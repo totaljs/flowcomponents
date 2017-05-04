@@ -1,6 +1,6 @@
 # Total.js Flow Components
 
-This repository contains all Total.js Flow components.
+This repository contains all __Total.js Flow components__.
 
 __Requirements__:
 
@@ -19,6 +19,12 @@ __Requirements__:
 - choose your component from this repository
 - upload `componentname.js` (via database icon in designer)
 - don't upload `readme.md` and `componentname-run.js`
+
+---
+
+## Support
+
+Total.js Support is applied for components which are from developers: __Peter Širka__ and __Martin Smola__. Do you want own compnents? [Contact us](https://www.totaljs.com/contact/).
 
 ## Contact
 
