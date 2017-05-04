@@ -14,6 +14,12 @@ __Requirements__:
 - each component has to contain a test file `YOURCOMPONENTNAME-run.js`
 - keep readme 1:1 with readme in the component declaration
 
+## How to install a component to my Total.js Flow?
+
+- choose your component from this repository
+- upload `componentname.js` (via database icon in designer)
+- don't upload `readme.md` and `componentname-run.js`
+
 ## Contact
 
 - contact form <https://www.totaljs.com/contact/>
