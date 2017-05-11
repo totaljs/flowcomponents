@@ -36,9 +36,17 @@ exports.install = function(instance) {
 	var added = false;
 	var ready = false;
 
-	instance.custom.reconfigure = function(){
+	instance.custom.reconfigure = function() {
+
+		added = false;
+		ready = false;
+
+		if (!MQTT.broker(instance.options.broker)) {
+			return instance.status('No broker', 'red');
+		}
 
 		if (instance.options.broker && instance.options.topic) {
+
 			!added && MQTT.add(instance.options.broker);
 			added = true;
 			ready = true;
@@ -52,16 +60,7 @@ exports.install = function(instance) {
 
 	instance.on('options', instance.custom.reconfigure);
 
-	instance.on('close', function(){
-		MQTT.remove(instance.options.broker, instance.id);
-		OFF('mqtt.brokers.connected', connected);
-		OFF('mqtt.brokers.connecting', connecting);
-		OFF('mqtt.brokers.disconnected', disconnected);
-		OFF('mqtt.brokers.connectionfailed', connectionfailed);
-		OFF('mqtt.brokers.error', error);
-	});
-
-	instance.on('data', function(flowdata){
+	instance.on('data', function(flowdata) {
 		if (!ready)
 			return;
 
@@ -73,40 +72,38 @@ exports.install = function(instance) {
 		MQTT.publish(instance.options.broker, topic, msg, PUBLISH_OPTIONS);
 	});
 
-	ON('mqtt.brokers.connected', connected);
-	ON('mqtt.brokers.connecting', connecting);
-	ON('mqtt.brokers.disconnected', disconnected);
-	ON('mqtt.brokers.connectionfailed', connectionfailed);
-	ON('mqtt.brokers.error', error);
+	instance.on('close', function() {
+		MQTT.remove(instance.options.broker, instance.id);
+		OFF('mqtt.brokers.status', brokerstatus);
+	});
 
-	function connected(brokerid) {
+	ON('mqtt.brokers.status', brokerstatus);
+
+	function brokerstatus(status, brokerid, msg) {
 		if (brokerid !== instance.options.broker)
 			return;
-		instance.status('Connected', 'green')
-	};
 
-	function connecting(brokerid) {
-		if (brokerid !== instance.options.broker)
-			return;
-		instance.status('Connecting', '#a6c3ff')
-	};
-
-	function disconnected(brokerid) {
-		if (brokerid !== instance.options.broker)
-			return;
-		instance.status('Disconnected', 'red')
-	};
-
-	function connectionfailed(brokerid) {
-		if (brokerid !== instance.options.broker)
-			return;
-		instance.status('Disconnected', 'red')
-	};
-
-	function error(brokerid, msg) {
-		if (brokerid !== instance.options.broker)
-			return;
-		instance.status(msg, 'red')
+		switch (status) {
+			case 'connecting':
+				instance.status('Connecting', '#a6c3ff');
+				break;
+			case 'connected':
+				instance.status('Connected', 'green');
+				break;
+			case 'disconnected':
+				instance.status('Disconnected', 'red');
+				break;
+			case 'connectionfailed':
+				instance.status('Connection failed', 'red');
+				break;
+			case 'new':
+			case 'removed':
+				instance.custom.reconfigure();
+				break;
+			case 'error':
+				instance.status(msg, 'red');
+				break;
+		};
 	};
 
 	instance.custom.reconfigure();

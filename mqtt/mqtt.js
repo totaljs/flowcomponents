@@ -16,10 +16,10 @@ exports.html = `<div class="padding">
 		<div class="padding npb">
 			<div class="row">
 				<div class="col-md-6">
-					<div data-jc="textbox" data-jc-path="host" data-placeholder="test.mosquitto.org" class="m">Hostname or IP address</div>
+					<div data-jc="textbox" data-jc-path="host" data-placeholder="test.mosquitto.org" data-required="true" class="m">Hostname or IP address</div>
 				</div>
 				<div class="col-md-6">
-					<div data-jc="textbox" data-jc-path="port" data-placeholder="1883" class="m">Port</div>
+					<div data-jc="textbox" data-jc-path="port" data-placeholder="1883" data-required="true" class="m">Port</div>
 				</div>
 			</div>
 			<div class="row">
@@ -56,7 +56,7 @@ exports.install = function(instance) {
 		var options = instance.options;
 
 		if (!options.host || !options.port) {
-			broker && instance.custom.removeBroker();
+			instance.status('Not configured', 'red');
 			return;
 		}
 
@@ -74,36 +74,39 @@ exports.install = function(instance) {
 		MQTT_BROKERS.push(broker);
 	};
 
-	instance.custom.removeBroker = function() {
+	instance.close = function(done) {
 		broker && broker.close(function() {
 			MQTT_BROKERS = MQTT_BROKERS.remove('id', instance.options.id);
+			EMIT('mqtt.brokers.status', 'removed', instance.options.id);
+			done();
 		});
+		OFF('mqtt.brokers.status', brokerstatus);
 	};
 
-	instance.on('close', instance.custom.removeBroker);
+	ON('mqtt.brokers.status', brokerstatus);
+
+	function brokerstatus(status, brokerid) {
+		if (brokerid !== instance.options.id)
+			return;
+
+		switch (status) {
+			case 'connecting':
+				instance.status('Connecting', '#a6c3ff');
+				break;
+			case 'connected':
+				instance.status('Connected', 'green');
+				break;
+			case 'disconnected':
+				instance.status('Disconnected', 'red');
+				break;
+			case 'connectionfailed':
+				instance.status('Connection failed', 'red');
+				break;
+		};
+	};
+
 	instance.on('options', instance.custom.reconfigure);
 	instance.custom.reconfigure();
-
-	ON('mqtt.brokers.connecting', function(brokerid){
-		if (brokerid !== instance.options.id)
-			return;
-		instance.status('Connecting', '#a6c3ff');
-	});
-	ON('mqtt.brokers.connected', function(brokerid){
-		if (brokerid !== instance.options.id)
-			return;
-		instance.status('Connected', 'green');
-	});
-	ON('mqtt.brokers.disconnected', function(brokerid){
-		if (brokerid !== instance.options.id)
-			return;
-		instance.status('Disconnected', 'red');
-	});
-	ON('mqtt.brokers.connectionfailed', function(brokerid){
-		if (brokerid !== instance.options.id)
-			return;
-		instance.status('Connection failed', 'red');
-	});
 };
 
 FLOW.trigger('mqtt.brokers', function(next) {
@@ -133,7 +136,7 @@ MQTT.publish = function(brokerid, topic, data, options) {
 	if (broker)
 		broker.publish(topic, data, options);
 	else
-		EMIT('mqtt.brokers.error', brokerid, 'No such broker');
+		EMIT('mqtt.brokers.status', 'error', brokerid, 'No such broker');
 };
 
 MQTT.subscribe = function(brokerid, componentid, topic, qos) {
@@ -144,6 +147,10 @@ MQTT.subscribe = function(brokerid, componentid, topic, qos) {
 MQTT.unsubscribe = function(brokerid, componentid, topic, qos) {
 	var broker = MQTT_BROKERS.findItem('id', brokerid);
 	broker && broker.unsubscribe(componentid, topic);
+};
+
+MQTT.broker = function(brokerid) {
+	return MQTT_BROKERS.findItem('id', brokerid);
 };
 
 /*
@@ -174,6 +181,9 @@ function Broker(options) {
 	self.subscribtions = {};
 	self.id = options.id;
 	self.options = options;
+	setTimeout(function() {
+		EMIT('mqtt.brokers.status', 'new', self.id);
+	}, 500);
 	return self;
 }
 
@@ -181,25 +191,25 @@ Broker.prototype.connect = function() {
 
 	var self = this;
 	if (self.connected || self.connecting)
-		return EMIT('mqtt.brokers.' + (self.connected ? 'connected' : 'connecting'), self.id);
+		return EMIT('mqtt.brokers.status', self.connected ? 'connected' : 'connecting', self.id);
 
 	self.connecting = true;
 	var broker = self.options.secure ? 'mqtts://' : 'mqtt://' + self.options.host + ':' + self.options.port;
 
-	EMIT('mqtt.brokers.connecting', self.id);
+	EMIT('mqtt.brokers.status', 'connecting', self.id);
 
 	self.client = mqtt.connect(broker);
 
 	self.client.on('connect', function() {
 		self.connecting = false;
 		self.connected = true;
-		EMIT('mqtt.brokers.connected', self.id);
+		EMIT('mqtt.brokers.status', 'connected', self.id);
 	});
 
-	self.client.on('reconnect', function(){
+	self.client.on('reconnect', function() {
 		self.connecting = true;
 		self.connected = false;
-		EMIT('mqtt.brokers.connecting', self.id);
+		EMIT('mqtt.brokers.status', 'connecting', self.id);
 	});
 
 	self.client.on('message', function(topic, message) {
@@ -215,10 +225,10 @@ Broker.prototype.connect = function() {
 	self.client.on('close', function() {
 		if (self.connected) {
 			self.connected = false;
-			EMIT('mqtt.brokers.disconnected', self.id);
+			EMIT('mqtt.brokers.status', 'disconnected', self.id);
 		} else if (self.connecting) {
 			self.connecting = false;
-			EMIT('mqtt.brokers.connectionfailed', self.id);
+			EMIT('mqtt.brokers.status', 'connectionfailed', self.id);
 		}
 	});
 
@@ -227,7 +237,7 @@ Broker.prototype.connect = function() {
 		if (self.connecting) {
 			self.client.end();
 			self.connecting = false;
-			EMIT('mqtt.brokers.connectionfailed', self.id);
+			EMIT('mqtt.brokers.status', 'connectionfailed', self.id);
 		}
 
 		console.log('ERROR', broker, err);
@@ -298,13 +308,9 @@ Broker.prototype.close = function(callback) {
 	var self = this;
 	self.closing = true;
 
-	if (self.connected) {
-		self.client.once('close', () => callback());
-		self.client.end();
-	} else if (self.connecting) {
-		self.client.end();
-		callback();
-	} else
+	if (self.connected || self.connecting)
+		self.client.end(callback);
+	else
 		callback();
 
 	self.client.removeAllListeners();
