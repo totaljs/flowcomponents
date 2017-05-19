@@ -3,5 +3,5 @@
 	{"name":"Web","items":["httpdownloader", "httpgeoip", "httplistener", "httpreceiver", "httpresponse", "httproute"]},
 	{"name":"IoT","items":["netatmo", "mqtt", "mqttpublish", "mqttsubscribe"]},
 	{"name":"Total.js Messenger","items":["messengerrawdata", "messengermessage", "messengersender", "messengerusers"]}
-	{"name":"Flowboard","items":["flowboardlight", "flowboardoutput", "flowboardsocket"]},
+	{"name":"Flowboard","items":["flowboardlight", "flowboardoutput", "flowboardsocket"]}
 ]
