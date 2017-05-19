@@ -10,7 +10,7 @@ exports.author = 'Peter Širka';
 exports.readme = `# Flowbard: Socket
 
 - input \`0 = OFF\` and \`1 = ON\`
-- input \`0 = OFF\` and \`1 = ON\``;
+- output \`0 = OFF\` and \`1 = ON\``;
 
 exports.install = function(instance) {
 
