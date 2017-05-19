@@ -2,6 +2,6 @@
 	{"name":"Common","items":["analytics", "condition", "counter", "debug", "delay", "email", "filewriter", "function", "groupanalytics", "lastusage", "httprequest", "lastusage", "merge", "modified", "nosql", "parser", "scheduler", "sms", "switch", "template", "timer", "transform", "trigger", "uniqueinterval", "megatimer"]},
 	{"name":"Web","items":["httpdownloader", "httpgeoip", "httplistener", "httpreceiver", "httpresponse", "httproute"]},
 	{"name":"IoT","items":["netatmo", "mqtt", "mqttpublish", "mqttsubscribe"]},
-	{"name":"Total.js Messenger","items":["messengerrawdata", "messengermessage", "messengersender", "messengerusers"]}
+	{"name":"Total.js Messenger","items":["messengerrawdata", "messengermessage", "messengersender", "messengerusers"]},
 	{"name":"Flowboard","items":["flowboardlight", "flowboardoutput", "flowboardsocket"]}
 ]
