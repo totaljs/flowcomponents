@@ -22,23 +22,26 @@ exports.install = function(instance) {
 
 	instance.on('data', function(response) {
 		instance.set('state', response.data);
-		instance.custom.send(response.data);
+		instance.flowboard_send(response.data);
 		instance.status(arr[response.data]);
 	});
 
-	instance.custom.send = function(data, category) {
+	instance.on('options', instance.custom.reconfigure);
+	instance.custom.reconfigure();
+
+	// Flowboard methods:
+
+	instance.flowboard_send = function(data, category) {
 		global.FLOWBOARD &&	global.FLOWBOARD.send(instance, data, category);
 	};
 
-	instance.custom.process = function(message) {
+	instance.flowboard_process = function(message) {
 		instance.send(message.value);
 		instance.status(arr[message.value]);
-		instance.custom.send(message.value);
+		instance.flowboard_send(message.value);
 	};
 
-	instance.on('options', instance.custom.reconfigure);
-	instance.custom.reconfigure();
-	instance.custom.current = function() {
+	instance.flowboard_laststate = function() {
 		return instance.get('state');
 	};
 };

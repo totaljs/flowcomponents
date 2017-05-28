@@ -19,16 +19,20 @@ exports.install = function(instance) {
 
 	instance.on('data', function(response) {
 		instance.set('state', response.data);
-		instance.custom.send(response.data);
+		instance.flowboard_send(response.data);
 	});
-
-	instance.custom.send = function(data, category) {
-		global.FLOWBOARD &&	global.FLOWBOARD.send(instance, data, category);
-	};
 
 	instance.on('options', instance.custom.reconfigure);
 	instance.custom.reconfigure();
-	instance.custom.current = function() {
+
+	// Flowboard methods:
+
+	instance.flowboard_send = function(data, category) {
+		global.FLOWBOARD &&	global.FLOWBOARD.send(instance, data, category);
+	};
+
+	instance.flowboard_laststate = function() {
 		return instance.get('state');
 	};
+
 };
