@@ -17,7 +17,7 @@ exports.html = `<div class="padding">
 			<div data-jc="textbox" data-jc-path="output" data-placeholder="@(Count of outputs)" data-maxlength="1" data-jc-type="number" data-increment="true" data-align="center" data-required="true" data-icon="fa-sitemap">@(Outputs)</div>
 		</div>
 	</div>
-	<div data-jc="codemirror" data-jc-path="condition" data-height="200" data-required="true">@(Condition)</div>
+	<div data-jc="codemirror" data-jc-path="condition" data-type="javascript" data-height="200" data-required="true">@(Condition)</div>
 	<div class="help">@(Data will continue when the condition will be validated.)</div>
 </div><script>ON('save.condition', function(component, options) {
 	component.output = options.output || 1;
