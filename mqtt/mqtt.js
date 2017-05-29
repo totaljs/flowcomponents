@@ -69,6 +69,7 @@ exports.install = function(instance) {
 	};
 
 	instance.custom.createBroker = function() {
+		ON('mqtt.brokers.status', brokerstatus);
 		broker = new Broker(instance.options);
 		instance.status('Ready', 'white');
 		MQTT_BROKERS.push(broker);
@@ -82,8 +83,6 @@ exports.install = function(instance) {
 		});
 		OFF('mqtt.brokers.status', brokerstatus);
 	};
-
-	ON('mqtt.brokers.status', brokerstatus);
 
 	function brokerstatus(status, brokerid) {
 		if (brokerid !== instance.options.id)
