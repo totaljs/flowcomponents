@@ -1,6 +1,6 @@
 // TEST INTERFACE FOR TOTAL.JS FLOW COMPONENT
 require('total.js').http('debug');
-require('./flow');
+require('../flow');
 FLOWINIT(require('./' + U.getName(process.argv[1].replace(/\-run\.js$/, ''))));
 
 // `assert` is a global variable
@@ -34,14 +34,14 @@ FLOWINIT(require('./' + U.getName(process.argv[1].replace(/\-run\.js$/, ''))));
 // ON('flow.close')                    - triggered when the component is closed
 
 ON('flow.ready', function() {
-	FLOWOPTIONS({ 
+	FLOWOPTIONS({
 		enabled: true,
-		type: 'weekly', 
-		ondata: 'on', 
-		offdata: 'off', 
-		datatype: 'string', 
-		weekly: { 
-			days: { 
+		type: 'weekly',
+		ondata: 'on',
+		offdata: 'off',
+		datatype: 'string',
+		weekly: {
+			days: {
 				thursday: [
 					{ time: '10:14', type: 'on' },
 					{ time: '10:15', type: 'off' },
@@ -59,9 +59,9 @@ ON('flow.ready', function() {
 					{ time: '10:27', type: 'off' },
 					{ time: '10:28', type: 'on' },
 					{ time: '10:29', type: 'off' }
-				] 
-			} 
-		} 
+				]
+			}
+		}
 	});
 
 	console.log('===========\nUse CMD/CTRL+C to cancel this test!!!\n===========');

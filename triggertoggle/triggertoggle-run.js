@@ -34,8 +34,10 @@ FLOWINIT(require('./' + U.getName(process.argv[1].replace(/\-run\.js$/, ''))));
 // ON('flow.close')                    - triggered when the component is closed
 
 ON('flow.ready', function() {
-	// FLOWDATA({ url: 'https://www.w3schools.com/xml/cd_catalog.xml' });
-	// or ...
-	FLOWDATA('https://www.w3schools.com/xml/cd_catalog.xml');
+	FLOWOPTIONS({ datatypeA: 'integer', dataA: 1, datatypeB: 'integer', dataB: 2 });
+	FLOWCLICK();
+	FLOWCLICK();
+	FLOWCLICK();
+	FLOWCLICK();
 	FLOWCLOSE();
 });
