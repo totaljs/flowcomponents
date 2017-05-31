@@ -24,7 +24,7 @@ exports.html = `<div class="padding">
 	</section>
 </div>`;
 
-exports.readme = `# Trigger
+exports.readme = `# Toggle Trigger
 
 - Clicking on the component starts the chain
 - Settings allows to set a data-type and a value`;
