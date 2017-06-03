@@ -12,7 +12,7 @@ exports.options = { route: 0 };
 exports.cloning = false;
 
 exports.html = `<div class="padding">
-	<div data-jc="dropdown" data-jc-path="route" data-source="receiverroutes" data-empty="" data-jc-type="number" class="m">@(Choose a route)</div>
+	<div data-jc="dropdown" data-jc-path="route" data-source="receiverroutes" data-empty="" class="m">@(Choose a route)</div>
 </div>
 <script>ON('open.receiver', function(component, options) {
 	TRIGGER('{0}', 'receiverroutes');
@@ -38,7 +38,7 @@ response.user;      // (Object) User instance (if exists)
 exports.install = function(instance) {
 
 	instance.custom.event = function(controller) {
-		if (controller.route.hash !== instance.options.route)
+		if (createId(controller.route) !== instance.options.route)
 			return;
 		var data = {};
 		data.user = controller.user;
@@ -62,11 +62,15 @@ FLOW.trigger(TRIGGER, function(next) {
 	var items = [];
 	for (var i = 0, length = F.routes.web.length; i < length; i++) {
 		var item = F.routes.web[i];
-		items.push({ priority: (item.method === 'GET' ? 1 : item.method === 'POST' ? 2 : item.method === 'PUT' ? 3 : 4).toString() + item.urlraw.length.toString(), id: item.hash, name: item.method + ': ' + item.urlraw + (item.schema ? ' (Schema: {0})'.format(item.schema[0] === 'default' ? item.schema[1] : item.schema.join('/')) : '') });
+		items.push({ priority: (item.method === 'GET' ? 1 : item.method === 'POST' ? 2 : item.method === 'PUT' ? 3 : 4).toString() + item.urlraw.length.toString(), id: createId(item), name: item.method + ': ' + item.urlraw + (item.schema ? ' (Schema: {0})'.format(item.schema[0] === 'default' ? item.schema[1] : item.schema.join('/')) : '') });
 	}
 	items.quicksort('priority');
 	next(items);
 });
+
+function createId(route) {
+	return route.hash + 'X' + route.method + 'X' + (route.schema ? route.schema.join('') : '');
+}
 
 exports.uninstall = function() {
 	FLOW.trigger(TRIGGER, null);
