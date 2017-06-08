@@ -89,7 +89,8 @@ exports.install = function(instance) {
 		global: {
 			get: FLOW.get,
 			set: FLOW.set,
-			rem: FLOW.rem
+			rem: FLOW.rem,
+			variable: FLOW.variable
 		},
 		Date: Date,
 		Object: Object
