@@ -45,11 +45,16 @@ exports.install = function(instance) {
 			return;
 
 		pending -= arr.length;
-		instance.send(arr);
-		if (instance.options.id)
+
+		if (instance.options.id) {
+			var msg = instance.make(arr);
+			msg.id = id;
+			instance.send(msg);
 			delete data[id];
-		else
+		} else {
+			instance.send(arr);
 			data[id] = [];
+		}
 
 		status && instance.custom.status();
 	};
