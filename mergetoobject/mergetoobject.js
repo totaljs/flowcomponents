@@ -36,7 +36,6 @@ exports.install = function(instance) {
 		var id = response.id;
 
 		data[id] = data[id] || {};
-console.log(response);
 		var prop = instance.options.props[response.index];
 		if (!prop)
 			instance.debug('No property name for current input:', response.index);
