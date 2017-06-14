@@ -10,8 +10,6 @@ exports.author = 'Martin Smola';
 exports.icon = 'compress';
 
 exports.html = `<div class="padding">
-	<div data-jc="checkbox" data-jc-path="toobject">@(Merge data into object)</div>
-	<br>
 	<div data-jc="textboxlist" data-jc-path="props" data-maxlength="50" data-placeholder="property name" data-icon="fa-list">Properties</div>
 	<div class="help">@(Data comming to each of the inputs will be assign to a property from top to bottom. The first input to the first property.)</div>
 	<script>
@@ -54,4 +52,13 @@ exports.install = function(instance) {
 	instance.on('click', function() {
 		data = {};
 	});
+
+	instance.on('options', function() {
+		if (instance.options.props && instance.options.props.length)
+			instance.status('');
+		else 
+			instance.status('Not configured', 'red');
+	});
+
+	instance.status(instance.options.props && instance.options.props.lenght ? '' : 'Not configured', 'red');
 };
