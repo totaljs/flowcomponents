@@ -31,14 +31,19 @@ exports.install = function(instance) {
 				value = '' + options.data;
 				break;
 			case 'integer':
-				value = U.parseInt(options.data);
+				value = options.data.parseInt2('error');
+				value = value === 'error' ? NaN : value;
 				break;
 			case 'float':
-				value = U.parseFloat(options.data);
+				value = options.data.parseFloat2('error');
+				value = value === 'error' ? NaN : value;
 				break;
 			case 'date':
-				var num = U.parseInt(options.data);
-				value = num ? new Date(num) : options.data.parseDate();
+				options.data = options.data.toString();
+				var num = options.data.parseInt('error');
+				num === 'error' && (num = options.data.parseDate('error'));
+				num === 'error' && (num = null);
+				value = num ? new Date(num).toUTCString() : num;
 				break;
 			case 'object':
 				try {

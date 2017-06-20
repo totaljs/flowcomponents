@@ -12,6 +12,16 @@ When the wires between the components are mess it's time to use Virtual wire.
 After creating new \`Virtual wire out\` make sure to hit Apply button, otherwise it will not appear in \`Virtual wire in\`s settings.
 `;
 
+exports.html = `<div class="padding">
+	<div data-jc="textbox" data-jc-path="name" class="m" data-required="true" data-maxlength="500" data-placeholder="Some unique name">@(Name)</div>
+	<div class="help m">@(This is identifier that appears in 'Virtual wire in' component's settings in the dropdown.)</div>	
+</div>
+<script>
+	ON('save.virtualwireout', function(component, options) {
+		!component.name && (component.name = options.name);
+	});	
+</script>`;
+
 var VIRTUAL_WIRES = [];
 
 exports.install = function(instance) {	
@@ -25,7 +35,7 @@ exports.install = function(instance) {
 	};
 
 	instance.on('data', function(flowdata) {		
-		EMIT('virtualwire:' + instance.id,  flowdata);
+		EMIT('virtualwireout', instance.id, flowdata);
 	});
 
 	instance.on('options', instance.custom.reconfigure);
@@ -33,14 +43,12 @@ exports.install = function(instance) {
 
 	instance.on('close', function(){
 		delete VIRTUAL_WIRES[instance.id];
-	});
-
-	
+	});	
 };
 
-FLOW.trigger('virtualwires', function(next) {    
+FLOW.trigger('virtualwiresout', function(next) {    
 
-	var wires = [{}];
+	var wires = [];
 
 	Object.keys(VIRTUAL_WIRES).forEach(function(key){
 		wires.push({id: key, name: VIRTUAL_WIRES[key]});
