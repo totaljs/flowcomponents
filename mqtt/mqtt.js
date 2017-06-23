@@ -27,7 +27,7 @@ exports.html = `<div class="padding">
 					<div data-jc="textbox" data-jc-path="username" class="m">Username</div>
 				</div>
 				<div class="col-md-6">
-					<div data-jc="textbox" data-jc-path="password" class="m">Password</div>
+					<div data-jc="textbox" data-jc-path="password" data-jc-type="password" class="m">Password</div>
 				</div>
 			</div>
 		</div>
@@ -197,7 +197,7 @@ Broker.prototype.connect = function() {
 
 	EMIT('mqtt.brokers.status', 'connecting', self.id);
 
-	self.client = mqtt.connect(broker);
+	self.client = mqtt.connect(broker, self.options);
 
 	self.client.on('connect', function() {
 		self.connecting = false;
