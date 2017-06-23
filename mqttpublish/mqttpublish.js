@@ -98,6 +98,7 @@ exports.install = function(instance) {
 				break;
 			case 'new':
 			case 'removed':
+			case 'reconfigured':
 				instance.custom.reconfigure();
 				break;
 			case 'error':

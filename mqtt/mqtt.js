@@ -186,7 +186,7 @@ function Broker(options) {
 	return self;
 }
 
-Broker.prototype.connect = function() {
+Broker.prototype.connect = function(reconfigure) {
 
 	var self = this;
 	if (self.connected || self.connecting)
@@ -203,6 +203,7 @@ Broker.prototype.connect = function() {
 		self.connecting = false;
 		self.connected = true;
 		EMIT('mqtt.brokers.status', 'connected', self.id);
+		reconfigure && EMIT('mqtt.brokers.status', 'reconfigured', self.id);
 	});
 
 	self.client.on('reconnect', function() {
@@ -259,7 +260,7 @@ Broker.prototype.reconfigure = function(options) {
 
 	if (self.connected) {
 		self.disconnect();
-		self.connect();
+		self.connect(true);
 	}
 };
 
