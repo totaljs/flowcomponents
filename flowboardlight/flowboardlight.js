@@ -1,5 +1,5 @@
 exports.id = 'flowboardlight';
-exports.title = 'Flowboard: Light';
+exports.title = 'Light';
 exports.group = 'Flowbard';
 exports.color = '#AC92EC';
 exports.icon = 'fa-lightbulb-o';
@@ -16,32 +16,43 @@ exports.install = function(instance) {
 
 	var arr = ['Off', 'On'];
 
-	instance.custom.reconfigure = function() {
+	instance.reconfigure = function() {
 		instance.status(global.FLOWBOARD ? arr[instance.get('state') || 0] : 'Flowbard not found.', global.FLOWBOARD ? null : 'red');
 	};
 
 	instance.on('data', function(response) {
 		instance.set('state', response.data);
-		instance.flowboard_send(response.data);
+		instance.flowboard('laststate', response.data);
 		instance.status(arr[response.data]);
 	});
 
-	instance.on('options', instance.custom.reconfigure);
-	instance.custom.reconfigure();
+	instance.on('options', instance.reconfigure);
+	instance.reconfigure();
 
-	// Flowboard methods:
+	instance.on('flowboard', function(type, data) {
+		switch (type) {
 
-	instance.flowboard_send = function(data, category) {
-		global.FLOWBOARD &&	global.FLOWBOARD.send(instance, data, category);
-	};
+			case 'laststate':
+				// Sends last know state
+				var state = instance.get('state');
+				state !== undefined && instance.flowboard('laststate', state);
+				break;
 
-	instance.flowboard_process = function(message) {
-		instance.send(message.value);
-		instance.status(arr[message.value]);
-		instance.flowboard_send(message.value);
-	};
+			case 'switch':
 
-	instance.flowboard_laststate = function() {
-		return instance.get('state');
-	};
+				// data === {Number}
+				// 0: off, 1: on
+
+				// Sends data to device
+				instance.send(data);
+
+				// Change status and last know state
+				instance.status(arr[data]);
+				instance.set('state', data);
+
+				// Send the last state to Flowboard
+				instance.flowboard('laststate', data);
+				break;
+		}
+	});
 };
