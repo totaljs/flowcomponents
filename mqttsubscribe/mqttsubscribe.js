@@ -33,9 +33,6 @@ exports.install = function(instance) {
 	var subscribed = false;
 	var isWildcard = false;
 
-	var MESSAGE = {
-		topic: ''
-	};
 	instance.custom.reconfigure = function(o, old_options) {
 
 		added = false;
@@ -100,11 +97,15 @@ exports.install = function(instance) {
 				break;
 			case 'new':
 			case 'removed':
-			case 'reconfigured':
 				instance.custom.reconfigure();
 				break;
 			case 'error':
 				instance.status(msg, 'red');
+				break;
+			case 'reconfigured':
+				instance.options.broker = msg;
+				instance.reconfig();
+				instance.custom.reconfigure();
 				break;
 		};
 
@@ -122,9 +123,8 @@ exports.install = function(instance) {
 			if (instance.options.topic !== topic)
 				return;
 		}
-		MESSAGE.topic = topic;
-		MESSAGE.data = message;
-		instance.send(MESSAGE);
+
+		instance.send({topic: topic, data: message});
 	};
 
 	instance.custom.reconfigure();
