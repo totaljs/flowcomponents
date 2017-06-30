@@ -51,6 +51,7 @@ exports.install = function(instance) {
 	// [d]ashboard[a]analytics = da_
 	var dbname = 'da_' + instance.id;
 	var temporary = F.path.databases(dbname + '.json');
+	var temporarycurrent = F.path.databases(dbname + '_current.json');
 	var cache = {};
 	var current = {};
 
@@ -63,6 +64,7 @@ exports.install = function(instance) {
 
 	instance.on('close', function() {
 		Fs.unlink(temporary, NOOP);
+		Fs.unlink(temporarycurrent, NOOP);
 	});
 
 	instance.on('data', function(response) {
@@ -144,6 +146,7 @@ exports.install = function(instance) {
 
 	instance.custom.save_temporary = function() {
 		Fs.writeFile(temporary, JSON.stringify(cache), NOOP);
+		Fs.writeFile(temporarycurrent, JSON.stringify(current), NOOP);
 	};
 
 	instance.custom.save = function() {
@@ -275,19 +278,23 @@ exports.install = function(instance) {
 
 	instance.reconfigure();
 
-	Fs.readFile(temporary, function(err, data) {
-		if (err)
-			return;
-		var dt = cache.datetime || F.datetime;
-		var tmp = data.toString('utf8').parseJSON(true);
-		if (tmp && tmp.datetime) {
-			cache = tmp;
-			if (cache.type[0] === 'D')
-				cache.datetime.getDate() !== dt.getDate() && instance.custom.save();
-			else
-				cache.datetime.getHours() !== dt.getHours() && instance.custom.save();
-			instance.custom.status();
-		}
+	Fs.readFile(temporarycurrent, function(err, data) {
+		if (data)
+			current = data.toString('utf8').parseJSON(true);
+		Fs.readFile(temporary, function(err, data) {
+			if (err)
+				return;
+			var dt = cache.datetime || F.datetime;
+			var tmp = data.toString('utf8').parseJSON(true);
+			if (tmp && tmp.datetime) {
+				cache = tmp;
+				if (cache.type[0] === 'D')
+					cache.datetime.getDate() !== dt.getDate() && instance.custom.save();
+				else
+					cache.datetime.getHours() !== dt.getHours() && instance.custom.save();
+				instance.custom.status();
+			}
+		});
 	});
 };
 
