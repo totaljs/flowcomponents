@@ -65,5 +65,14 @@
       "https://rawgit.com/totaljs/flowcomponents/master/flowboardoutput/flowboardoutput.js",
       "https://rawgit.com/totaljs/flowcomponents/master/flowboardsocket/flowboardsocket.js"
     ]
+  },
+  {
+    "name": "Monitoring",
+    "items": [
+      "https://rawgit.com/totaljs/flowcomponents/master/monitorcpu/monitorcpu.js",
+      "https://rawgit.com/totaljs/flowcomponents/master/monitormemory/monitormemory.js",
+      "https://rawgit.com/totaljs/flowcomponents/master/monitordisk/monitordisk.js",
+      "https://rawgit.com/totaljs/flowcomponents/master/monitordisk/monitornetwork.js"
+    ]
   }
 ]
