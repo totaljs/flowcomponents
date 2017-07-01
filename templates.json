@@ -72,7 +72,8 @@
       "https://rawgit.com/totaljs/flowcomponents/master/monitorcpu/monitorcpu.js",
       "https://rawgit.com/totaljs/flowcomponents/master/monitormemory/monitormemory.js",
       "https://rawgit.com/totaljs/flowcomponents/master/monitordisk/monitordisk.js",
-      "https://rawgit.com/totaljs/flowcomponents/master/monitordisk/monitornetwork.js"
+      "https://rawgit.com/totaljs/flowcomponents/master/monitornetwork/monitornetwork.js",
+      "https://rawgit.com/totaljs/flowcomponents/master/monitorsuperadmin/monitorsuperadmin.js"
     ]
   }
 ]

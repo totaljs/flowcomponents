@@ -5,7 +5,7 @@ exports.author = 'Peter Širka';
 exports.group = 'Inputs';
 exports.color = '#F6BB42';
 exports.output = 1;
-exports.icon = 'hdd-o';
+exports.icon = 'exchange';
 exports.options = { interval: 8000, ports: ['80'], interface: 'eth0' };
 exports.readme = `# Network monitoring
 
