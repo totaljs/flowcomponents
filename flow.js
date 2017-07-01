@@ -34,6 +34,11 @@ function Component(options) {
 
 Util.inherits(Component, EventEmitter);
 
+Component.prototype.error = function(e, parent) {
+	console.log(e);
+	return this;
+};
+
 Component.prototype.set = function(key, value) {
 	FLOW.set('$' + this.id + key, value);
 	return this;
