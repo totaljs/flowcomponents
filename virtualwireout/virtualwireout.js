@@ -9,32 +9,31 @@ exports.readme = `# Virtual wire out
 
 When the wires between the components are mess it's time to use Virtual wire.
 
-After creating new \`Virtual wire out\` make sure to hit Apply button, otherwise it will not appear in \`Virtual wire in\`s settings.
-`;
+After creating new \`Virtual wire out\` make sure to hit Apply button, otherwise it will not appear in \`Virtual wire in\`s settings.`;
 
 exports.html = `<div class="padding">
 	<div data-jc="textbox" data-jc-path="name" class="m" data-required="true" data-maxlength="500" data-placeholder="Some unique name">@(Name)</div>
-	<div class="help m">@(This is identifier that appears in 'Virtual wire in' component's settings in the dropdown.)</div>	
+	<div class="help m">@(This is identifier that appears in 'Virtual wire in' component's settings in the dropdown.)</div>
 </div>
 <script>
 	ON('save.virtualwireout', function(component, options) {
 		!component.name && (component.name = options.name);
-	});	
+	});
 </script>`;
 
-var VIRTUAL_WIRES = [];
+var VIRTUAL_WIRES = {};
 
-exports.install = function(instance) {	
+exports.install = function(instance) {
 
 	instance.custom.reconfigure = function(){
-		if (!instance.name)
-			return instance.status('Unique name required', 'red');
-
-		instance.status('');
-		VIRTUAL_WIRES[instance.id] = instance.name;
+		if (instance.name) {
+			instance.status('');
+			VIRTUAL_WIRES[instance.id] = instance.name;
+		} else
+			instance.status('Unique name required', 'red');
 	};
 
-	instance.on('data', function(flowdata) {		
+	instance.on('data', function(flowdata) {
 		EMIT('virtualwireout', instance.id, flowdata);
 	});
 
@@ -43,10 +42,10 @@ exports.install = function(instance) {
 
 	instance.on('close', function(){
 		delete VIRTUAL_WIRES[instance.id];
-	});	
+	});
 };
 
-FLOW.trigger('virtualwiresout', function(next) {    
+FLOW.trigger('virtualwiresout', function(next) {
 
 	var wires = [];
 
@@ -54,5 +53,5 @@ FLOW.trigger('virtualwiresout', function(next) {
 		wires.push({id: key, name: VIRTUAL_WIRES[key]});
 	});
 
-    next(wires);
+	next(wires);
 });
