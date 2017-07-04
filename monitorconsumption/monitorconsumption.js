@@ -56,6 +56,7 @@ exports.install = function(instance) {
 
 		var arr = [];
 
+		// Get CPU and Memory consumption
 		instance.options.monitorconsumption && arr.push(function(next) {
 			Exec('ps -p {0} -o %cpu,rss,etime'.format(process.pid), function(err, response) {
 
