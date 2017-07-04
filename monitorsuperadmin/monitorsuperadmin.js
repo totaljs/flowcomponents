@@ -1,12 +1,12 @@
 exports.id = 'monitorsuperadmin';
-exports.title = 'Monitoring: SuperAdmin';
+exports.title = 'SuperAdmin';
 exports.version = '1.0.0';
 exports.author = 'Peter Širka';
-exports.group = 'Inputs';
+exports.group = 'Monitoring';
 exports.color = '#F6BB42';
 exports.output = 1;
 exports.icon = 'binoculars';
-exports.options = { interval: 8000, url: '', token: '' };
+exports.options = { interval: 8000, url: '', token: '', enabled: true };
 exports.readme = `# SuperAdmin monitoring
 
 This component monitors all applications in Toatl.js SuperAdmin. The response is Object Array.
@@ -68,6 +68,9 @@ exports.install = function(instance) {
 			tproc = null;
 		}
 
+		if (!instance.options.enabled)
+			return;
+
 		RESTBuilder.make(function(builder) {
 			builder.url(U.path(instance.options.url) + '/api/apps/');
 			builder.header('x-token', instance.options.token);
@@ -79,6 +82,7 @@ exports.install = function(instance) {
 				}
 
 				current = response;
+				instance.custom.status();
 				instance.send(current);
 				tproc = setTimeout(instance.custom.run, instance.options.interval);
 			});
@@ -92,12 +96,24 @@ exports.install = function(instance) {
 		}
 	});
 
-	instance.reconfigure = function() {
-		if (instance.options.token && instance.options.url) {
-			instance.status('');
-			setTimeout(instance.custom.run, 1000);
-		} else
+	instance.custom.status = function() {
+		if (instance.options.enabled)
+			instance.status('Applications: ' + current.length + 'x');
+		else if (instance.options.token && instance.options.url)
+			instance.status('Disabled', 'red');
+		else
 			instance.status('Not configured', 'red');
+	};
+
+	instance.on('click', function() {
+		instance.options.enabled = !instance.options.enabled;
+		instance.custom.status();
+		instance.options.enabled && instance.custom.run();
+	});
+
+	instance.reconfigure = function() {
+		instance.options.token && instance.options.url && setTimeout(instance.custom.run, 1000);
+		instance.custom.status();
 	};
 
 	instance.on('options', instance.reconfigure);

@@ -1,12 +1,13 @@
 exports.id = 'monitornetwork';
-exports.title = 'Monitoring: Network';
+exports.title = 'Network';
 exports.version = '1.0.0';
 exports.author = 'Peter Širka';
-exports.group = 'Inputs';
+exports.group = 'Monitoring';
 exports.color = '#F6BB42';
 exports.output = 1;
+exports.click = true;
 exports.icon = 'exchange';
-exports.options = { interval: 8000, ports: ['80'], interface: 'eth0' };
+exports.options = { interval: 8000, ports: ['80'], interface: 'eth0', enabled: true };
 exports.readme = `# Network monitoring
 
 This component monitors network in Linux systems. It uses \`netstat\` and \`ifconfig\` commands.
@@ -80,9 +81,18 @@ exports.install = function(instance) {
 		});
 
 		arr.async(function() {
-			tproc = setTimeout(instance.custom.run, instance.options.interval);
-			instance.send(current);
+			if (instance.options.enabled) {
+				tproc = setTimeout(instance.custom.run, instance.options.interval);
+				instance.send(current);
+			}
 		});
+	};
+
+	instance.custom.status = function() {
+		if (instance.options.enabled)
+			instance.status('Connections: ' + current.open + 'x');
+		else
+			instance.status('Disabled', 'red');
 	};
 
 	instance.reconfigure = function() {
@@ -90,6 +100,12 @@ exports.install = function(instance) {
 		instance.options.ports.forEach(n => arg.push('-e :' + n));
 		arg = arg.join(' ');
 	};
+
+	instance.on('click', function() {
+		instance.options.enabled = !instance.options.enabled;
+		instance.custom.status();
+		instance.options.enabled && instance.custom.run();
+	});
 
 	instance.on('close', function() {
 		if (tproc) {

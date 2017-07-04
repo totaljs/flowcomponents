@@ -1,11 +1,13 @@
 exports.id = 'monitorcpu';
-exports.title = 'Monitoring: CPU';
+exports.title = 'CPU';
 exports.version = '1.0.0';
 exports.author = 'Peter Širka';
-exports.group = 'Inputs';
+exports.group = 'Monitoring';
 exports.color = '#F6BB42';
 exports.output = 1;
 exports.icon = 'microchip';
+exports.options = { enabled: true };
+exports.click = true;
 exports.readme = `# CPU monitoring
 
 This component monitors CPU \`% percentage\` consumption in Linux systems. It uses \`mpstat\` command.
@@ -56,7 +58,10 @@ exports.install = function(instance) {
 		chunk.toString('utf8').parseTerminal(fields, instance.custom.parse);
 		current.count = current.cores.length;
 		current.updated = F.datetime;
-		current.count && instance.send(current);
+		if (current.count) {
+			instance.send(current);
+			instance.custom.status();
+		}
 	};
 
 	instance.custom.parse = function(values) {
@@ -66,6 +71,22 @@ exports.install = function(instance) {
 		else
 			current.cores[+values[0]] = val;
 	};
+
+	instance.custom.status = function() {
+		if (instance.options.enabled)
+			instance.status(current.cpu.floor(1) + '%');
+		else
+			instance.status('Disabled', 'red');
+	};
+
+	instance.on('click', function() {
+		instance.options.enabled = !instance.options.enabled;
+		instance.custom.status();
+		if (instance.options.enabled)
+			instance.custom.run();
+		else
+			instance.custom.kill();
+	});
 
 	instance.on('close', function() {
 		instance.custom.kill();

@@ -1,12 +1,13 @@
 exports.id = 'monitordisk';
-exports.title = 'Monitoring: Disk';
+exports.title = 'Disk';
 exports.version = '1.0.0';
 exports.author = 'Peter Širka';
-exports.group = 'Inputs';
+exports.group = 'Monitoring';
 exports.color = '#F6BB42';
 exports.output = 1;
 exports.icon = 'hdd-o';
-exports.options = { interval: 8000, path: '/' };
+exports.click = true;
+exports.options = { interval: 8000, path: '/', enabled: true };
 exports.readme = `# Disk monitoring
 
 This component monitors disk \`bytes\` consumption in Linux systems. It uses \`df\` command.
@@ -45,6 +46,9 @@ exports.install = function(instance) {
 			tproc = null;
 		}
 
+		if (!instance.options.enabled)
+			return;
+
 		require('child_process').exec('df -hTB1 ' + instance.options.path, function(err, response) {
 
 			tproc = setTimeout(instance.custom.run, instance.options.interval);
@@ -58,10 +62,25 @@ exports.install = function(instance) {
 				current.total = line[0].parseInt();
 				current.free = line[2].parseInt();
 				current.used = line[1].parseInt();
+				instance.custom.status();
 				instance.send(current);
 			});
 		});
 	};
+
+	instance.custom.status = function() {
+		if (instance.options.enabled)
+			instance.status(current.free.filesize() + ' / ' + current.total.filesize());
+		else
+			instance.status('Disabled', 'red');
+	};
+
+	instance.on('click', function() {
+		instance.options.enabled = !instance.options.enabled;
+		instance.custom.status();
+		if (instance.options.enabled)
+			instance.custom.run();
+	});
 
 	instance.on('close', function() {
 		if (tproc) {

@@ -1,8 +1,8 @@
 exports.id = 'monitorconsumption';
-exports.title = 'Monitoring: Consumption';
+exports.title = 'Consumption';
 exports.version = '1.0.0';
 exports.author = 'Peter Širka';
-exports.group = 'Inputs';
+exports.group = 'Monitoring';
 exports.color = '#F6BB42';
 exports.input = 0;
 exports.output = 1;
@@ -122,13 +122,12 @@ exports.install = function(instance) {
 		if (instance.options.enabled)
 			instance.status('{0}% / {1}'.format(current.cpu, current.memory.filesize()));
 		else
-			instance.status('Disabled');
+			instance.status('Disabled', 'red');
 	};
 
 	instance.on('click', function() {
 		instance.options.enabled = !instance.options.enabled;
 		instance.custom.status();
-		instance.save();
 
 		if (instance.options.enabled) {
 			current.counter = 0;

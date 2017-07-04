@@ -1,12 +1,13 @@
 exports.id = 'monitormemory';
-exports.title = 'Monitoring: Memory';
+exports.title = 'Memory';
 exports.version = '1.0.0';
 exports.author = 'Peter Širka';
-exports.group = 'Inputs';
+exports.group = 'Monitoring';
 exports.color = '#F6BB42';
 exports.output = 1;
+exports.click = true;
 exports.icon = 'microchip';
-exports.options = { interval: 8000 };
+exports.options = { interval: 8000, enabled: true };
 exports.readme = `# Memory monitoring
 
 This component monitors memory \`bytes\` consumption in Linux systems. It uses \`free\` command.
@@ -41,6 +42,9 @@ exports.install = function(instance) {
 			tproc = null;
 		}
 
+		if (!instance.options.enabled)
+			return;
+
 		require('child_process').exec('free -b -t', function(err, response) {
 
 			tproc = setTimeout(instance.custom.run, instance.options.interval);
@@ -54,9 +58,23 @@ exports.install = function(instance) {
 			current.total = memory[0].parseInt();
 			current.used = memory[1].parseInt() - memory[3].parseInt();
 			current.free = current.total - current.used;
+			instance.custom.status();
 			instance.send(current);
 		});
 	};
+
+	instance.custom.status = function() {
+		if (instance.options.enabled)
+			instance.status(current.free.filesize() + ' / ' + current.total.filesize());
+		else
+			instance.status('Disabled', 'red');
+	};
+
+	instance.on('click', function() {
+		instance.options.enabled = !instance.options.enabled;
+		instance.custom.status();
+		instance.options.enabled && instance.custom.run();
+	});
 
 	instance.on('close', function() {
 		if (tproc) {

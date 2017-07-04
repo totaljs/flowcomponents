@@ -1,12 +1,13 @@
 exports.id = 'monitorprocess';
-exports.title = 'Monitoring: Process';
+exports.title = 'Process';
 exports.version = '1.0.0';
 exports.author = 'Peter Širka';
-exports.group = 'Inputs';
+exports.group = 'Monitoring';
 exports.color = '#F6BB42';
 exports.output = 1;
 exports.icon = 'exchange';
-exports.options = { interval: 8000, process: 'total' };
+exports.click = true;
+exports.options = { interval: 8000, process: 'total', enabled: true };
 exports.readme = `# Process monitoring
 
 This component monitors a process in Linux systems. It uses \`ps\` and \`lsof\` commands.
@@ -59,6 +60,9 @@ exports.install = function(instance) {
 			tproc = null;
 		}
 
+		if (!instance.options.enabled)
+			return;
+
 		counter++;
 
 		if (!pids || counter % 10 === 0) {
@@ -79,6 +83,7 @@ exports.install = function(instance) {
 	instance.custom.pid = function(callback) {
 		Exec('ps aux | grep "{0}" | grep -v "grep" | awk {\'print $2\'}'.format(instance.options.process), function(err, response) {
 			var arr = null;
+
 			if (err) {
 				instance.error(err);
 				pids = null;
@@ -87,7 +92,6 @@ exports.install = function(instance) {
 				pids = arr.join(',');
 			}
 
-			instance.status('PID: ' + (arr ? arr.length + 'x' : 'waiting'));
 			callback();
 		});
 	};
@@ -130,11 +134,28 @@ exports.install = function(instance) {
 				} else
 					current.files = response.trim().parseInt2();
 
+				instance.status();
 				instance.send(current);
 				callback();
 			});
 		});
 	};
+
+	instance.custom.status = function() {
+		if (instance.options.enabled)
+			instance.status('{0}% / {1}'.format(current.cpu, current.memory.filesize()));
+		else
+			instance.status('Disabled', 'red');
+	};
+
+	instance.on('click', function() {
+		instance.options.enabled = !instance.options.enabled;
+		instance.custom.status();
+		if (instance.options.enabled) {
+			counter = 0;
+			instance.custom.run();
+		}
+	});
 
 	instance.reconfigure = function() {
 		counter = 0;
