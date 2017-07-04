@@ -39,6 +39,7 @@ exports.install = function(instance) {
 	var tproc = null;
 	var arg = null;
 	var reg_network = /RX bytes:\d+|TX bytes:\d+/g;
+	var Exec = require('child_process').exec;
 
 	instance.custom.run = function() {
 
@@ -50,7 +51,7 @@ exports.install = function(instance) {
 		var arr = [];
 
 		arr.push(function(next) {
-			require('child_process').exec('netstat -an | grep {0} | wc -l'.format(arg), function(err, response) {
+			Exec('netstat -an | grep {0} | wc -l'.format(arg), function(err, response) {
 
 				if (err)
 					instance.error(err);
@@ -62,7 +63,7 @@ exports.install = function(instance) {
 		});
 
 		arr.push(function(next) {
-			require('child_process').exec('ifconfig ' + instance.options.interface, function(err, response) {
+			Exec('ifconfig ' + instance.options.interface, function(err, response) {
 
 				if (err)
 					instance.error(err);
