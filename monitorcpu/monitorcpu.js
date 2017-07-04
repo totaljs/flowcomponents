@@ -57,7 +57,6 @@ exports.install = function(instance) {
 		current.cpu = 0;
 		chunk.toString('utf8').parseTerminal(fields, instance.custom.parse);
 		current.count = current.cores.length;
-		current.updated = F.datetime;
 		if (current.count) {
 			instance.send(current);
 			instance.custom.status();
