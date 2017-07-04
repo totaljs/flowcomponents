@@ -2,7 +2,6 @@
   {
     "name": "Common",
     "items": [
-      "https://rawgit.com/totaljs/flowcomponents/master/analytics/analytics.js",
       "https://rawgit.com/totaljs/flowcomponents/master/condition/condition.js",
       "https://rawgit.com/totaljs/flowcomponents/master/counter/counter.js",
       "https://rawgit.com/totaljs/flowcomponents/master/debug/debug.js",
@@ -10,7 +9,6 @@
       "https://rawgit.com/totaljs/flowcomponents/master/email/email.js",
       "https://rawgit.com/totaljs/flowcomponents/master/filewriter/filewriter.js",
       "https://rawgit.com/totaljs/flowcomponents/master/function/function.js",
-      "https://rawgit.com/totaljs/flowcomponents/master/groupanalytics/groupanalytics.js",
       "https://rawgit.com/totaljs/flowcomponents/master/lastusage/lastusage.js",
       "https://rawgit.com/totaljs/flowcomponents/master/httprequest/httprequest.js",
       "https://rawgit.com/totaljs/flowcomponents/master/merge/merge.js",
@@ -64,6 +62,12 @@
       "https://rawgit.com/totaljs/flowcomponents/master/flowboardlight/flowboardlight.js",
       "https://rawgit.com/totaljs/flowcomponents/master/flowboardoutput/flowboardoutput.js",
       "https://rawgit.com/totaljs/flowcomponents/master/flowboardsocket/flowboardsocket.js"
+    ]
+  },
+  {
+    "name": "Dashboard",
+    "items": [
+      "https://rawgit.com/totaljs/flowcomponents/master/dashboardanalytics/dashboardanalytics.js"
     ]
   },
   {

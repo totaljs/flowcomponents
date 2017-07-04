@@ -213,8 +213,7 @@ exports.install = function(instance) {
 
 	instance.on('options', instance.reconfigure);
 
-	instance.on('dashboard', function(type, data) {
-
+	instance.on('dashboard', function(type) {
 		switch (type) {
 			case 'stats':
 				instance.stats();
@@ -223,7 +222,6 @@ exports.install = function(instance) {
 				instance.dashboard(type, current);
 				break;
 		}
-
 	});
 
 	// This method sends stats to Dashboard

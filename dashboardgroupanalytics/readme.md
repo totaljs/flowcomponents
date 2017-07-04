@@ -1,4 +1,4 @@
-# Group Analytics
+# Dashboard Group Analytics (NOT COMPLETE)
 
 Creates a group analytics automatically according a value and group. The value must be a `Number` and group must be a `String`. The output is `Object`:
 

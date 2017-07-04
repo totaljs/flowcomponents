@@ -1,9 +1,9 @@
-exports.id = 'groupanalytics';
+exports.id = 'dashboardgroupanalytics';
 exports.title = 'Group Analytics';
 exports.version = '1.0.0';
 exports.author = 'Peter Širka';
-exports.group = 'Databases';
-exports.color = '#D770AD';
+exports.group = 'Dashboard';
+exports.color = '#5CB36D';
 exports.input = true;
 exports.output = 1;
 exports.options = { fn: 'next({ value: value.count, group: value.brand });', format: '{0}x', decimals: 2 };
