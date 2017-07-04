@@ -1,5 +1,5 @@
 exports.id = 'monitorconsumption';
-exports.title = 'Monitor: Consumption';
+exports.title = 'Monitoring: Consumption';
 exports.version = '1.0.0';
 exports.author = 'Peter Širka';
 exports.group = 'Inputs';
