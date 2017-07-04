@@ -73,7 +73,7 @@
   {
     "name": "Monitoring",
     "items": [
-      "https://rawgit.com/totaljs/flowcomponents/master/consumption/consumption.js",
+      "https://rawgit.com/totaljs/flowcomponents/master/monitorconsumption/monitorconsumption.js",
       "https://rawgit.com/totaljs/flowcomponents/master/monitorcpu/monitorcpu.js",
       "https://rawgit.com/totaljs/flowcomponents/master/monitormemory/monitormemory.js",
       "https://rawgit.com/totaljs/flowcomponents/master/monitordisk/monitordisk.js",

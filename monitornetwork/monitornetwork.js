@@ -99,7 +99,6 @@ exports.install = function(instance) {
 	});
 
 	instance.on('options', instance.reconfigure);
-
 	setTimeout(instance.custom.run, 1000);
 	instance.reconfigure();
 };

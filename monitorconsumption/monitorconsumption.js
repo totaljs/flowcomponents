@@ -1,5 +1,5 @@
-exports.id = 'consumption';
-exports.title = 'Consumption';
+exports.id = 'monitorconsumption';
+exports.title = 'Monitor: Consumption';
 exports.version = '1.0.0';
 exports.author = 'Peter Širka';
 exports.group = 'Inputs';
@@ -9,7 +9,7 @@ exports.output = 1;
 exports.icon = 'bug';
 exports.options = { interval: 5000, enabled: true, monitorconsumption: true, monitorsize: true, monitorconnections: true, monitorfiles: true };
 exports.click = true;
-exports.readme = `# Flow consumption
+exports.readme = `# Consumption monitoring
 
 This component measure CPU and memory consumption, open files and open connections of this application. It uses these Linux commands: \`ps\`, \`lsof\`, \`netstat\` and \`df\`.
 

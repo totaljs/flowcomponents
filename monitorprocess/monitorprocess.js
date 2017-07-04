@@ -138,10 +138,12 @@ exports.install = function(instance) {
 
 	instance.reconfigure = function() {
 		counter = 0;
+		pids = null;
 		current.name = instance.options.process;
 		instance.custom.run();
 	};
 
+	instance.on('options', instance.reconfigure);
 	setTimeout(instance.custom.run, 1000);
 	instance.reconfigure();
 };
