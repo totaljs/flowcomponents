@@ -105,7 +105,6 @@ exports.install = function(instance) {
 
 		arr.async(function() {
 
-			current.counter++;
 			tproc && clearTimeout(tproc);
 
 			if (instance.options.enabled) {
@@ -114,6 +113,7 @@ exports.install = function(instance) {
 			}
 
 			instance.custom.status();
+			current.counter++;
 		});
 	};
 
