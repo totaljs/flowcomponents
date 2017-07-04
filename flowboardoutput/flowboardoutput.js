@@ -1,5 +1,5 @@
 exports.id = 'flowboardoutput';
-exports.title = 'Flowboard: Output';
+exports.title = 'Output';
 exports.group = 'Flowbard';
 exports.color = '#AC92EC';
 exports.icon = 'fa-commenting';
@@ -13,26 +13,24 @@ This component shows data as they are. Output can be __HTML__ and can contain __
 
 exports.install = function(instance) {
 
-	instance.custom.reconfigure = function() {
+	instance.reconfigure = function() {
 		instance.status(global.FLOWBOARD ? '' : 'Flowbard not found.', global.FLOWBOARD ? null : 'red');
 	};
 
 	instance.on('data', function(response) {
 		instance.set('state', response.data);
-		instance.flowboard_send(response.data);
+		instance.flowboard && instance.flowboard('laststate', response.data);
 	});
 
-	instance.on('options', instance.custom.reconfigure);
-	instance.custom.reconfigure();
+	instance.on('options', instance.reconfigure);
+	instance.reconfigure();
 
-	// Flowboard methods:
-
-	instance.flowboard_send = function(data, category) {
-		global.FLOWBOARD &&	global.FLOWBOARD.send(instance, data, category);
-	};
-
-	instance.flowboard_laststate = function() {
-		return instance.get('state');
-	};
-
+	instance.on('flowboard', function(type, data) {
+		switch (type) {
+			case 'laststate':
+				var data = instance.get('state');
+				data !== undefined && instance.flowboard && instance.flowboard('laststate', data);
+				break;
+		}
+	});
 };

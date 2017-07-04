@@ -29,9 +29,10 @@ exports.readme = `
 If the topic field is left empty and the data object does not have a 'topic' property then nothing is send.
 `;
 
-var PUBLISH_OPTIONS = {};
 
 exports.install = function(instance) {
+
+	var PUBLISH_OPTIONS = {};
 
 	var added = false;
 	var ready = false;
@@ -102,6 +103,11 @@ exports.install = function(instance) {
 				break;
 			case 'error':
 				instance.status(msg, 'red');
+				break;
+			case 'reconfigured':
+				instance.options.broker = msg;
+				instance.reconfig();
+				instance.custom.reconfigure();
 				break;
 		};
 	};

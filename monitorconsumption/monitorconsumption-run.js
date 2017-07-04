@@ -34,19 +34,5 @@ FLOWINIT(require('./' + U.getName(process.argv[1].replace(/\-run\.js$/, ''))));
 // ON('flow.close')                    - triggered when the component is closed
 
 ON('flow.ready', function() {
-	FLOWOPTIONS({ fn: 'next(value.temperature)', type: 'max', format: '{0}%' });
-	setTimeout(function() {
-		FLOWDATA({ temperature: 30 });
-		FLOWEMIT('service', 1);
-		FLOWDATA({ temperature: 33 });
-		FLOWEMIT('service', 2);
-		FLOWDATA({ temperature: 25 });
-		FLOWDATA({ temperature: 20 });
-		FLOWDATA({ temperature: 35 });
-		FLOWEMIT('service', 3);
-		FLOWDATA({ temperature: 35 });
-		FLOWDATA({ temperature: 35 });
-		FLOWDATA({ temperature: 35 });
-		FLOWDATA({ temperature: 35 });
-	}, 1000);
+
 });

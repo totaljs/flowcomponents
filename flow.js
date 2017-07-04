@@ -34,6 +34,11 @@ function Component(options) {
 
 Util.inherits(Component, EventEmitter);
 
+Component.prototype.error = function(e, parent) {
+	console.log(e);
+	return this;
+};
+
 Component.prototype.set = function(key, value) {
 	FLOW.set('$' + this.id + key, value);
 	return this;
@@ -274,8 +279,12 @@ global.FLOWTRIGGER = function(name, data) {
 		console.error(ERR + 'trigger ({0}) --> not found'.format(name));
 };
 
-global.FLOWDATA = function(data) {
+global.FLOWDATA = function(data, input) {
 	data = new FlowData(data);
+	if (typeof(input) === 'number' && input > -1) {
+		data.index = input;
+		FLOW.current.emit('' + input, data);
+	}
 	FLOW.current.emit('data', data);
 	EMIT('flow.data', data);
 };

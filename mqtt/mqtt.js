@@ -27,7 +27,7 @@ exports.html = `<div class="padding">
 					<div data-jc="textbox" data-jc-path="username" class="m">Username</div>
 				</div>
 				<div class="col-md-6">
-					<div data-jc="textbox" data-jc-path="password" class="m">Password</div>
+					<div data-jc="textbox" data-jc-path="password" data-jc-type="password" class="m">Password</div>
 				</div>
 			</div>
 		</div>
@@ -53,6 +53,11 @@ exports.install = function(instance) {
 
 	instance.custom.reconfigure = function(o, old_options) {
 
+		if (old_options)
+			MQTT_BROKERS = MQTT_BROKERS.remove(function(b){
+				return b.id === old_options.id;
+			});		
+
 		var options = instance.options;
 
 		if (!options.host || !options.port) {
@@ -62,15 +67,18 @@ exports.install = function(instance) {
 
 		options.id = options.host + ':' + options.port;
 
-		if (broker)
-			JSON.stringify(options) !== JSON.stringify(old_options) && broker.reconfigure(options);
-		else
-			instance.custom.createBroker();
+		if (broker) {
+			JSON.stringify(options) !== JSON.stringify(old_options) && broker.close();
+			EMIT('mqtt.brokers.status', 'reconfigured', old_options.id, options.id);
+		}
+		
+		instance.custom.createBroker();
 	};
 
 	instance.custom.createBroker = function() {
 		ON('mqtt.brokers.status', brokerstatus);
-		broker = new Broker(instance.options);
+		var o = instance.options;
+		broker = new Broker({host: o.host, port: o.port, id: o.id});
 		instance.status('Ready', 'white');
 		MQTT_BROKERS.push(broker);
 	};
@@ -222,7 +230,7 @@ Broker.prototype.connect = function() {
 	});
 
 	self.client.on('close', function() {
-		if (self.connected) {
+		if (self.connected || !self.connecting) {
 			self.connected = false;
 			EMIT('mqtt.brokers.status', 'disconnected', self.id);
 		} else if (self.connecting) {
@@ -244,22 +252,29 @@ Broker.prototype.connect = function() {
 
 };
 
-Broker.prototype.disconnect = function() {
+Broker.prototype.disconnect = function(reconnect) {
 	var self = this;
-	if (!self.closing && !self.components.length && self.client && self.client.connected)
-		self.client.end();
+	if (!self.closing)
+		self.close(function(){
+			reconnect && self.connect();
+		});
 };
 
-Broker.prototype.reconfigure = function(options) {
+Broker.prototype.close = function(callback) {
 	var self = this;
-	if (self.closing)
-		return;
+	self.closing = true;
 
-	self.options = options;
+	if (self.connected || self.connecting)
+		self.client.end(cb);
+	else
+		cb();
 
-	if (self.connected) {
-		self.disconnect();
-		self.connect();
+	function cb() {		
+		EMIT('mqtt.brokers.status', 'disconnected', self.id);
+		self.client.removeAllListeners();
+		self.components = [];
+		self.client = null;
+		callback && callback();
 	}
 };
 
@@ -303,18 +318,6 @@ Broker.prototype.publish = function(topic, data, options) {
 	self.client.publish(topic, data, options);
 };
 
-Broker.prototype.close = function(callback) {
-	var self = this;
-	self.closing = true;
-
-	if (self.connected || self.connecting)
-		self.client.end(callback);
-	else
-		callback();
-
-	self.client.removeAllListeners();
-};
-
 Broker.prototype.add = function(componentid) {
 	var self = this;
 	self.components.indexOf(componentid) === -1 && self.components.push(componentid);
@@ -324,5 +327,5 @@ Broker.prototype.add = function(componentid) {
 Broker.prototype.remove = function(componentid) {
 	var self = this;
 	self.components = self.components.remove(componentid);
-	self.disconnect();
+	!self.components.length && self.disconnect();
 };

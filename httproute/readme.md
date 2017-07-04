@@ -1,11 +1,13 @@
 # HTTP route
-
 When a request comes in bellow object is available at `flowdata.data`:
 ```javascript
 {
 	params: { id: '1' },     // params for dynamic routes, e.g. /test/{id}
 	query: { msg: 'Hello' }, // parsed query string, e.g. /test/1?msg=Hello
-	body: { test: 'OK' }     // object if json requests otherwise string
+	body: { test: 'OK' },    // object if json requests otherwise string
+	session: {},			 // sesion data
+	user: {},				 // user
+	files: []				 // files
 }
 ```
 

@@ -8,36 +8,40 @@ exports.output = 1;
 exports.options = {};
 exports.readme = `# Virtual wire in
 
-After creating \`Virtual wire out\` make sure to hit Apply button otherwise it will not appear in setting of this component.
-
-`;
+After creating \`Virtual wire out\` make sure to hit Apply button otherwise it will not appear in setting of this component.`;
 
 exports.html = `<div class="padding">
-	<div data-jc="dropdown" data-jc-path="wire" data-source="virtualwires_source" class="m">@(Select a wire)</div>
+	<div data-jc="dropdown" data-jc-path="wire" data-source="virtualwiresout_source" data-required="true" data-empty="Select a Virtual wire out component" class="m">@(Select a wire)</div>
+	<div class="help m">@(Make sure to create 'Virtual wire out' first to see it in dropdown.)</div>
 </div>
 <script>
-	TRIGGER('virtualwires', 'virtualwires_source');
+	ON('open.virtualwirein', function(){
+		TRIGGER('virtualwiresout', 'virtualwiresout_source');
+	});
+	ON('save.virtualwirein', function(component, options) {
+		!component.name && (component.name = 'From ' + virtualwiresout_source.findItem('id', options.wire).name);
+	});
 </script>`;
 
-exports.install = function(instance) {	
+exports.install = function(instance) {
 
 	instance.custom.reconfigure = function(options, old_options){
 		if (old_options && old_options.wire && options.wire !== old_options.wire)
-			OFF('virtualwire:' + options.wire, handler);
+			OFF('virtualwireout', instance.handler);
 
 		if (instance.options.wire) {
-			ON('virtualwire:' + instance.options.wire, handler);
+			ON('virtualwireout', instance.handler);
 			instance.status('');
 		} else {
 			instance.status('Not configured');
 		}
 	};
 
-	instance.on('options', instance.custom.reconfigure);
-
-	instance.custom.reconfigure();
-
-	function handler(flowdata){
-		instance.send(flowdata);
+	instance.handler = function(id, flowdata) {
+		if (instance.options.wire === id)
+			instance.send(flowdata);
 	};
+
+	instance.on('options', instance.custom.reconfigure);
+	instance.custom.reconfigure();
 };
