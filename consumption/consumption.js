@@ -55,7 +55,6 @@ exports.install = function(instance) {
 		}
 
 		var arr = [];
-		current.counter++;
 
 		instance.options.monitorconsumption && arr.push(function(next) {
 			Exec('ps -p {0} -o %cpu,rss,etime'.format(process.pid), function(err, response) {
@@ -94,11 +93,7 @@ exports.install = function(instance) {
 		});
 
 		// Get directory size
-		instance.options.monitorsize && arr.push(function(next) {
-
-			if (current.counter % 5 !== 0)
-				return next();
-
+		instance.options.monitorsize && current.counter % 5 !== 0 && arr.push(function(next) {
 			Exec('du -hsb ' + process.cwd(), function(err, response) {
 				if (!err) {
 					var match = response.trim().match(reg_appdisksize);
@@ -109,6 +104,8 @@ exports.install = function(instance) {
 		});
 
 		arr.async(function() {
+
+			current.counter++;
 			tproc && clearTimeout(tproc);
 
 			if (instance.options.enabled) {
@@ -131,6 +128,12 @@ exports.install = function(instance) {
 		instance.options.enabled = !instance.options.enabled;
 		instance.custom.status();
 		instance.save();
+
+		if (instance.options.enabled) {
+			current.counter = 0;
+			instance.custom.run();
+		}
+
 	});
 
 	instance.on('close', function() {
