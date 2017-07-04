@@ -37,7 +37,7 @@ exports.html = `<div class="padding">
 
 exports.install = function(instance) {
 
-	var current = { name: '', cpu: 0, memory: 0, files: 0, uptime: 0 };
+	var current = { name: '', cpu: 0, memory: 0, files: 0, uptime: 0, count: 0 };
 	var pids = null;
 	var tproc = null;
 	var counter = 0;
@@ -87,9 +87,11 @@ exports.install = function(instance) {
 			if (err) {
 				instance.error(err);
 				pids = null;
+				current.count = 0;
 			} else {
 				arr = response.trim().split('\n');
 				pids = arr.join(',');
+				current.count = arr.length;
 			}
 
 			callback();
@@ -110,6 +112,8 @@ exports.install = function(instance) {
 
 			var uptime_max = 0;
 			current.uptime = null;
+			current.memory = 0;
+			current.cpu = 0;
 
 			response.split('\n').forEach(function(line, index) {
 				if (!index)
@@ -134,7 +138,7 @@ exports.install = function(instance) {
 				} else
 					current.files = response.trim().parseInt2();
 
-				instance.status();
+				instance.custom.status();
 				instance.send(current);
 				callback();
 			});
@@ -143,7 +147,7 @@ exports.install = function(instance) {
 
 	instance.custom.status = function() {
 		if (instance.options.enabled)
-			instance.status('{0}% / {1}'.format(current.cpu, current.memory.filesize()));
+			instance.status('{0}% / {1} ({2}x)'.format(current.cpu.floor(1), current.memory.filesize(), current.count));
 		else
 			instance.status('Disabled', 'red');
 	};
