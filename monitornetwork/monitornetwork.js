@@ -83,6 +83,7 @@ exports.install = function(instance) {
 		arr.async(function() {
 			if (instance.options.enabled) {
 				tproc = setTimeout(instance.custom.run, instance.options.interval);
+				instance.custom.status();
 				instance.send(current);
 			}
 		});
