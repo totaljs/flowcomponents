@@ -110,7 +110,10 @@ exports.install = function(instance) {
 
 			if (instance.options.enabled) {
 				tproc = setTimeout(instance.custom.run, instance.options.interval);
-				instance.send(current);
+				if (instance.send2)
+					instance.send2(current);
+				else
+					instance.send(current);
 			}
 
 			instance.custom.status();
