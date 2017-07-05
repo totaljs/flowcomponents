@@ -25,7 +25,8 @@
       "https://rawgit.com/totaljs/flowcomponents/master/trigger/trigger.js",
       "https://rawgit.com/totaljs/flowcomponents/master/triggertoggle/triggertoggle.js",
       "https://rawgit.com/totaljs/flowcomponents/master/uniqueinterval/uniqueinterval.js",
-      "https://rawgit.com/totaljs/flowcomponents/master/megatimer/megatimer.js"
+      "https://rawgit.com/totaljs/flowcomponents/master/megatimer/megatimer.js",
+      "https://rawgit.com/totaljs/flowcomponents/master/comment/comment.js"
     ]
   },
   {
