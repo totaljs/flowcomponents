@@ -3,7 +3,7 @@ exports.title = 'Comment';
 exports.group = 'Common';
 exports.color = '#704cff';
 exports.author = 'Martin Smola';
-exports.icon = '';
+exports.icon = 'comments';
 exports.readme = '# Comment';
 
 exports.install = function() {};
