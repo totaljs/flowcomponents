@@ -69,7 +69,8 @@
   {
     "name": "Dashboard",
     "items": [
-      "https://rawgit.com/totaljs/flowcomponents/master/dashboardanalytics/dashboardanalytics.js"
+      "https://rawgit.com/totaljs/flowcomponents/master/dashboardanalytics/dashboardanalytics.js",
+      "https://rawgit.com/totaljs/flowcomponents/master/dashboardoutput/dashboardoutput.js"
     ]
   },
   {
