@@ -22,7 +22,7 @@ exports.install = function(instance) {
 
 	instance.on('data', function(response) {
 		instance.set('state', response.data);
-		instance.flowboard('laststate', response.data);
+		instance.flowboard && instance.flowboard('laststate', response.data);
 		instance.status(arr[response.data]);
 	});
 
@@ -35,7 +35,7 @@ exports.install = function(instance) {
 			case 'laststate':
 				// Sends last know state
 				var state = instance.get('state');
-				state !== undefined && instance.flowboard('laststate', state);
+				state !== undefined && instance.flowboard && instance.flowboard('laststate', state);
 				break;
 
 			case 'switch':
@@ -51,7 +51,7 @@ exports.install = function(instance) {
 				instance.set('state', data);
 
 				// Send the last state to Flowboard
-				instance.flowboard('laststate', data);
+				instance.flowboard && instance.flowboard('laststate', data);
 				break;
 		}
 	});
