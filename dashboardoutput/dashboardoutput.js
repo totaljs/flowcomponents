@@ -16,13 +16,13 @@ exports.install = function(instance) {
 
 	instance.on('data', function(response) {
 		lastdata = response.data;
-		lastdata != null && instance.dashboard('laststate', lastdata);
+		lastdata != null && instance.dashboard && instance.dashboard('laststate', lastdata);
 	});
 
 	instance.on('dashboard', function(type) {
 		switch (type) {
 			case 'laststate':
-				lastdata != null && instance.dashboard(type, lastdata);
+				lastdata != null && instance.dashboard && instance.dashboard(type, lastdata);
 				break;
 		}
 	});

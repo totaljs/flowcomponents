@@ -123,7 +123,7 @@ exports.install = function(instance) {
 			current.decimals = instance.options.decimals;
 			current.datetime = F.datetime;
 			instance.connections && instance.send(current);
-			instance.dashboard('laststate', current);
+			instance.dashboard && instance.dashboard('laststate', current);
 			instance.custom.status();
 			EMIT('flow.dashboardanalytics', instance, current);
 		});
@@ -219,7 +219,7 @@ exports.install = function(instance) {
 				instance.stats();
 				break;
 			case 'laststate':
-				instance.dashboard(type, current);
+				instance.dashboard && instance.dashboard(type, current);
 				break;
 		}
 	});
