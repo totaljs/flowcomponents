@@ -25,30 +25,53 @@ When a request comes in bellow object is available at \`flowdata.data\`:
 See documentation for flags [here](https://docs.totaljs.com/latest/en.html#api~HttpRouteOptionsFlags~unauthorize)
 Method flags are set automatically e.g. \`get, post, put or delete\`
 
-\`id:ROUTE_ID\` flag cannot be used since it's already used by this component internally
-`;
+\`id:ROUTE_ID\` flag cannot be used since it's already used by this component internally`;
 
 exports.html = `<div class="padding">
-	<div data-jc="textbox" data-jc-path="url" class="m" data-required="true" data-maxlength="500" data-placeholder="/api/test">@(URL address)</div>
-	<div data-jc="dropdown" data-jc-path="method" data-required="true" data-options=";GET;POST;PUT;DELETE;OPTIONS" class="m">@(HTTP method)</div>
-	<div data-jc="textbox" data-jc-path="flags" data-placeholder="json">@(Additional flags)</div>
-	<div class="help m">@(Separate flags by comma e.g. 'json,authorize')</div>
-	<div data-jc="checkbox" data-jc-path="emptyresponse">@(Automaticlly respond with 200 OK?)</div>
+	<section>
+		<label>@(Main settings)</label>
+		<div class="padding npb">
+			<div data-jc="textbox" data-jc-path="url" class="m" data-required="true" data-maxlength="500" data-placeholder="/api/test">@(URL address)</div>
+			<div data-jc="dropdown" data-jc-path="method" data-required="true" data-options=";GET;POST;PUT;DELETE;OPTIONS" class="m">@(HTTP method)</div>
+
+			<div class="row">
+				<div class="col-md-8 m">
+					<div data-jc="textbox" data-jc-path="flags" data-placeholder="json">@(Additional flags)</div>
+					<div class="help m">@(Separate flags by comma e.g. <code>json, authorize</code>)</div>
+				</div>
+				<div class="col-md-4 m">
+					<div data-jc="textbox" data-jc-path="size" data-placeholder="in kB" data-increment="true" data-jc-type="number" data-maxlength="10" data-align="center">@(Max. request size)</div>
+					<div class="help m">@(In <code>kB</code> kilobytes)</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<br />
+	<div data-jc="checkbox" data-jc-path="emptyresponse" class="b black">@(Automaticlly respond with 200 OK?)</div>
 	<div class="help m">@(If not checked you need to use HTTP response component to respond to the request.)</div>
+	<hr />
 	<div data-jc="keyvalue" data-jc-path="headers" data-placeholder-key="@(Header name)" data-placeholder-value="@(Header value and press enter)" class="m">@(Custom headers)</div>
 	<div data-jc="keyvalue" data-jc-path="cookies" data-placeholder-key="@(Cookie name)" data-placeholder-value="@(Cookie value and press enter)" class="m">@(Cookies)</div>
-	<script>
-		ON('save.httproute', function(component, options) {
-			!component.name && (component.name = options.method + ' ' + options.url);
-		});	
-	</script>
-</div>`;
+</div><script>
+	ON('open.httproute', function(component, options) {
+		if (options.flags instanceof Array) {
+			options.flags = options.flags.remove(function(item) {
+				return item.substring(0, 3) === 'id:';
+			}).join(', ');
+		}
+	});
+
+	ON('save.httproute', function(component, options) {
+		!component.name && (component.name = options.method + ' ' + options.url);
+	});
+</script>`;
 
 exports.install = function(instance) {
 
 	var id, params;
 
 	instance.custom.action = function() {
+
 		var data = {
 			query: this.query,
 			body: this.body,
@@ -56,6 +79,7 @@ exports.install = function(instance) {
 			user: this.user,
 			files: this.files
 		};
+
 		if (params.length) {
 			data.params = {};
 			for (var i = 0, length = arguments.length; i < length; i++)
@@ -63,12 +87,13 @@ exports.install = function(instance) {
 		}
 
 		data = instance.make(data);
+
 		if (instance.options.emptyresponse) {
 			instance.status('200 OK');
-			this.plain();
-		}
-		else
+			setTimeout(self => self.plain(), 100, this);
+		} else
 			data.set('controller', this);
+
 		instance.send(data);
 	};
 
@@ -82,7 +107,9 @@ exports.install = function(instance) {
 		}
 
 		if (typeof(options.flags) === 'string')
-			options.flags = options.flags.split(',');
+			options.flags = options.flags.split(',').trim();
+
+		console.log(options.flags);
 
 		id && UNINSTALL('route', id);
 		id = 'id:' + instance.id;
@@ -93,7 +120,7 @@ exports.install = function(instance) {
 		flags.push(id);
 		flags.push(options.method.toLowerCase());
 
-		F.route(options.url, instance.custom.action, flags);
+		F.route(options.url, instance.custom.action, flags, options.size || 5);
 		instance.status('Listening', 'green');
 	};
 
