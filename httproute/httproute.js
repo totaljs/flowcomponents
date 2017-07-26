@@ -109,8 +109,6 @@ exports.install = function(instance) {
 		if (typeof(options.flags) === 'string')
 			options.flags = options.flags.split(',').trim();
 
-		console.log(options.flags);
-
 		id && UNINSTALL('route', id);
 		id = 'id:' + instance.id;
 		params = [];
