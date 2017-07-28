@@ -6,7 +6,7 @@ exports.group = 'Dashboard';
 exports.color = '#5CB36D';
 exports.input = true;
 exports.output = 1;
-exports.options = { fn: 'next(value.temperature);', format: '{0} °C', decimals: 2 };
+exports.options = { fn: 'next(value.temperature);', format: '{0} °C', decimals: 2, statshours: 24, statsdays: 14, statsmonths: 12, statsyears: 5  };
 exports.readme = `# Dashboard Analytics
 
 Creates analytics automatically according a value. The value must be a number. The output is \`Object\`:
@@ -122,7 +122,7 @@ exports.install = function(instance) {
 			current.period = instance.options.type[0] === 'D' ? 'daily' : 'hourly';
 			current.decimals = instance.options.decimals;
 			current.datetime = F.datetime;
-			instance.connections && instance.send(current);
+			instance.send2(current);
 			instance.dashboard && instance.dashboard('laststate', current);
 			instance.custom.status();
 			EMIT('flow.dashboardanalytics', instance, current);
@@ -195,6 +195,8 @@ exports.install = function(instance) {
 		cache.datetime = F.datetime;
 	};
 
+	instance.nosql = callback => callback(null, NOSQL(dbname));
+
 	instance.reconfigure = function() {
 		var options = instance.options;
 
@@ -251,20 +253,20 @@ exports.install = function(instance) {
 
 			var tmp = { year: doc.year, month: doc.month, day: doc.day, hour: doc.hour, count: doc.count, value: doc.value, datecreated: doc.datecreated };
 			tmp.id = doc.id;
-			output.hourslength = 24;
-			quantitator(output.hourslength, output.hours, 'id', tmp, comparer); // last 24 hours
+			output.hourslength = instance.options.statshours || 24;
+			quantitator(output.hourslength, output.hours, 'id', tmp, comparer);
 
 			tmp.id = +doc.id.toString().substring(0, 8);
-			output.dayslength = 14;
-			quantitator(output.dayslength, output.days, 'id', tmp, comparer); // last 14 days
+			output.dayslength = instance.options.statsdays || 14;
+			quantitator(output.dayslength, output.days, 'id', tmp, comparer);
 
 			tmp.id = +doc.id.toString().substring(0, 6);
-			output.monthslength = 12;
-			quantitator(output.monthslength, output.months, 'id', tmp, comparer); // last 12 months
+			output.monthslength = instance.options.statsmonths || 12;
+			quantitator(output.monthslength, output.months, 'id', tmp, comparer);
 
 			tmp.id = doc.year;
-			output.yearslength = 5;
-			quantitator(output.yearslength, output.years, 'id', tmp, comparer); // last 5 years
+			output.yearslength = instance.options.statsyears || 5;
+			quantitator(output.yearslength, output.years, 'id', tmp, comparer);
 
 		}).callback(function() {
 			if (callback)
