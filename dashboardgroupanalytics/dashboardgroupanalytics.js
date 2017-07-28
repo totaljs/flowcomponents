@@ -6,7 +6,7 @@ exports.group = 'Dashboard';
 exports.color = '#5CB36D';
 exports.input = true;
 exports.output = 1;
-exports.options = { fn: 'next({ value: value.count, group: value.brand });', format: '{0}x', decimals: 2 };
+exports.options = { fn: 'next({ value: value.count, group: value.brand });', format: '{0}x', decimals: 2, statshours: 24, statsdays: 14, statsmonths: 12, statsyears: 5 };
 exports.readme = `# Group Analytics
 
 Creates a group analytics automatically according a value and group. The value must be a \`Number\` and group must be a \`String\`. The output is \`Object\`:
@@ -54,7 +54,7 @@ exports.install = function(instance) {
 	const Fs = require('fs');
 
 	var fn = null;
-	var dbname = 'groupanalytics_' + instance.id;
+	var dbname = 'dga_' + instance.id;
 	var temporary = F.path.databases(dbname + '.json');
 	var cache = {};
 	var current = {};
@@ -130,8 +130,10 @@ exports.install = function(instance) {
 			btmp.period = instance.options.type[0] === 'D' ? 'daily' : 'hourly';
 			btmp.decimals = instance.options.decimals;
 			btmp.datetime = F.datetime;
-			instance.connections && instance.send(current);
-			EMIT('flow.groupanalytics', instance, current);
+			instance.send2(current);
+			instance.dashboard && instance.dashboard('laststate', current);
+			instance.custom.status();
+			EMIT('flow.dashboardgroupanalytics', instance, current);
 		});
 	});
 
@@ -144,10 +146,6 @@ exports.install = function(instance) {
 
 	instance.custom.save_temporary = function() {
 		Fs.writeFile(temporary, JSON.stringify(cache), NOOP);
-	};
-
-	instance.custom.current = function() {
-		return current;
 	};
 
 	instance.custom.save = function() {
@@ -193,7 +191,10 @@ exports.install = function(instance) {
 			doc.group = key;
 			doc.datecreated = F.datetime;
 
-			NOSQL(dbname).update(doc, doc).where('id', doc.id).where('group', doc.group);
+			NOSQL(dbname).update(doc, doc).where('id', doc.id).where('group', doc.group).callback(function() {
+				// Sends stats
+				instance.stats();
+			});
 
 			item.count = 0;
 			item.number = null;
@@ -217,39 +218,147 @@ exports.install = function(instance) {
 	};
 
 	instance.custom.reconfigure = function() {
-		var options = instance.options;
-
-		if (!options.type) {
+		if (instance.options.type) {
+			fn = SCRIPT(instance.options.fn);
+			instance.status('');
+			instance.custom.init && instance.custom.init();
+		} else {
 			instance.status('Not configured', 'red');
 			fn = null;
-			return;
 		}
-
-		fn = SCRIPT(options.fn);
-		instance.status('');
-		instance.custom.init && instance.custom.init();
 	};
 
 	instance.on('options', instance.custom.reconfigure);
-	instance.custom.stats = callback => callback(null, NOSQL(dbname));
+	instance.on('dashboard', function(type) {
+		switch (type) {
+			case 'stats':
+				instance.stats();
+				break;
+			case 'laststate':
+				instance.dashboard && instance.dashboard(type, current);
+				break;
+		}
+	});
+
+	instance.nosql = callback => callback(null, NOSQL(dbname));
+
+	// This method sends stats to Dashboard
+	instance.stats = function(callback) {
+
+		if (!global.DASHBOARD || !global.DASHBOARD.online()) {
+			callback && callback();
+			return;
+		}
+
+		var output = {};
+		var daily = instance.options.type[0] === 'D';
+		var g = {};
+
+		output.id = instance.id;
+		output.hours = {};
+		output.days = {};
+		output.months = {};
+		output.years = {};
+		output.groups = [];
+		output.period = daily ? 'hourly' : 'daily';
+		output.type = daily ? instance.options.type.substring(1) : instance.options.type;
+		output.format = instance.options.format;
+		output.decimals = instance.options.decimals;
+
+		var comparer = output.type === 'min' ? Math.min : Math.max;
+
+		NOSQL(dbname).find().prepare(function(doc) {
+
+			g[doc.group] = true;
+
+			var tmp = { year: doc.year, month: doc.month, day: doc.day, hour: doc.hour, count: doc.count, value: doc.value, datecreated: doc.datecreated };
+			var group = output.hours[doc.group];
+			!group && (group = output.hours[doc.group] = []);
+			tmp.id = doc.id;
+			output.hourslength = instance.options.statshours || 24;
+			quantitator(output.hourslength, group, 'id', tmp, comparer);
+
+			tmp.id = +doc.id.toString().substring(0, 8);
+			output.dayslength = instance.options.statsdays || 14;
+			group = output.days[doc.group];
+			!group && (group = output.days[doc.group] = []);
+			quantitator(output.dayslength, group, 'id', tmp, comparer);
+
+			tmp.id = +doc.id.toString().substring(0, 6);
+			output.monthslength = instance.options.statsmonths || 12;
+			group = output.months[doc.group];
+			!group && (group = output.months[doc.group] = []);
+			quantitator(output.monthslength, group, 'id', tmp, comparer);
+
+			tmp.id = doc.year;
+			output.yearslength = instance.options.statsyears || 5;
+			group = output.years[doc.group];
+			!group && (group = output.years[doc.group] = []);
+			quantitator(output.yearslength, group, 'id', tmp, comparer);
+
+		}).callback(function() {
+			output.groups = Object.keys(g);
+			if (callback)
+				callback(null, output);
+			else if (instance.dashboard)
+				instance.dashboard('stats', output);
+		});
+	};
+
 	instance.custom.groups = callback => callback(null, NOSQL(dbname).meta('groups'));
 	instance.custom.reconfigure();
+
+	instance.custom.status = function() {
+		var count = NOSQL(dbname).meta('groups').length;
+		instance.status('Groups: ' + count + 'x');
+	};
 
 	instance.custom.init = function() {
 		instance.custom.init = null;
 		Fs.readFile(temporary, function(err, data) {
 			if (err)
 				return;
-			var dt = cache.$datetime || F.datetime;
 			var tmp = data.toString('utf8').parseJSON(true);
 			if (tmp && tmp.$datetime) {
 				cache = tmp;
-				if (instance.options.type[0] === 'D')
-					cache.$datetime.getDate() !== dt.getDate() && instance.custom.save();
-				else
-					cache.$datetime.getHours() !== dt.getHours() && instance.custom.save();
+				instance.custom.save();
 			} else
 				cache.$datetime = F.datetime;
 		});
 	};
 };
+
+function quantitator(max, results, identity, obj, comparer, group) {
+
+	if (group && !results[group])
+		results[group] = [];
+
+	var arr = group ? results[group] : results;
+
+	var length = arr.length;
+	var item;
+
+	if (length < max) {
+		item = arr.findItem(identity, obj[identity]);
+		if (item) {
+			item.value = comparer(item.value, obj.value);
+		} else {
+			arr.push(U.clone(obj));
+			arr.quicksort(identity, false);
+		}
+		return;
+	}
+
+	for (var i = 0; i < length; i++) {
+		item = arr[i];
+		if (obj[identity] > item[identity]) {
+			for (var j = length - 1; j > i; j--)
+				arr[j] = arr[j - 1];
+			arr[i] = U.clone(obj);
+			return;
+		} else if (obj[identity] === item[identity]) {
+			item.value = comparer(item.value, obj.value);
+			return;
+		}
+	}
+}

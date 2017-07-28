@@ -50,6 +50,8 @@ ON('flow.ready', function() {
 		FLOWDATA({ value: 2, group: 'VW' });
 		FLOWDATA({ value: 5, group: 'Audi' });
 		FLOWDATA({ value: 8, group: 'BMW' });
-		// console.log(FLOWINSTANCE.custom.current());
+
+		FLOWINSTANCE.stats(console.log);
+
 	}, 1000);
 });
