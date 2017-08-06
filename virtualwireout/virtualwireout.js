@@ -12,7 +12,7 @@ When the wires between the components are mess it's time to use Virtual wire.
 After creating new \`Virtual wire out\` make sure to hit Apply button, otherwise it will not appear in \`Virtual wire in\`s settings.`;
 
 exports.html = `<div class="padding">
-	<div data-jc="textbox" data-jc-path="name" class="m" data-required="true" data-maxlength="500" data-placeholder="Some unique name">@(Name)</div>
+	<div data-jc="textbox" data-jc-path="name" class="m" data-jc-config="required:true;maxlength:500;placeholder:@(Some unique name)">@(Name)</div>
 	<div class="help m">@(This is identifier that appears in 'Virtual wire in' component's settings in the dropdown.)</div>
 </div>
 <script>

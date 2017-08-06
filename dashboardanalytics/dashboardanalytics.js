@@ -29,14 +29,14 @@ This components sends to Dashboard two types of data:
 - \`stats\` with stats`;
 
 exports.html = `<div class="padding">
-	<div data-jc="dropdown" data-jc-path="type" class="m" data-options=";@(Hourly: Sum values)|sum;@(Hourly: A maximum value)|max;@(Hourly: A minimum value)|min;@(Hourly: An average value)|avg;@(Hourly: An average (median) value)|median;@(Daily: Sum values)|Dsum;@(Daily: A maximum value)|Dmax;@(Daily: A minimum value)|Dmin;@(Daily: An average value)|Davg;@(Daily: An average (median) value)|Dmedian" data-required="true">@(Type)</div>
-	<div data-jc="codemirror" data-jc-path="fn" data-type="javascript" class="m">@(Analyzator)</div>
+	<div data-jc="dropdown" data-jc-path="type" class="m" data-jc-config="items:,@(Hourly: Sum values)|sum,@(Hourly: A maximum value)|max,@(Hourly: A minimum value)|min,@(Hourly: An average value)|avg,@(Hourly: An average (median) value)|median,@(Daily: Sum values)|Dsum,@(Daily: A maximum value)|Dmax,@(Daily: A minimum value)|Dmin,@(Daily: An average value)|Davg,@(Daily: An average (median) value)|Dmedian;required:true">@(Type)</div>
+	<div data-jc="codemirror" data-jc-path="fn" data-jc-config="type:javascript" class="m">@(Analyzator)</div>
 	<div class="row">
 		<div class="col-md-3 m">
-			<div data-jc="textbox" data-jc-path="format" data-placeholder="@(e.g. {0} °C)" data-maxlength="10" data-align="center">@(Format)</div>
+			<div data-jc="textbox" data-jc-path="format" data-jc-config="placeholder:@(e.g. {0} °C);maxlength:10;align:center">@(Format)</div>
 		</div>
 		<div class="col-md-3 m">
-			<div data-jc="textbox" data-jc-path="decimals" data-maxlength="10" data-align="center" data-increment="true" data-jc-type="number">@(Decimals)</div>
+			<div data-jc="textbox" data-jc-path="decimals" data-jc-config="maxlength:10;align:center;increment:true;type:number">@(Decimals)</div>
 		</div>
 	</div>
 </div>`;

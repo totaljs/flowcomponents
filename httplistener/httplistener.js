@@ -52,7 +52,7 @@ exports.install = function(instance) {
 		data.path = req.req.split;
 		data.file = true;
 		data.extension = req.extension;
-		instance.send(data);
+		instance.send2(data);
 	};
 
 	instance.custom.event = function(controller) {
@@ -69,7 +69,7 @@ exports.install = function(instance) {
 		data.path = controller.req.split;
 		data.file = false;
 		data.extension = null;
-		instance.send(data);
+		instance.send2(data);
 	};
 
 	F.on('controller', instance.custom.event);

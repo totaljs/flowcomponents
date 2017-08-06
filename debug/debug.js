@@ -17,7 +17,7 @@ Writes data to the debug tab
 exports.html = `<div class="padding">
 	<div class="row">
 		<div class="col-md-12">
-			<div data-jc="textbox" data-jc-path="property" data-placeholder="" class="m">Property (leave empty to show whole data object)</div>
+			<div data-jc="textbox" data-jc-path="property" data-jc-config="placeholder: @(e.g. data.user.name)" class="m">Path to the property (leave empty to show whole data object)</div>
 			<div data-jc="checkbox" data-jc-path="enabled">@(Enabled)</div>
 		</div>
 	</div>
@@ -36,7 +36,7 @@ exports.install = function(instance) {
 		instance.save();
 	});
 
-	instance.on('options', function(options) {
+	instance.on('options', function() {
 		instance.custom.status();
 	});
 

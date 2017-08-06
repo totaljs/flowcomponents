@@ -8,13 +8,13 @@ exports.author = 'Peter Širka';
 exports.icon = 'cloud-upload';
 
 exports.html = `<div class="padding">
-	<div data-jc="textbox" data-jc-path="url" class="m" data-required="true" data-maxlength="500" data-jc-type="url" data-placeholder="@(E.g. https://www.totaljs.com)">@(URL address)</div>
+	<div data-jc="textbox" data-jc-path="url" class="m" data-jc-config="required:true;maxlength:500;type:url;placeholder:@(E.g. https\\://www.totaljs.com)">@(URL address)</div>
 	<div class="row">
 		<div class="col-md-6 m">
-			<div data-jc="dropdown" data-jc-path="method" data-required="true" data-options=";GET;POST;PUT;DELETE">@(HTTP method)</div>
+			<div data-jc="dropdown" data-jc-path="method" data-jc-config="required:true;items:,GET,POST,PUT,DELETE">@(HTTP method)</div>
 		</div>
 		<div class="col-md-6 m">
-			<div data-jc="dropdown" data-jc-path="stringify" data-required="true" data-options=";URL encoded|encoded;JSON|json;RAW|raw">@(Serialization)</div>
+			<div data-jc="dropdown" data-jc-path="stringify" data-jc-config="required:true;items:,URL encoded|encoded,JSON|json,RAW|raw">@(Serialization)</div>
 		</div>
 	</div>
 	<div data-jc="checkbox" data-jc-path="chunks">@(Download the content <b>in chunks</b>)</div>
@@ -27,14 +27,14 @@ exports.html = `<div class="padding">
 					<div data-jc="textbox" data-jc-path="username">@(User)</div>
 				</div>
 				<div class="col-md-6 m">
-					<div data-jc="textbox" data-jc-path="userpassword" data-jc-type="password">@(Password)</div>
+					<div data-jc="textbox" data-jc-path="userpassword" data-jc-config="type:password">@(Password)</div>
 				</div>
 			</div>
 		</div>
 	</section>
 	<br />
-	<div data-jc="keyvalue" data-jc-path="headers" data-placeholder-key="@(Header name)" data-placeholder-value="@(Header value and press enter)" class="m">@(Custom headers)</div>
-	<div data-jc="keyvalue" data-jc-path="cookies" data-placeholder-key="@(Cookie name)" data-placeholder-value="@(Cookie value and press enter)" class="m">@(Cookies)</div>
+	<div data-jc="keyvalue" data-jc-path="headers" data-jc-config="placeholderkey:@(Header name);placeholdervalue:@(Header value and press enter)" class="m">@(Custom headers)</div>
+	<div data-jc="keyvalue" data-jc-path="cookies" data-jc-config="placeholderkey:@(Cookie name);placeholdervalue:@(Cookie value and press enter)" class="m">@(Cookies)</div>
 </div>`;
 
 exports.readme = `# Request
@@ -52,7 +52,7 @@ exports.install = function(instance) {
 	var cookies = null;
 
 	instance.on('data', function(response) {
-		can && instance.custom.send(response);
+		can && instance.custom.send2(response);
 	});
 
 	instance.custom.send = function(response) {
@@ -60,13 +60,13 @@ exports.install = function(instance) {
 
 		if (options.chunks) {
 			U.download(options.url, flags, response.data, function(err, response) {
-				response.on('data', (chunks) => instance.send(chunks));
+				response.on('data', (chunks) => instance.send2(chunks));
 			}, cookies, headers);
 		} else {
 			U.request(options.url, flags, response.data, function(err, data, status, headers, host) {
 				if (response && !err) {
 					response.data = { data: data, status: status, headers: headers, host: host };
-					instance.send(response);
+					instance.send2(response);
 				} else if (err)
 					instance.error(err, response);
 			}, cookies, headers);

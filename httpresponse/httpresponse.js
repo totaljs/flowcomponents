@@ -14,11 +14,9 @@ HTTP response will respond with data recieved using data-type set in Settings fo
 exports.html = `<div class="padding">
 	<div class="row">
 		<div class="col-md-6 m">
-			<div data-jc="dropdown" data-jc-path="datatype" data-required="true" data-options=";Empty response|emptyresponse;JSON|json;HTML|html;Plain text|plain;XML|xml">@(Response data-type (json by default))</div>
+			<div data-jc="dropdown" data-jc-path="datatype" data-jc-config="required:true;items:,Empty response|emptyresponse,JSON|json,HTML|html,Plain text|plain,XML|xml">@(Response data-type (json by default))</div>
 		</div>
 	</div>
-	<!--<div data-jc="keyvalue" data-jc-path="headers" data-placeholder-key="@(Header name)" data-placeholder-value="@(Header value and press enter)" class="m">@(Custom headers)</div>
-	<div data-jc="keyvalue" data-jc-path="cookies" data-placeholder-key="@(Cookie name)" data-placeholder-value="@(Cookie value and press enter)" class="m">@(Cookies)</div>-->
 </div>`;
 
 const ERRORMESSAGE = {};

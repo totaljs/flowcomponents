@@ -14,10 +14,10 @@ A condition has to return an \`index\` for re-send current data to the specific 
 exports.html = `<div class="padding">
 	<div class="row">
 		<div class="col-md-3 m">
-			<div data-jc="textbox" data-jc-path="output" data-placeholder="@(Count of outputs)" data-maxlength="1" data-jc-type="number" data-increment="true" data-align="center" data-required="true" data-icon="fa-sitemap">@(Outputs)</div>
+			<div data-jc="textbox" data-jc-path="output" data-jc-config="placeholder:@(Count of outputs);maxlength:1;type:number;increment:true;align:center;required:true;icon:sitemap">@(Outputs)</div>
 		</div>
 	</div>
-	<div data-jc="codemirror" data-jc-path="condition" data-type="javascript" data-height="200" data-required="true">@(Condition)</div>
+	<div data-jc="codemirror" data-jc-path="condition" data-jc-config="type:javascript;height:200;required:true">@(Condition)</div>
 	<div class="help">@(Data will continue when the condition will be validated.)</div>
 </div><script>ON('save.condition', function(component, options) {
 	component.output = options.output || 1;
@@ -35,9 +35,9 @@ exports.install = function(instance) {
 		if (err)
 			return;
 		if (value > -1)
-			instance.send(value, response);
+			instance.send2(value, response);
 		else if (value === true)
-			instance.send(response);
+			instance.send2(response);
 	};
 
 	instance.custom.reconfigure = function() {

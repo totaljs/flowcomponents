@@ -14,10 +14,10 @@ This component filters unique data according to the unique data \`key\` (can be 
 exports.html = `<div class="padding">
 	<div class="row">
 		<div class="col-md-3 m">
-			<div data-jc="textbox" data-jc-path="interval" data-placeholder="@(5 minutes)" data-maxlength="20" data-align="center" data-required="true" data-icon="fa-clock-o">@(Interval)</div>
+			<div data-jc="textbox" data-jc-path="interval" data-jc-config="placeholder:@(5 minutes);maxlength:20;align:center;required:true;icon:clock-o">@(Interval)</div>
 		</div>
 	</div>
-	<div data-jc="codemirror" data-jc-path="condition" data-height="200" data-required="true">@(Unique data key)</div>
+	<div data-jc="codemirror" data-jc-path="condition" data-jc-config="height:200;required:true">@(Unique data key)</div>
 </div>`;
 
 exports.install = function(instance) {
@@ -32,7 +32,7 @@ exports.install = function(instance) {
 			var now = new Date();
 			if (val == null || val < now) {
 				cache[key] = now.add(instance.options.interval);
-				instance.send(response);
+				instance.send2(response);
 			}
 		});
 	});

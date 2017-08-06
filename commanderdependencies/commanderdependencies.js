@@ -10,10 +10,11 @@ exports.readme = `# Commander: Dependencies
 
 This component can inject dependencies to each new connected user. Output is \`user\` instance.`;
 exports.options = { scripts: [], styles: [], code: '' };
+
 exports.html = `<div class="padding npb">
-	<div data-jc="textboxlist" data-jc-path="scripts" data-placeholder="@(URL to .js)" class="m">@(JavaScript)</div>
-	<div data-jc="textboxlist" data-jc-path="styles" data-placeholder="@(URL to .css)" class="m">@(Styles)</div>
-	<div data-jc="codemirror" data-jc-path="code" data-type="javascript" data-height="100">@(Custom code)</div>
+	<div data-jc="textboxlist" data-jc-path="scripts" data-jc-config="placeholder:@(URL to .js)" class="m">@(JavaScript)</div>
+	<div data-jc="textboxlist" data-jc-path="styles" data-jc-config="placeholder:@(URL to .css)" class="m">@(Styles)</div>
+	<div data-jc="codemirror" data-jc-path="code" data-jc-config="type:javascript;height:100">@(Custom code)</div>
 </div>`;
 
 exports.install = function(instance) {

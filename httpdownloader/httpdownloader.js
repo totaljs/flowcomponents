@@ -21,7 +21,7 @@ exports.install = function(instance) {
 		else if (response.data && response.data.url)
 			url = response.data.url;
 		url && U.download(url, FLAGS, function(err, response) {
-			response.on('data', (chunk) => instance.send(chunk));
+			response.on('data', (chunk) => instance.send2(chunk));
 		});
 	});
 };

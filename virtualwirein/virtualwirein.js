@@ -11,7 +11,7 @@ exports.readme = `# Virtual wire in
 After creating \`Virtual wire out\` make sure to hit Apply button otherwise it will not appear in setting of this component.`;
 
 exports.html = `<div class="padding">
-	<div data-jc="dropdown" data-jc-path="wire" data-source="virtualwiresout_source" data-required="true" data-empty="Select a Virtual wire out component" class="m">@(Select a wire)</div>
+	<div data-jc="dropdown" data-jc-path="wire" data-jc-config="source:virtualwiresout_source;required:true;empty:@(Select a Virtual wire out component)" class="m">@(Select a wire)</div>
 	<div class="help m">@(Make sure to create 'Virtual wire out' first to see it in dropdown.)</div>
 </div>
 <script>
@@ -39,7 +39,7 @@ exports.install = function(instance) {
 
 	instance.handler = function(id, flowdata) {
 		if (instance.options.wire === id)
-			instance.send(flowdata);
+			instance.send2(flowdata);
 	};
 
 	instance.on('options', instance.custom.reconfigure);
