@@ -9,7 +9,7 @@ exports.icon = 'code';
 exports.options = {};
 
 exports.html = `<div class="padding">
-	<div data-jc="dropdown" data-jc-path="operation" data-jc-config="required:true;source:schemaoperations;empty:" class="m">@(Perform operation)</div>
+	<div data-jc="dropdown" data-jc-path="operation" data-jc-config="required:true;datasource:schemaoperations;empty:" class="m">@(Perform operation)</div>
 </div><script>
 TRIGGER('schemacodelist', 'schemaoperations');
 </script>`;

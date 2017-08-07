@@ -9,8 +9,8 @@ exports.icon = 'code';
 exports.options = { layout: '', template: '' };
 
 exports.html = `<div class="padding">
-	<div data-jc="dropdown" data-jc-path="layout" data-jc-config="source:pagerenderer.templates" class="m">@(Layout)</div>
-	<div data-jc="dropdown" data-jc-path="template" data-jc-config="source:pagerenderer.templates;required:true">@(Template)</div>
+	<div data-jc="dropdown" data-jc-path="layout" data-jc-config="datasource:pagerenderer.templates" class="m">@(Layout)</div>
+	<div data-jc="dropdown" data-jc-path="template" data-jc-config="datasource:pagerenderer.templates;required:true">@(Template)</div>
 </div>
 <script>
 	ON('open.pagerenderer', function(component, options) {

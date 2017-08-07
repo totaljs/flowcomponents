@@ -190,7 +190,7 @@ exports.html = `
 		<div class="weekly-inline-edit hidden" id="weekly-inline-edit">
 			<div class="inline-edit">
 				<div data-jc="dropdown" data-jc-path="megatimercomponent.form.type" data-jc-options="items:On|on,Off|off" class="m">@(Type)</div>
-				<div data-jc="dropdown" data-jc-path="megatimercomponent.form.time" data-jc-options="source:megatimercomponent.hours" class="m">@(Time)</div>
+				<div data-jc="dropdown" data-jc-path="megatimercomponent.form.time" data-jc-options="datasource:megatimercomponent.hours" class="m">@(Time)</div>
 				<button class="button"><i class="fa fa-check"></i>&nbsp;@(Set)</button>
 				<button class="button button-remove"><i class="fa fa-trash"></i>&nbsp;@(Remove)</button>
 			</div>

@@ -9,7 +9,7 @@ exports.author = 'Martin Smola';
 exports.options = {};
 
 exports.html = `<div class="padding">
-	<div data-jc="dropdown" data-jc-path="broker" data-jc-config="source:mqttconfig.brokers;required:true" class="m">@(Select a broker)</div>
+	<div data-jc="dropdown" data-jc-path="broker" data-jc-config="datasource:mqttconfig.brokers;required:true" class="m">@(Select a broker)</div>
 	<div data-jc="textbox" data-jc-path="topic" data-jc-config="placeholder:hello/world;required:true" class="m">Topic</div>
 	<div data-jc="dropdown" data-jc-path="qos" data-jc-config="items:,0,1,2" class="m">@(QoS)</div>
 </div>

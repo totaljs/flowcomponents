@@ -43,7 +43,7 @@ Creates a group analytics automatically according a value and group. The value m
 \`\`\``;
 
 exports.html = `<div class="padding">
-	<div data-jc="dropdown" data-jc-path="type" class="m" data-jc-config="items:,@(Hourly: Sum values)|sum,@(Hourly: A maximum value)|max,@(Hourly: A minimum value)|min,@(Hourly: An average value)|avg,@(Hourly: An average (median) value)|median,@(Daily: Sum values)|Dsum,@(Daily: A maximum value)|Dmax,@(Daily: A minimum value)|Dmin,@(Daily: An average value)|Davg,@(Daily: An average (median) value)|Dmedian;required:true">@(Type)</div>
+	<div data-jc="dropdown" data-jc-path="type" class="m" data-jc-config="items:,@(Hourly\\: Sum values)|sum,@(Hourly\\: A maximum value)|max,@(Hourly\\: A minimum value)|min,@(Hourly\\: An average value)|avg,@(Hourly\\: An average (median) value)|median,@(Daily\\: Sum values)|Dsum,@(Daily\\: A maximum value)|Dmax,@(Daily\\: A minimum value)|Dmin,@(Daily\\: An average value)|Davg,@(Daily\\: An average (median) value)|Dmedian;required:true">@(Type)</div>
 	<div data-jc="codemirror" data-jc-path="fn" data-jc-config="type:javascript" class="m">@(Analyzator)</div>
 	<div class="row">
 		<div class="col-md-3 m">
