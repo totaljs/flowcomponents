@@ -37,7 +37,7 @@ send();
 exports.html = `<div class="padding">
 	<div class="row">
 		<div class="col-md-3">
-			<div data-jc="textbox" data-jc-path="outputs" data-jc-config="type:number;validation:value > 0;increment:true;maxlength:3">Number of outputs</div>
+			<div data-jc="textbox" data-jc-path="outputs" data-jc-config="type:number;validation:value > 0;increment:true;maxlength:3">@(Number of outputs)</div>
 			<div class="help m">@(Minimum is 1)</div>
 		</div>
 	</div>
