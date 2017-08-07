@@ -25,7 +25,7 @@ __Data Example__:
 exports.html = `<div class="padding">
 	<div class="row">
 		<div class="col-md-3 m">
-			<div data-jc="textbox" data-jc-path="interval" data-placeholder="@(10000)" data-increment="true" data-jc-type="number" data-required="true" data-maxlength="10">@(Interval in milliseconds)</div>
+			<div data-jc="textbox" data-jc-path="interval" data-jc-config="placeholder:10000;increment:true;type:number;required:true;maxlength:10;align:center">@(Interval in milliseconds)</div>
 		</div>
 	</div>
 </div>`;
@@ -59,7 +59,7 @@ exports.install = function(instance) {
 			current.used = memory[1].parseInt() - memory[3].parseInt();
 			current.free = current.total - current.used;
 			instance.custom.status();
-			instance.send(current);
+			instance.send2(current);
 		});
 	};
 

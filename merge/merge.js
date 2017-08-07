@@ -12,11 +12,11 @@ exports.icon = 'compress';
 exports.html = `<div class="padding">
 	<div class="row">
 		<div class="col-md-3 m">
-			<div data-jc="textbox" data-jc-path="count" data-required="true" data-placeholder="5" data-jc-type="number" data-increment="true" data-align="center">@(Count)</div>
+			<div data-jc="textbox" data-jc-path="count" data-jc-config="required:true;placeholder:5;type:number;increment:true;align:center">@(Count)</div>
 			<div class="help">@(Count of messages per queue)</div>
 		</div>
 		<div class="col-md-3 m">
-			<div data-jc="textbox" data-jc-path="timeout" data-placeholder="5" data-jc-type="number" data-increment="true" data-align="center">@(Timeout in ms)</div>
+			<div data-jc="textbox" data-jc-path="timeout" data-jc-config="placeholder:5;type:number;increment:true;align:center">@(Timeout in ms)</div>
 			<div class="help">@(0 means "timeout is disabled")</div>
 		</div>
 	</div>
@@ -49,10 +49,10 @@ exports.install = function(instance) {
 		if (instance.options.id) {
 			var msg = instance.make(arr);
 			msg.id = id;
-			instance.send(msg);
+			instance.send2(msg);
 			delete data[id];
 		} else {
-			instance.send(arr);
+			instance.send2(arr);
 			data[id] = [];
 		}
 

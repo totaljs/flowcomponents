@@ -9,15 +9,16 @@ exports.icon = 'code';
 exports.options = { template: '<h1>Hello @{model.firstname}</h1>', layout: false };
 
 exports.html = `<div class="padding">
-	<div data-jc="textbox" data-jc-path="name" data-required="true" data-placeholder="@(Post template)" class="m">@(Template name)</div>
+	<div data-jc="textbox" data-jc-path="name" data-jc-config="placeholder:@(Post template);required:true" class="m">@(Template name)</div>
 	<div data-jc="checkbox" data-jc-path="layout">@(Is this template a layout?)</div>
 	<div class="help m">@(Layout should contain html, head and body tags and any other templates will be injected into this layout.)</div>
-	<div data-jc="codemirror" data-jc-path="template" data-required="true">@(Template)</div>
+	<div data-jc="codemirror" data-jc-path="template" data-jc-config="required:true">@(Template)</div>
 </div>`;
 
 exports.readme = `# Template
 
 ### Layout
+
 Use \`@{body}\` placeholder to insert other template, only works for layout
 
 Incoming data are available in the templates or layouts as \`model\`
@@ -38,14 +39,11 @@ Template:
 
 exports.install = function(instance) {
 
-	instance.custom.template;
-
 	instance.custom.reconfigure = function() {
 		var can = instance.options.template ? true : false;
-		template = instance.options.template || '';
 		instance.status(can ? '' : 'Not configured', can ? undefined : 'red');
 		templates = templates.remove('id', instance.id);
-		templates.push({id: instance.id, name: instance.options.name});
+		templates.push({ id: instance.id, name: instance.options.name });
 	};
 
 	instance.on('options', instance.custom.reconfigure);

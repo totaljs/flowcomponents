@@ -11,14 +11,14 @@ exports.options = { interval: 0 };
 exports.html = `<div class="padding">
 	<div class="row">
 		<div class="col-md-3 m">
-			<div data-jc="textbox" data-jc-path="interval" data-placeholder="@(1000)" data-increment="true" data-jc-type="number" data-required="true">@(Interval in milliseconds)</div>
+			<div data-jc="textbox" data-jc-path="interval" data-jc-config="placeholder:1000;increment:true;type:number;required:true">@(Interval in milliseconds)</div>
 		</div>
 	</div>
 	<section>
 		<label><i class="fa fa-random"></i>@(Output data)</label>
 		<div class="padding">
-			<div data-jc="dropdown" data-jc-path="datatype" data-options=";String|string;Integer|integer;Float|float;Boolean|boolean;Date|date;Object|object;Base64 as Buffer|buffer" class="m">@(Data type (String by default))</div>
-			<div data-jc="textbox" data-jc-path="data" data-placeholder="@(e.g. Hello world or { hello: 'world'} or ['hello', 'world'])">@(Data)</div>
+			<div data-jc="dropdown" data-jc-path="datatype" data-jc-config="items:,String|string,Integer|integer,Float|float,Boolean|boolean,Date|date,Object|object,Base64 as Buffer|buffer" class="m">@(Data type (String by default))</div>
+			<div data-jc="textbox" data-jc-path="data" data-jc-config="placeholder:@(e.g. Hello world or { hello: 'world'} or ['hello', 'world'])">@(Data)</div>
 		</div>
 	</section>
 </div>`;
@@ -32,7 +32,7 @@ exports.install = function(instance) {
 	var value;
 	var id;
 
-	instance.on('click', () => value && instance.send(value));
+	instance.on('click', () => value && instance.send2(value));
 
 	instance.reconfigure = function() {
 		var options = instance.options;
@@ -76,7 +76,7 @@ exports.install = function(instance) {
 				break;
 		}
 		clearInterval(id);
-		options.interval && (id = setInterval(() => instance.send(value), options.interval));
+		options.interval && (id = setInterval(() => instance.send2(value), options.interval));
 		instance.status('');
 	};
 

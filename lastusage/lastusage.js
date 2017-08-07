@@ -13,7 +13,7 @@ This component remembers date and time of last usage.`;
 exports.html = `<div class="padding">
 	<div class="row">
 		<div class="col-md-4">
-			<div data-jc="textbox" data-jc-path="format" data-placeholder="@(dd.MM.yyyy HH:mm:ss)" data-maxlength="25" data-align="center">@(Date format)</div>
+			<div data-jc="textbox" data-jc-path="format" data-jc-config="placeholder:@(dd.MM.yyyy HH:mm:ss);maxlength:25;align:center">@(Date format)</div>
 		</div>
 	</div>
 </div>`;

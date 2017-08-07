@@ -10,9 +10,9 @@ exports.options = { fn: `// Expects "String"
 next(value.toUpperCase())` };
 
 exports.html = `<div class="padding">
-	<div data-jc="dropdown" data-jc-path="parser" class="m" data-options=";@(XML to Object)|xml;@(Line to Array)|array;@(JSON to Object)|json;@(Custom)|custom" data-required="true">@(From which data-type)</div>
-	<div data-jc="visible" data-jc-path="parser" data-if="value === 'custom'">
-		<div data-jc="codemirror" data-jc-path="fn" data-type="javascript">@(Custom function)</div>
+	<div data-jc="dropdown" data-jc-path="parser" class="m" data-jc-config="items:,@(XML to Object)|xml,@(Line to Array)|array,@(JSON to Object)|json,@(Custom)|custom;required:true">@(From which data-type)</div>
+	<div data-jc="visible" data-jc-path="parser" data-jc-config="if:value === 'custom'">
+		<div data-jc="codemirror" data-jc-path="fn" data-jc-config="type:javascript">@(Custom function)</div>
 	</div>
 </div>`;
 
@@ -48,15 +48,15 @@ exports.install = function(instance) {
 		switch (instance.options.parser) {
 			case 'xml':
 				response.data = response.data.parseXML();
-				response.data && instance.send(response);
+				response.data && instance.send2(response);
 				return;
 			case 'json':
 				response.data = response.data.parseJSON(true);
-				response.data && instance.send(response);
+				response.data && instance.send2(response);
 				return;
 			case 'newline':
 				response.data = response.data.split(',').trim();
-				response.data && instance.send(response);
+				response.data && instance.send2(response);
 				return;
 			case 'custom':
 				fn(response.data, function(err, value) {
@@ -64,7 +64,7 @@ exports.install = function(instance) {
 						instance.error(err, response);
 					} else {
 						response.data = value;
-						instance.send(response);
+						instance.send2(response);
 					}
 				});
 				return;

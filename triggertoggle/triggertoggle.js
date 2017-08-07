@@ -11,15 +11,15 @@ exports.html = `<div class="padding">
 	<section class="m">
 		<label><i class="fa fa-code"></i>@(A)</label>
 		<div class="padding">
-			<div data-jc="dropdown" data-jc-path="datatypeA" data-options=";String|string;Integer|integer;Float|float;Boolean|boolean;Date|date;Object|object;Base64 as Buffer|buffer" class="m">@(Data type (String by default))</div>
-			<div data-jc="textbox" data-jc-path="dataA" data-placeholder="@(e.g. Hello world or { hello: 'world'} or ['hello', 'world']))">@(Data)</div>
+			<div data-jc="dropdown" data-jc-path="datatypeA" data-jc-config="items:,String|string,Integer|integer,Float|float,Boolean|boolean,Date|date,Object|object,Base64 as Buffer|buffer" class="m">@(Data type (String by default))</div>
+			<div data-jc="textbox" data-jc-path="dataA" data-jc-congif="placeholder:@(e.g. Hello world or { hello: 'world'} or ['hello', 'world']))">@(Data)</div>
 		</div>
 	</section>
 	<section>
 		<label><i class="fa fa-code"></i>@(B)</label>
 		<div class="padding">
-			<div data-jc="dropdown" data-jc-path="datatypeB" data-options=";String|string;Integer|integer;Float|float;Boolean|boolean;Date|date;Object|object;Base64 as Buffer|buffer" class="m">@(Data type (String by default))</div>
-			<div data-jc="textbox" data-jc-path="dataB" data-placeholder="@(e.g. Hello world or { hello: 'world'} or ['hello', 'world']))">@(Data)</div>
+			<div data-jc="dropdown" data-jc-path="datatypeB" data-jc-config="items:,String|string,Integer|integer,Float|float,Boolean|boolean,Date|date,Object|object,Base64 as Buffer|buffer" class="m">@(Data type (String by default))</div>
+			<div data-jc="textbox" data-jc-path="dataB" data-jc-congif="placeholder:@(e.g. Hello world or { hello: 'world'} or ['hello', 'world']))">@(Data)</div>
 		</div>
 	</section>
 </div>`;
@@ -37,7 +37,7 @@ exports.install = function(instance) {
 
 	instance.on('click', function() {
 		toggle = !toggle;
-		instance.send(toggle ? valueA : valueB);
+		instance.send2(toggle ? valueA : valueB);
 	});
 
 	instance.reconfigure = function() {

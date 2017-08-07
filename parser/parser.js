@@ -8,18 +8,18 @@ exports.author = 'Peter Širka';
 exports.icon = 'code';
 
 exports.html = `<div class="padding">
-	<div data-jc="dropdown" data-jc-path="parser" class="m" data-options=";Begin/End parser|beginend;Newline parser|newline" data-required="true">@(Parser type)</div>
+	<div data-jc="dropdown" data-jc-path="parser" class="m" data-jc-config="items:,Begin/End parser|beginend,Newline parser|newline;required:true">@(Parser type)</div>
 </div>
-<div data-jc="visible" data-jc-path="parser" data-if="value === 'beginend'">
+<div data-jc="visible" data-jc-path="parser" data-jc-config="if:value === 'beginend'">
 	<section>
 		<label><i class="fa fa-code"></i>@(Advanced settings)</label>
-		<div data-jc="disable" data-jc-path="parser" data-if="value !== 'beginend'" data-validate="begin,end" class="padding">
+		<div data-jc="disable" data-jc-path="parser" data-jc-config="if_value !== 'beginend';validate:begin,end" class="padding">
 			<div class="row">
 				<div class="col-md-6 m">
-					<div data-jc="textbox" data-jc-path="begin" data-required="true" data-placeholder="e.g. <@(PRODUCT)>">@(Begin phrase)</div>
+					<div data-jc="textbox" data-jc-path="begin" data-jc-config="required:true;placeholder:@(e.g. <PRODUCT>)">@(Begin phrase)</div>
 				</div>
 				<div class="col-md-6 m">
-					<div data-jc="textbox" data-jc-path="end" data-required="true" data-placeholder="e.g. </@(PRODUCT)>">@(End phrase)</div>
+					<div data-jc="textbox" data-jc-path="end" data-jc-config="required:true;placeholder:@(e.g. </PRODUCT>)">@(End phrase)</div>
 				</div>
 			</div>
 		</div>
@@ -37,10 +37,10 @@ exports.install = function(instance) {
 		var options = instance.options;
 		switch (options.parser) {
 			case 'beginend':
-				streamer = U.streamer(options.begin, options.end, (data) => instance.send(data));
+				streamer = U.streamer(options.begin, options.end, (data) => instance.send2(data));
 				break;
 			case 'newline':
-				streamer = U.streamer('\n', (data) => instance.send(data));
+				streamer = U.streamer('\n', (data) => instance.send2(data));
 				break;
 			default:
 				streamer = null;

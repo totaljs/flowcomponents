@@ -15,15 +15,13 @@ exports.install = function(instance) {
 	var counter = 0;
 	instance.on('data', function(response) {
 		var data = response.data;
-
 		if (data instanceof Buffer)
 			data = data.toString('base64');
 		else if (typeof(data) === 'object' || data instanceof Date)
 			data = JSON.stringify(data);
-
 		if (backup !== data) {
 			backup = data;
-			instance.send(response);
+			instance.send2(response);
 		} else {
 			counter++;
 			instance.status('Not modified: {0}x'.format(counter));

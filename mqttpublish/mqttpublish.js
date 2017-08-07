@@ -9,25 +9,22 @@ exports.output = 0;
 exports.author = 'Martin Smola';
 exports.options = {};
 
-exports.html = `
-	<div class="padding">
-		<div data-jc="dropdown" data-jc-path="broker" data-source="mqttconfig.brokers" class="m" data-required="true">@(Brokers)</div>
-		<div data-jc="textbox" data-jc-path="topic" data-placeholder="hello/world" class="m">Topic</div>
-		<div data-jc="dropdown" data-jc-path="qos" data-options=";0;1;2" class="m">@(QoS)</div>
-		<div data-jc="checkbox" data-jc-path="retain" class="m">@(Retain)</div>
-	</div>
-	<script>
-		ON('open.mqttpublish', function(component, options) {
-			TRIGGER('mqtt.brokers', 'mqttconfig.brokers');
-		});
-	</script>
-`;
+exports.html = `<div class="padding">
+	<div data-jc="dropdown" data-jc-path="broker" data-jc-config="source:mqttconfig.brokers;required:true" class="m">@(Brokers)</div>
+	<div data-jc="textbox" data-jc-path="topic" data-jc-config="placeholder:hello/world" class="m">Topic</div>
+	<div data-jc="dropdown" data-jc-path="qos" data-jc-config="items:,0,1,2" class="m">@(QoS)</div>
+	<div data-jc="checkbox" data-jc-path="retain" class="m">@(Retain)</div>
+</div>
+<script>
+	ON('open.mqttpublish', function(component, options) {
+		TRIGGER('mqtt.brokers', 'mqttconfig.brokers');
+	});
+</script>`;
 
 exports.readme = `
 # MQTT publish
 
-If the topic field is left empty and the data object does not have a 'topic' property then nothing is send.
-`;
+If the topic field is left empty and the data object does not have a 'topic' property then nothing is send.`;
 
 
 exports.install = function(instance) {
@@ -42,9 +39,8 @@ exports.install = function(instance) {
 		added = false;
 		ready = false;
 
-		if (!MQTT.broker(instance.options.broker)) {
+		if (!MQTT.broker(instance.options.broker))
 			return instance.status('No broker', 'red');
-		}
 
 		if (instance.options.broker && instance.options.topic) {
 
@@ -64,13 +60,12 @@ exports.install = function(instance) {
 	instance.on('data', function(flowdata) {
 		if (!ready)
 			return;
-
 		var msg = flowdata.data;
 		var topic = instance.options.topic || msg.topic;
-		if (!topic)
-			return instance.debug('MQTT publish no topic');
-
-		MQTT.publish(instance.options.broker, topic, msg, PUBLISH_OPTIONS);
+		if (topic)
+			MQTT.publish(instance.options.broker, topic, msg, PUBLISH_OPTIONS);
+		else
+			instance.debug('MQTT publish no topic');
 	});
 
 	instance.on('close', function() {
@@ -109,8 +104,8 @@ exports.install = function(instance) {
 				instance.reconfig();
 				instance.custom.reconfigure();
 				break;
-		};
-	};
+		}
+	}
 
 	instance.custom.reconfigure();
 };

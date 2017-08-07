@@ -16,10 +16,10 @@ exports.html = `<div class="padding">
 		<div class="padding npb">
 			<div class="row">
 				<div class="col-md-6">
-					<div data-jc="textbox" data-jc-path="host" data-placeholder="test.mosquitto.org" data-required="true" class="m">Hostname or IP address</div>
+					<div data-jc="textbox" data-jc-path="host" data-jc-config="placeholder:test.mosquitto.org;required:true" class="m">Hostname or IP address</div>
 				</div>
 				<div class="col-md-6">
-					<div data-jc="textbox" data-jc-path="port" data-placeholder="1883" data-required="true" class="m">Port</div>
+					<div data-jc="textbox" data-jc-path="port" data-jc-config="placeholder:1883;required:true" class="m">Port</div>
 				</div>
 			</div>
 			<div class="row">
@@ -27,7 +27,7 @@ exports.html = `<div class="padding">
 					<div data-jc="textbox" data-jc-path="username" class="m">Username</div>
 				</div>
 				<div class="col-md-6">
-					<div data-jc="textbox" data-jc-path="password" data-jc-type="password" class="m">Password</div>
+					<div data-jc="textbox" data-jc-path="password" data-jc-config="type:password" class="m">Password</div>
 				</div>
 			</div>
 		</div>
@@ -35,15 +35,12 @@ exports.html = `<div class="padding">
 </div>`;
 
 exports.readme = `
-# MQTT Broker
-
-
-`;
+# MQTT Broker`;
 
 var MQTT_BROKERS = [];
-global.MQTT = {};
-
 var mqtt;
+
+global.MQTT = {};
 
 exports.install = function(instance) {
 
@@ -56,7 +53,7 @@ exports.install = function(instance) {
 		if (old_options)
 			MQTT_BROKERS = MQTT_BROKERS.remove(function(b){
 				return b.id === old_options.id;
-			});		
+			});
 
 		var options = instance.options;
 
@@ -71,7 +68,7 @@ exports.install = function(instance) {
 			JSON.stringify(options) !== JSON.stringify(old_options) && broker.close();
 			EMIT('mqtt.brokers.status', 'reconfigured', old_options.id, options.id);
 		}
-		
+
 		instance.custom.createBroker();
 	};
 
@@ -109,8 +106,8 @@ exports.install = function(instance) {
 			case 'connectionfailed':
 				instance.status('Connection failed', 'red');
 				break;
-		};
-	};
+		}
+	}
 
 	instance.on('options', instance.custom.reconfigure);
 	instance.custom.reconfigure();
@@ -269,7 +266,7 @@ Broker.prototype.close = function(callback) {
 	else
 		cb();
 
-	function cb() {		
+	function cb() {
 		EMIT('mqtt.brokers.status', 'disconnected', self.id);
 		self.client.removeAllListeners();
 		self.components = [];

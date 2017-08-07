@@ -31,16 +31,16 @@ exports.html = `<div class="padding">
 	<section>
 		<label>@(Main settings)</label>
 		<div class="padding npb">
-			<div data-jc="textbox" data-jc-path="url" class="m" data-required="true" data-maxlength="500" data-placeholder="/api/test">@(URL address)</div>
-			<div data-jc="dropdown" data-jc-path="method" data-required="true" data-options=";GET;POST;PUT;DELETE;OPTIONS" class="m">@(HTTP method)</div>
+			<div data-jc="textbox" data-jc-path="url" class="m" data-jc-config="required:true;maxlength:500;placeholder:/api/test">@(URL address)</div>
+			<div data-jc="dropdown" data-jc-path="method" data-jc-config="required:true;items:,GET,POST,PUT,DELETE,OPTIONS" class="m">@(HTTP method)</div>
 
 			<div class="row">
 				<div class="col-md-8 m">
-					<div data-jc="textbox" data-jc-path="flags" data-placeholder="json">@(Additional flags)</div>
+					<div data-jc="textbox" data-jc-path="flags" data-jc-config="placeholder:json">@(Additional flags)</div>
 					<div class="help m">@(Separate flags by comma e.g. <code>json, authorize</code>)</div>
 				</div>
 				<div class="col-md-4 m">
-					<div data-jc="textbox" data-jc-path="size" data-placeholder="in kB" data-increment="true" data-jc-type="number" data-maxlength="10" data-align="center">@(Max. request size)</div>
+					<div data-jc="textbox" data-jc-path="size" data-jc-config="placeholder:in kB;increment:true;type:number;maxlength:10;align:center">@(Max. request size)</div>
 					<div class="help m">@(In <code>kB</code> kilobytes)</div>
 				</div>
 			</div>
@@ -50,9 +50,10 @@ exports.html = `<div class="padding">
 	<div data-jc="checkbox" data-jc-path="emptyresponse" class="b black">@(Automaticlly respond with 200 OK?)</div>
 	<div class="help m">@(If not checked you need to use HTTP response component to respond to the request.)</div>
 	<hr />
-	<div data-jc="keyvalue" data-jc-path="headers" data-placeholder-key="@(Header name)" data-placeholder-value="@(Header value and press enter)" class="m">@(Custom headers)</div>
-	<div data-jc="keyvalue" data-jc-path="cookies" data-placeholder-key="@(Cookie name)" data-placeholder-value="@(Cookie value and press enter)" class="m">@(Cookies)</div>
-</div><script>
+	<div data-jc="keyvalue" data-jc-path="headers" data-jc-config="placeholderkey:@(Header name);placeholdervalue:@(Header value and press enter)" class="m">@(Custom headers)</div>
+	<div data-jc="keyvalue" data-jc-path="cookies" data-jc-config="placeholderkey:@(Cookie name);placeholdervalue:@(Cookie value and press enter)" class="m">@(Cookies)</div>
+</div>
+<script>
 	ON('open.httproute', function(component, options) {
 		if (options.flags instanceof Array) {
 			options.flags = options.flags.remove(function(item) {

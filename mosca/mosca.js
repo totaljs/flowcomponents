@@ -12,14 +12,14 @@ exports.npm = ['mosca'];
 
 exports.html = `<div class="padding">
 	<section>
-		<label><i class="fa fa-exchange"></i>@(MQTT server (Mosca))</label>	
+		<label><i class="fa fa-exchange"></i>@(MQTT server (Mosca))</label>
 		<!--<div class="padding npb">
 			<div class="row">
 				<div class="col-md-6">
-					<div data-jc="textbox" data-jc-path="host" data-placeholder="127.0.0.1" class="m">Hostname or IP address</div>
+					<div data-jc="textbox" data-jc-path="host" data-jc-config="placeholder:127.0.0.1" class="m">Hostname or IP address</div>
 				</div>
 				<div class="col-md-6">
-					<div data-jc="textbox" data-jc-path="port" data-placeholder="1883" class="m">Port</div>
+					<div data-jc="textbox" data-jc-path="port" data-jc-config="placeholder:1883" class="m">Port</div>
 				</div>
 			</div>
 		</div>-->
@@ -28,11 +28,9 @@ exports.html = `<div class="padding">
 
 exports.readme = `
 # MQTT Broker
-
-
 `;
 
-var moscaů
+var mosca;
 
 exports.install = function(instance) {
 	mosca = require('mosca');
@@ -53,14 +51,10 @@ exports.install = function(instance) {
 
 	instance.custom.start_server = function(){
 		var options = instance.options;
-		 
-		var settings = {
-		  port: options.port || 1883,
-		  persistence: mosca.persistence.Memory
-		};
-		 
+
+		var settings = { port: options.port || 1883, persistence: mosca.persistence.Memory };
 		var server = new mosca.Server(settings, function() {
-		  instance.status('Running...')
+			instance.status('Running...');
 		});
 	};
 };

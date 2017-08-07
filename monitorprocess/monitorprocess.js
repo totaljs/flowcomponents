@@ -27,10 +27,10 @@ __Data Example__:
 exports.html = `<div class="padding">
 	<div class="row">
 		<div class="col-md-3 m">
-			<div data-jc="textbox" data-jc-path="interval" data-placeholder="@(10000)" data-increment="true" data-jc-type="number" data-required="true" data-maxlength="10">@(Interval in milliseconds)</div>
+			<div data-jc="textbox" data-jc-path="interval" data-jc-config="placeholder:10000;increment:true;type:number;required:true;maxlength:10">@(Interval in milliseconds)</div>
 		</div>
 		<div class="col-md-3 m">
-			<div data-jc="textbox" data-jc-path="process" data-placeholder="total" data-required="true" data-maxlength="30">@(Process name)</div>
+			<div data-jc="textbox" data-jc-path="process" data-jc-config="placeholder:total;required:true;maxlength:30">@(Process name)</div>
 		</div>
 	</div>
 </div>`;
@@ -139,7 +139,7 @@ exports.install = function(instance) {
 					current.files = response.trim().parseInt2();
 
 				instance.custom.status();
-				instance.send(current);
+				instance.send2(current);
 				callback();
 			});
 		});

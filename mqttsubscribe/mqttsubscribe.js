@@ -8,23 +8,19 @@ exports.output = 1;
 exports.author = 'Martin Smola';
 exports.options = {};
 
-exports.html = `
-	<div class="padding">
-		<div data-jc="dropdown" data-jc-path="broker" data-source="mqttconfig.brokers" class="m" data-required="true">@(Select a broker)</div>		
-		<div data-jc="textbox" data-jc-path="topic" data-placeholder="hello/world" data-required="true" class="m">Topic</div>
-		<div data-jc="dropdown" data-jc-path="qos" data-options=";0;1;2" class="m">@(QoS)</div>
-	</div>
-	<script>
-		ON('open.mqttsubscribe', function(component, options) {
-			TRIGGER('mqtt.brokers', 'mqttconfig.brokers');
-		});
-	</script>
-`;
+exports.html = `<div class="padding">
+	<div data-jc="dropdown" data-jc-path="broker" data-jc-config="source:mqttconfig.brokers;required:true" class="m">@(Select a broker)</div>
+	<div data-jc="textbox" data-jc-path="topic" data-jc-config="placeholder:hello/world;required:true" class="m">Topic</div>
+	<div data-jc="dropdown" data-jc-path="qos" data-jc-config="items:,0,1,2" class="m">@(QoS)</div>
+</div>
+<script>
+	ON('open.mqttsubscribe', function(component, options) {
+		TRIGGER('mqtt.brokers', 'mqttconfig.brokers');
+	});
+</script>`;
 
 exports.readme = `
 # MQTT subscribe
-
-
 `;
 
 exports.install = function(instance) {
@@ -38,9 +34,8 @@ exports.install = function(instance) {
 		added = false;
 		subscribed = false;
 
-		if (!MQTT.broker(instance.options.broker)) {
+		if (!MQTT.broker(instance.options.broker))
 			return instance.status('No broker', 'red');
-		}
 
 		if (instance.options.broker && instance.options.topic) {
 
@@ -56,6 +51,7 @@ exports.install = function(instance) {
 				MQTT.unsubscribe(instance.options.broker, instance.id, old_options.topic);
 				MQTT.subscribe(instance.options.broker, instance.id, instance.options.topic, instance.options.qos);
 			}
+
 			added = true;
 			subscribed = true;
 			return;
@@ -107,10 +103,8 @@ exports.install = function(instance) {
 				instance.reconfig();
 				instance.custom.reconfigure();
 				break;
-		};
-
-
-	};
+		}
+	}
 
 	function message(brokerid, topic, message) {
 		if (brokerid !== instance.options.broker)
@@ -124,8 +118,8 @@ exports.install = function(instance) {
 				return;
 		}
 
-		instance.send({topic: topic, data: message});
-	};
+		instance.send2({ topic: topic, data: message });
+	}
 
 	instance.custom.reconfigure();
 };

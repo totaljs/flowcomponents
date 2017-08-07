@@ -9,8 +9,8 @@ exports.icon = 'code';
 exports.options = { layout: '', template: '' };
 
 exports.html = `<div class="padding">
-	<div data-jc="dropdown" data-jc-path="layout" data-source="pagerenderer.templates" class="m">@(Layout)</div>
-	<div data-jc="dropdown" data-jc-path="template" data-source="pagerenderer.templates" data-required="true">@(Template)</div>
+	<div data-jc="dropdown" data-jc-path="layout" data-jc-config="source:pagerenderer.templates" class="m">@(Layout)</div>
+	<div data-jc="dropdown" data-jc-path="template" data-jc-config="source:pagerenderer.templates;required:true">@(Template)</div>
 </div>
 <script>
 	ON('open.pagerenderer', function(component, options) {
@@ -28,7 +28,7 @@ exports.html = `<div class="padding">
 			name += template.name;
 			component.name = name;
 		}
-	});	
+	});
 </script>`;
 
 exports.readme = `# Page renderer
@@ -64,7 +64,7 @@ exports.install = function(instance) {
 
 		try {
 			flowdata.data = F.viewCompile('@{nocompress all}\n' + pagetemplate, flowdata.data, '', flowdata.parent);
-			instance.send(flowdata);
+			instance.send2(flowdata);
 		} catch (e) {
 			instance.error(e.toString());
 		}
@@ -73,11 +73,8 @@ exports.install = function(instance) {
 	instance.custom.reconfigure = function() {
 		ready = instance.options.template ? true : false;
 		instance.status(ready ? '' : 'Not configured', ready ? undefined : 'red');
-		if (!ready)
-			return;
-
-		make_template();
-	}
+		ready && make_template();
+	};
 
 	function make_template(){
 
@@ -89,11 +86,11 @@ exports.install = function(instance) {
 			var layout = layoutcomp.options.template;
 			pagetemplate = layout.replace('@{body}', pagetemplate);
 		}
-	};
+	}
 
 	instance.on('options', instance.custom.reconfigure);
 
-	ON('flow.init', function(count) {
+	ON('flow.init', function() {
 		instance.custom.reconfigure();
 	});
 };
