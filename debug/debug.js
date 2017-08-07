@@ -8,16 +8,13 @@ exports.input = true;
 exports.options = { enabled: true };
 exports.readme = `# Debug
 
-Writes data to the debug tab
-
-## Config
-
-- enabled \`->\` enable/disable output to the debug tab`;
+Writes data to the debug tab.`;
 
 exports.html = `<div class="padding">
 	<div class="row">
 		<div class="col-md-12">
 			<div data-jc="textbox" data-jc-path="property" data-jc-config="placeholder: @(e.g. data.user.name)" class="m">Path to the property (leave empty to show whole data object)</div>
+			<div data-jc="textbox" data-jc-path="group" data-jc-config="placeholder: @(e.g. Temperature)" class="m">A group name</div>
 			<div data-jc="checkbox" data-jc-path="enabled">@(Enabled)</div>
 		</div>
 	</div>
@@ -26,8 +23,7 @@ exports.html = `<div class="padding">
 exports.install = function(instance) {
 
 	instance.on('data', function(response) {
-		var options = instance.options;
-		options.enabled && instance.debug(options.property ? U.get(response.data, options.property) : response);
+		instance.options.enabled && instance.debug(instance.options.property ? U.get(response.data, instance.options.property) : response, undefined, instance.options.group);
 	});
 
 	instance.on('click', function() {
