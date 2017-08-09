@@ -148,7 +148,7 @@ exports.install = function(instance) {
 				break;
 		}
 
-		!current.meta && (current.meta = { groups: NOSQL(dbname).meta('groups') || EMPTYARRAY });
+		!current.meta && (current.meta = { groups: NOSQL(dbname).meta('groups') || [] });
 		!current[group] && (current[group] = {});
 
 		var btmp = current[group];
@@ -165,6 +165,9 @@ exports.install = function(instance) {
 		current.meta.last = group;
 		current.meta.lastvalue = atmp.number;
 		current.meta.datetime = F.datetime;
+
+		if (current.meta.groups.indexOf(group) === -1)
+			current.meta.groups.push(group);
 
 		instance.send2(current);
 		instance.dashboard && instance.dashboard('laststate', current);
