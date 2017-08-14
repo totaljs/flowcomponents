@@ -40,6 +40,5 @@ ON('flow.ready', function() {
 		FLOWDATA(indexer++);
 		indexer > 15 && clearInterval(interval);
 	}, 1000);
-
 	FLOWDATA([100, 101, 102, 103]);
 });

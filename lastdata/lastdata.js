@@ -20,24 +20,29 @@ exports.html = `<div class="padding">
 
 exports.readme = `# Last Data
 
-This component keeps last a count of data and still returns \`Array\` of raw data.`;
+This component keeps last a count of data and still returns \`Array\` of raw data. Nullable data won't be added.`;
 
 exports.install = function(instance) {
 
 	var data = [];
 
 	instance.on('data', function(response) {
+		var is = false;
 		if (response.data instanceof Array) {
 			for (var i = 0, length = response.data.length; i < length; i++) {
 				var item = response.data[i];
-				data.unshift(item);
-				data.length > instance.options.count && data.pop();
+				if (item != null) {
+					data.unshift(item);
+					data.length > instance.options.count && data.pop();
+					is = true;
+				}
 			}
-		} else {
+		} else if (response.data != null) {
 			data.unshift(response.data);
 			data.length > instance.options.count && data.pop();
+			is = true;
 		}
-		instance.send2(data);
+		is && instance.send2(data);
 	});
 
 	instance.on('click', function() {
