@@ -1,3 +1,3 @@
-# Last usage
+# Last Usage
 
 This component remembers date and time of last usage.

@@ -1,12 +1,12 @@
 exports.id = 'lastusage';
-exports.title = 'Last usage';
+exports.title = 'Last Usage';
 exports.version = '1.0.0';
 exports.author = 'Peter Širka';
 exports.color = '#656D78';
 exports.input = true;
 exports.icon = 'calendar';
 exports.options = { format: 'dd.MM.yyyy HH:mm:ss' };
-exports.readme = `# Last usage
+exports.readme = `# Last Usage
 
 This component remembers date and time of last usage.`;
 
