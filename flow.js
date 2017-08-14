@@ -62,7 +62,7 @@ Component.prototype.signal = function(index, data) {
 	return this;
 };
 
-Component.prototype.send = function(index, message) {
+Component.prototype.send = Component.prototype.send2 = function(index, message) {
 
 	if (message === undefined) {
 		message = index;
