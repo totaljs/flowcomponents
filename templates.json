@@ -64,7 +64,8 @@
     "items": [
       "https://rawgit.com/totaljs/flowcomponents/v4.0.0/flowboardlight/flowboardlight.js",
       "https://rawgit.com/totaljs/flowcomponents/v4.0.0/flowboardoutput/flowboardoutput.js",
-      "https://rawgit.com/totaljs/flowcomponents/v4.0.0/flowboardsocket/flowboardsocket.js"
+      "https://rawgit.com/totaljs/flowcomponents/v4.0.0/flowboardsocket/flowboardsocket.js",
+      "https://rawgit.com/totaljs/flowcomponents/v4.0.0/flowboardsimplethermostat/flowboardsimplethermostat.js"
     ]
   },
   {
