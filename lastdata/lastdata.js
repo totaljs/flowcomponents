@@ -27,12 +27,12 @@ exports.install = function(instance) {
 	var data = [];
 
 	instance.on('data', function(response) {
-		data.unshift(response);
+		data.unshift(response.data);
 		data.length > instance.options.count && data.pop();
-		self.send2(data);
+		instance.send2(data);
 	});
 
 	instance.on('click', function() {
-		self.send2(data);
+		instance.send2(data);
 	});
 };
