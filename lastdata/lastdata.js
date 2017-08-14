@@ -46,6 +46,6 @@ exports.install = function(instance) {
 	});
 
 	instance.on('click', function() {
-		instance.send2(data);
+		data && data.length && instance.send2(data);
 	});
 };
