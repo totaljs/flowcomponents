@@ -27,7 +27,6 @@ exports.install = function(instance) {
 	var data = [];
 
 	instance.on('data', function(response) {
-
 		if (response.data instanceof Array) {
 			for (var i = 0, length = response.data.length; i < length; i++) {
 				var item = response.data[i];
