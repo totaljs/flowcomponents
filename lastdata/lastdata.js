@@ -27,8 +27,17 @@ exports.install = function(instance) {
 	var data = [];
 
 	instance.on('data', function(response) {
-		data.unshift(response.data);
-		data.length > instance.options.count && data.pop();
+
+		if (response.data instanceof Array) {
+			for (var i = 0, length = response.data.length; i < length; i++) {
+				var item = response.data[i];
+				data.unshift(item);
+				data.length > instance.options.count && data.pop();
+			}
+		} else {
+			data.unshift(response.data);
+			data.length > instance.options.count && data.pop();
+		}
 		instance.send2(data);
 	});
 
