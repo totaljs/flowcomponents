@@ -52,7 +52,7 @@ exports.install = function(instance) {
 	var cookies = null;
 
 	instance.on('data', function(response) {
-		can && instance.custom.send2(response);
+		can && instance.custom.send(response);
 	});
 
 	instance.custom.send = function(response) {
