@@ -35,7 +35,7 @@ exports.html = `<div class="padding">
 </div>
 <script>
 	ON('save.mqtt', function(component, options) {
-		!component.name && (component.name = options.username + ':' + (options.password ? '***' : '') + '@' + options.host + ':' + options.port);
+		!component.name && (component.name = '{0}:{1}@{2}:{3}'.format(options.username || '', options.password ? '***' : '', options.host, options.port));
 	});
 </script>`;
 
