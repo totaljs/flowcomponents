@@ -14,8 +14,12 @@ exports.html = `<div class="padding">
 	<div data-jc="dropdown" data-jc-path="qos" data-jc-config="items:,0,1,2" class="m">@(QoS)</div>
 </div>
 <script>
+	var mqttconfig = { brokers: [] };
 	ON('open.mqttsubscribe', function(component, options) {
 		TRIGGER('mqtt.brokers', 'mqttconfig.brokers');
+	});
+	ON('save.mqttsubscribe', function(component, options) {
+		!component.name && (component.name = options.broker + ' -> ' + options.topic);
 	});
 </script>`;
 

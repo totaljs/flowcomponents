@@ -32,7 +32,12 @@ exports.html = `<div class="padding">
 			</div>
 		</div>
 	</section>
-</div>`;
+</div>
+<script>
+	ON('save.mqtt', function(component, options) {
+		!component.name && (component.name = options.username + ':' + (options.password ? '***' : '') + '@' + options.host + ':' + options.port);
+	});
+</script>`;
 
 exports.readme = `
 # MQTT Broker`;
@@ -62,7 +67,7 @@ exports.install = function(instance) {
 			return;
 		}
 
-		options.id = options.host + ':' + options.port;
+		options.id = options.username || '' + ':' + options.password || '' + '@' + options.host + ':' + options.port;
 
 		if (broker) {
 			JSON.stringify(options) !== JSON.stringify(old_options) && broker.close();
@@ -73,23 +78,35 @@ exports.install = function(instance) {
 	};
 
 	instance.custom.createBroker = function() {
+
 		ON('mqtt.brokers.status', brokerstatus);
+
 		var o = instance.options;
-		broker = new Broker({host: o.host, port: o.port, id: o.id});
-		instance.status('Ready', 'white');
+		var opts = {host: o.host, port: o.port, id: o.id};
+
+		if (o.username) {
+			opts.username = o.username;
+			opts.password = o.password;
+		}
+
+		broker = new Broker(opts);
 		MQTT_BROKERS.push(broker);
+
+		instance.status('Ready', 'white');
 	};
 
 	instance.close = function(done) {
+
 		broker && broker.close(function() {
 			MQTT_BROKERS = MQTT_BROKERS.remove('id', instance.options.id);
 			EMIT('mqtt.brokers.status', 'removed', instance.options.id);
 			done();
 		});
+
 		OFF('mqtt.brokers.status', brokerstatus);
 	};
 
-	function brokerstatus(status, brokerid) {
+	function brokerstatus(status, brokerid, err) {
 		if (brokerid !== instance.options.id)
 			return;
 
@@ -105,6 +122,9 @@ exports.install = function(instance) {
 				break;
 			case 'connectionfailed':
 				instance.status('Connection failed', 'red');
+				break;
+			case 'error':
+				instance.error('MQTT Error, ID: ' + instance.id + '\n  ' + err);
 				break;
 		}
 	}
@@ -202,7 +222,7 @@ Broker.prototype.connect = function() {
 
 	EMIT('mqtt.brokers.status', 'connecting', self.id);
 
-	self.client = mqtt.connect(broker);
+	self.client = mqtt.connect(broker, self.options);
 
 	self.client.on('connect', function() {
 		self.connecting = false;
@@ -242,9 +262,8 @@ Broker.prototype.connect = function() {
 			self.client.end();
 			self.connecting = false;
 			EMIT('mqtt.brokers.status', 'connectionfailed', self.id);
+			EMIT('mqtt.brokers.status', 'error', self.id, err);
 		}
-
-		console.log('ERROR', broker, err);
 	});
 
 };
