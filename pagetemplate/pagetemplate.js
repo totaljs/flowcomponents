@@ -6,6 +6,7 @@ exports.input = false;
 exports.output = false;
 exports.author = 'Martin Smola';
 exports.icon = 'code';
+exports.traffic = false;
 exports.options = { template: '<h1>Hello @{model.firstname}</h1>', layout: false };
 
 exports.html = `<div class="padding">

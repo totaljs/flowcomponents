@@ -8,6 +8,7 @@ exports.input = false;
 exports.output = 0;
 exports.author = 'Martin Smola';
 exports.options = {};
+exports.traffic = false;
 exports.npm = ['mqtt'];
 
 exports.html = `<div class="padding">
@@ -35,7 +36,7 @@ exports.html = `<div class="padding">
 </div>
 <script>
 	ON('save.mqtt', function(component, options) {
-		!component.name && (component.name = '{0}:{1}@{2}:{3}'.format(options.username || '', options.password ? '***' : '', options.host, options.port));
+		!component.name && (component.name = '{0}@{1}:{2}'.format(options.username || '', options.host, options.port));
 	});
 </script>`;
 
@@ -67,7 +68,7 @@ exports.install = function(instance) {
 			return;
 		}
 
-		options.id = options.username || '' + ':' + options.password || '' + '@' + options.host + ':' + options.port;
+		options.id = (options.username || '') + '@' + options.host + ':' + options.port;
 
 		if (broker) {
 			JSON.stringify(options) !== JSON.stringify(old_options) && broker.close();
@@ -100,10 +101,11 @@ exports.install = function(instance) {
 		broker && broker.close(function() {
 			MQTT_BROKERS = MQTT_BROKERS.remove('id', instance.options.id);
 			EMIT('mqtt.brokers.status', 'removed', instance.options.id);
-			done();
 		});
 
 		OFF('mqtt.brokers.status', brokerstatus);
+
+		done();
 	};
 
 	function brokerstatus(status, brokerid, err) {
@@ -281,8 +283,8 @@ Broker.prototype.close = function(callback) {
 	self.closing = true;
 
 	if (self.connected || self.connecting)
-		self.client.end(cb);
-	else
+		self.client.end(/*cb*/);
+	//else
 		cb();
 
 	function cb() {

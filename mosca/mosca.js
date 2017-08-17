@@ -8,6 +8,7 @@ exports.input = false;
 exports.output = 0;
 exports.author = 'Martin Smola';
 exports.options = {};
+exports.traffic = false;
 exports.npm = ['mosca'];
 
 exports.html = `<div class="padding">
