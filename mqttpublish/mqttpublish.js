@@ -46,7 +46,7 @@ exports.install = function(instance) {
 		if (!MQTT.broker(instance.options.broker))
 			return instance.status('No broker', 'red');
 
-		if (instance.options.broker && instance.options.topic) {
+		if (instance.options.broker) {
 
 			!added && MQTT.add(instance.options.broker);
 			added = true;
