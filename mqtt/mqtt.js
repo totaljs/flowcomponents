@@ -289,7 +289,7 @@ Broker.prototype.close = function(callback) {
 
 	function cb() {
 		EMIT('mqtt.brokers.status', 'disconnected', self.id);
-		self.client.removeAllListeners();
+		self.client && self.client.removeAllListeners();
 		self.components = [];
 		self.client = null;
 		callback && callback();
