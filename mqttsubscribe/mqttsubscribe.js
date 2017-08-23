@@ -32,6 +32,8 @@ exports.install = function(instance) {
 	var added = false;
 	var subscribed = false;
 	var isWildcard = false;
+	var rtopic = ''; // root topic => 'test' for 'test/#'
+	var wtopic = ''; // wild topic => 'test/' for 'test/#' 
 
 	instance.custom.reconfigure = function(o, old_options) {
 
@@ -44,6 +46,10 @@ exports.install = function(instance) {
 		if (instance.options.broker && instance.options.topic) {
 
 			isWildcard = instance.options.topic.endsWith('#');
+			if (isWildcard) {
+				rtopic = instance.options.topic.substring(0, instance.options.topic.length - 2);
+				wtopic = instance.options.topic.substring(0, instance.options.topic.length - 1);
+			}
 
 			if (!added)
 				MQTT.add(instance.options.broker);
@@ -115,7 +121,7 @@ exports.install = function(instance) {
 			return;
 
 		if (isWildcard) {
-			if (!topic.startsWith(instance.options.topic.substring(0, instance.options.topic.length - 1)))
+			if (topic !== rtopic && !topic.startsWith(wtopic))
 				return;
 		} else {
 			if (instance.options.topic !== topic)
