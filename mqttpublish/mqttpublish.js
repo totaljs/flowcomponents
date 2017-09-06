@@ -12,6 +12,8 @@ exports.options = {};
 exports.html = `<div class="padding">
 	<div data-jc="dropdown" data-jc-path="broker" data-jc-config="datasource:mqttconfig.brokers;required:true" class="m">@(Brokers)</div>
 	<div data-jc="textbox" data-jc-path="topic" data-jc-config="placeholder:hello/world" class="m">Topic</div>
+	<div data-jc="textbox" data-jc-path="staticmessage" data-jc-config="placeholder:123">Static message(string)</div>
+	<div class="help m">@(If specified then incoming data are ignored and this message is sent instead. Topic is required if static message is defined.)</div>
 	<div data-jc="dropdown" data-jc-path="qos" data-jc-config="items:,0,1,2" class="m">@(QoS)</div>
 	<div data-jc="checkbox" data-jc-path="retain" class="m">@(Retain)</div>
 </div>
@@ -64,7 +66,7 @@ exports.install = function(instance) {
 	instance.on('data', function(flowdata) {
 		if (!ready)
 			return;
-		var msg = flowdata.data;
+		var msg = instance.options.staticmessage || flowdata.data;
 		var topic = instance.options.topic || msg.topic;
 		if (topic)
 			MQTT.publish(instance.options.broker, topic, msg, PUBLISH_OPTIONS);
