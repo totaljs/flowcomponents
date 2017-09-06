@@ -1,11 +1,11 @@
 exports.id = 'mqttpublish';
 exports.title = 'MQTT publish';
 exports.group = 'MQTT';
-exports.color = '#656D78';
+exports.color = '#888600';
 exports.version = '1.0.0';
 exports.icon = 'clock-o';
 exports.input = true;
-exports.output = 0;
+exports.output = 1;
 exports.author = 'Martin Smola';
 exports.options = {};
 
@@ -30,7 +30,9 @@ exports.html = `<div class="padding">
 exports.readme = `
 # MQTT publish
 
-If the topic field is left empty and the data object does not have a 'topic' property then nothing is send.`;
+If the topic field is left empty and the data object does not have a 'topic' property then nothing is send.
+
+Any incoming data are passed to the output.`;
 
 
 exports.install = function(instance) {
@@ -72,6 +74,8 @@ exports.install = function(instance) {
 			MQTT.publish(instance.options.broker, topic, msg, PUBLISH_OPTIONS);
 		else
 			instance.debug('MQTT publish no topic');
+
+		instance.send(flowdata);
 	});
 
 	instance.on('close', function() {

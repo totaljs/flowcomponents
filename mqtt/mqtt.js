@@ -1,7 +1,7 @@
 exports.id = 'mqtt';
 exports.title = 'MQTT broker';
 exports.group = 'MQTT';
-exports.color = '#656D78';
+exports.color = '#888600';
 exports.version = '1.0.0';
 exports.icon = 'clock-o';
 exports.input = false;

@@ -1,7 +1,7 @@
 exports.id = 'mqttsubscribe';
 exports.title = 'MQTT subscribe';
 exports.group = 'MQTT';
-exports.color = '#656D78';
+exports.color = '#888600';
 exports.version = '1.0.0';
 exports.icon = 'clock-o';
 exports.output = 1;
