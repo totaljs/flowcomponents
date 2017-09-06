@@ -8,39 +8,31 @@ exports.output = 1;
 exports.options = {};
 exports.readme = `# Virtual wire in
 
-After creating \`Virtual wire out\` make sure to hit Apply button otherwise it will not appear in setting of this component.`;
+When the wires between the components are mess it's time to use Virtual wire.`;
 
 exports.html = `<div class="padding">
-	<div data-jc="dropdown" data-jc-path="wire" data-jc-config="datasource:virtualwiresout_source;required:true;empty:@(Select a Virtual wire out component)" class="m">@(Select a wire)</div>
-	<div class="help m">@(Make sure to create 'Virtual wire out' first to see it in dropdown.)</div>
-</div>
+	<div data-jc="textbox" data-jc-path="wirename" data-jc-config="required:true;placeholder:@(some identifier)" class="m">@(Wire name)</div>
+	</div>
 <script>
-	ON('open.virtualwirein', function(){
-		TRIGGER('virtualwiresout', 'virtualwiresout_source');
-	});
 	ON('save.virtualwirein', function(component, options) {
-		!component.name && (component.name = 'From ' + virtualwiresout_source.findItem('id', options.wire).name);
+		!component.name && (component.name = options.wirename);
+	});
+	WATCH('settings.virtualwirein.wirename', function(path, value, type){
+		if (type === 2)
+			SET('settings.virtualwirein.wirename', value.slug());
 	});
 </script>`;
 
 exports.install = function(instance) {
 
-	instance.custom.reconfigure = function(options, old_options){
-		if (old_options && old_options.wire && options.wire !== old_options.wire)
-			OFF('virtualwireout', instance.handler);
-
-		if (instance.options.wire) {
-			ON('virtualwireout', instance.handler);
-			instance.status('');
-		} else {
-			instance.status('Not configured');
-		}
+	instance.custom.reconfigure = function(options){
+		instance.status(instance.options.wirename ? instance.options.wirename :'Not configured');
 	};
 
-	instance.handler = function(id, flowdata) {
-		if (instance.options.wire === id)
-			instance.send2(flowdata);
-	};
+	ON('virtualwire', function(wirename, flowdata){
+		if (instance.options.wirename && instance.options.wirename === wirename)
+			instance.send(flowdata);
+	});
 
 	instance.on('options', instance.custom.reconfigure);
 	instance.custom.reconfigure();

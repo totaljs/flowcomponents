@@ -7,51 +7,34 @@ exports.input = true;
 exports.options = {};
 exports.readme = `# Virtual wire out
 
-When the wires between the components are mess it's time to use Virtual wire.
-
-After creating new \`Virtual wire out\` make sure to hit Apply button, otherwise it will not appear in \`Virtual wire in\`s settings.`;
+When the wires between the components are mess it's time to use Virtual wire.`;
 
 exports.html = `<div class="padding">
-	<div data-jc="textbox" data-jc-path="name" class="m" data-jc-config="required:true;maxlength:500;placeholder:@(Some unique name)">@(Name)</div>
-	<div class="help m">@(This is identifier that appears in 'Virtual wire in' component's settings in the dropdown.)</div>
+	<div data-jc="textbox" data-jc-path="wirename" class="m" data-jc-config="required:true;placeholder:@(some identifier)">@(Wire name)</div>
 </div>
 <script>
 	ON('save.virtualwireout', function(component, options) {
-		!component.name && (component.name = options.name);
+		!component.name && (component.name = options.wirename);
+	});
+	WATCH('settings.virtualwireout.wirename', function(path, value, type){
+		if (type === 2)
+			SET('settings.virtualwireout.wirename', value.slug());
 	});
 </script>`;
 
-var VIRTUAL_WIRES = {};
-
 exports.install = function(instance) {
 
-	instance.custom.reconfigure = function(){
-		if (instance.name) {
-			instance.status('');
-			VIRTUAL_WIRES[instance.id] = instance.name;
+	instance.custom.reconfigure = function(options){
+		if (instance.options.wirename) {
+			instance.status(instance.options.wirename);
 		} else
-			instance.status('Unique name required', 'red');
+			instance.status('Not configure', 'red');
 	};
 
 	instance.on('data', function(flowdata) {
-		EMIT('virtualwireout', instance.id, flowdata);
+		EMIT('virtualwire', instance.options.wirename, flowdata);
 	});
 
 	instance.on('options', instance.custom.reconfigure);
 	instance.custom.reconfigure();
-
-	instance.on('close', function(){
-		delete VIRTUAL_WIRES[instance.id];
-	});
 };
-
-FLOW.trigger('virtualwiresout', function(next) {
-
-	var wires = [];
-
-	Object.keys(VIRTUAL_WIRES).forEach(function(key){
-		wires.push({id: key, name: VIRTUAL_WIRES[key]});
-	});
-
-	next(wires);
-});
