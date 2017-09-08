@@ -31,9 +31,6 @@ exports.install = function(instance) {
 
 	var added = false;
 	var subscribed = false;
-	var isWildcard = false;
-	var rtopic = ''; // root topic => 'test' for 'test/#'
-	var wtopic = ''; // wild topic => 'test/' for 'test/#' 
 
 	instance.custom.reconfigure = function(o, old_options) {
 
@@ -45,11 +42,6 @@ exports.install = function(instance) {
 
 		if (instance.options.broker && instance.options.topic) {
 
-			isWildcard = instance.options.topic.endsWith('#');
-			if (isWildcard) {
-				rtopic = instance.options.topic.substring(0, instance.options.topic.length - 2);
-				wtopic = instance.options.topic.substring(0, instance.options.topic.length - 1);
-			}
 
 			if (!added)
 				MQTT.add(instance.options.broker);
@@ -120,16 +112,40 @@ exports.install = function(instance) {
 		if (brokerid !== instance.options.broker)
 			return;
 
-		if (isWildcard) {
-			if (topic !== rtopic && !topic.startsWith(wtopic))
-				return;
-		} else {
-			if (instance.options.topic !== topic)
-				return;
-		}
-
-		instance.send2({ topic: topic, data: message });
+		mqttWildcard(topic, instance.options.topic) && instance.send2({ topic: topic, data: message });
 	}
 
 	instance.custom.reconfigure();
 };
+
+// https://github.com/hobbyquaker/mqtt-wildcard
+function mqttWildcard(topic, wildcard) {
+    if (topic === wildcard) {
+        return [];
+    } else if (wildcard === '#') {
+        return [topic];
+    }
+
+    var res = [];
+
+    var t = String(topic).split('/');
+    var w = String(wildcard).split('/');
+
+    var i = 0;
+    for (var lt = t.length; i < lt; i++) {
+        if (w[i] === '+') {
+            res.push(t[i]);
+        } else if (w[i] === '#') {
+            res.push(t.slice(i).join('/'));
+            return res;
+        } else if (w[i] !== t[i]) {
+            return null;
+        }
+    }
+
+    if (w[i] === '#') {
+        i += 1;
+    }
+
+    return (i === w.length) ? res : null;
+}
