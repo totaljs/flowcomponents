@@ -25,6 +25,25 @@ exports.html = `<div class="padding">
 
 exports.readme = `
 # MQTT subscribe
+
+The data recieved are passed to the output as follows:
+\`\`\`javascript
+{
+	topic: '/lights/on',
+	data: 'kitchen'
+}
+\`\`\`
+
+If the topic is wildcard then there's an array of matches in flowdata repository which can be used in Function component like so:
+\`\`\`javascript
+// wildcard -> /+/status
+// topic -> /devicename/status
+
+var match = flowdata.get('mqtt_wildcard');
+// match === ['devicename']
+\`\`\`
+ 
+More on wildcard topics [here](https://mosquitto.org/man/mqtt-7.html)
 `;
 
 exports.install = function(instance) {
@@ -112,7 +131,12 @@ exports.install = function(instance) {
 		if (brokerid !== instance.options.broker)
 			return;
 
-		mqttWildcard(topic, instance.options.topic) && instance.send2({ topic: topic, data: message });
+		var match = mqttWildcard(topic, instance.options.topic);
+		if (match) {
+			var flowdata = instance.make({ topic: topic, data: message })
+			flowdata.set('mqtt_wildcard', match);
+			instance.send2(flowdata);
+		}
 	}
 
 	instance.custom.reconfigure();
