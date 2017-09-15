@@ -7,7 +7,7 @@ exports.input = true;
 exports.output = ['red', 'blue'];
 exports.version = '1.0.0';
 exports.author = 'Martin Smola';
-exports.options = { value: 21, hysteresis: 0.5};
+exports.options = { temp_required: 21, hysteresis: 0.5, temp_current: 21, heating: false};
 exports.readme = `# Flowbard: Simple thermostat
 
 `;
@@ -20,7 +20,7 @@ exports.html = `<div class="padding">
 	</div>	
 	<div class="row">
 		<div class="col-md-6 m">
-			<div data-jc="textbox" data-jc-path="value" data-jc-config="placeholder:21;type:number;increment:true" class="m">Required temperature &#8451;</div>
+			<div data-jc="textbox" data-jc-path="temp_required" data-jc-config="placeholder:21;type:number;increment:true" class="m">Required temperature &#8451;</div>
 		</div>
 	</div>	
 	<div class="row">
@@ -47,11 +47,11 @@ exports.install = function(instance) {
 
 		var options = instance.options;
 
-		exports.options = instance.options = U.extend({ value: 21, hysteresis: 0.5}, instance.options, true);		
+		exports.options = instance.options = U.extend({ temp_required: 21, hysteresis: 0.5, temp_current: 21}, instance.options, true);		
 
-		instance.flowboard && instance.flowboard('options', instance.options);
+		send(instance.options);
 
-		instance.status(global.FLOWBOARD ? '{0} +-{1}'.format(options.value, options.hysteresis) : 'Flowbard not found.', global.FLOWBOARD ? null : 'red');		
+		instance.status(global.FLOWBOARD ? '{0} +-{1}'.format(options.temp_required, options.hysteresis) : 'Flowbard not found.', global.FLOWBOARD ? null : 'red');		
 	};
 
 	instance.on('data', function(flowdata) {
@@ -60,12 +60,14 @@ exports.install = function(instance) {
 
 		if (options.property) {
 			if (options.property.indexOf('.') === -1)
-				val = flowdata.data[options.property];
+				options.temp_current = flowdata.data[options.property];
 			else
-				val = U.get(flowdata.data, options.property);
+				options.temp_current = U.get(flowdata.data, options.property);
 		} else {
-			val = flowdata.data;
+			options.temp_current = flowdata.data;
 		}
+
+		val = options.temp_current;
 
 		if (!val)
 			return;
@@ -78,14 +80,22 @@ exports.install = function(instance) {
 			}
 		}
 
-		if (val < (options.value - options.hysteresis))
-			// start
-			instance.send(0, true);
-		else if (val > (options.value + options.hysteresis))
-			// stop
-			instance.send(1, true);
-
+		send(options);
 	});
+
+	function send(options) {
+		if (options.temp_current < (options.temp_required - options.hysteresis)) {
+			// start
+			options.heating = true;
+			instance.send(0, true);
+		} else if (options.temp_current > (options.temp_required + options.hysteresis)) {
+			// stop
+			options.heating = false;
+			instance.send(1, true);
+		}
+		
+		instance.flowboard && instance.flowboard('options', options);			
+	};
 
 	instance.on('options', instance.reconfigure);
 	instance.reconfigure();
@@ -94,7 +104,7 @@ exports.install = function(instance) {
 		switch (type) {
 
 			case 'setoptions':
-				instance.options.value = data.value;
+				instance.options.temp_required = data.temp_required;
 				instance.options.hysteresis = data.hysteresis;
 				instance.reconfigure();
 				break;
