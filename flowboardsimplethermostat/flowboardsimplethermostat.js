@@ -3,14 +3,19 @@ exports.title = 'Simple thermostat';
 exports.group = 'Flowbard';
 exports.color = '#AC92EC';
 exports.icon = 'fa-thermometer-half';
-exports.input = true;
+exports.input = 2;
 exports.output = ['red', 'blue'];
 exports.version = '1.0.0';
 exports.author = 'Martin Smola';
-exports.options = { temp_required: 21, hysteresis: 0.5, temp_current: 21, heating: false};
+exports.options = { temp_required: 21, hysteresis: 0.5, temp_current: 21, heating: false, enabled: true };
 exports.readme = `# Flowbard: Simple thermostat
 
-`;
+### Inputs
+- First input can be used to enable/disable the thermostat. Disabling will also send 'true' to second output.
+- Second input is default input for data.
+
+### Outputs
+- Data are send to first output when the heating should start and second to stop the heating.`;
 
 exports.html = `<div class="padding">
 	<div class="row">
@@ -29,16 +34,7 @@ exports.html = `<div class="padding">
 			<div class="help m">@(If desired temperature is 21&#8451; and hysteresis 0.5&#8451; then heatings starts at 20.5&#8451; and stops at 21.5&#8451;)</div>
 		</div>
 	</div>	
-</div>
-<script>
-	ON('open.flowboardsimplethermostat', function(component, options) {
-		TRIGGER('fb-st-options', 'settings.flowboardsimplethermostat');
-	});
-</script>`;
-
-FLOW.trigger('fb-st-options', function(next, data) {    
-    next(exports.options);
-});
+</div>`;
 
 exports.install = function(instance) {
 
@@ -47,14 +43,26 @@ exports.install = function(instance) {
 
 		var options = instance.options;
 
-		exports.options = instance.options = U.extend({ temp_required: 21, hysteresis: 0.5, temp_current: 21}, instance.options, true);		
+		instance.options = U.extend({ temp_required: 21, hysteresis: 0.5, temp_current: 21, enabled: true }, instance.options, true);		
 
 		send(instance.options);
 
-		instance.status(global.FLOWBOARD ? '{0} +-{1}'.format(options.temp_required, options.hysteresis) : 'Flowbard not found.', global.FLOWBOARD ? null : 'red');		
+		instance.status(global.FLOWBOARD ? '{0} +-{1} {2}'.format(options.temp_required, options.hysteresis, instance.options.enabled ? 'Enabled' : 'Disabled') : 'Flowbard not found.', global.FLOWBOARD ? null : 'red');
 	};
 
-	instance.on('data', function(flowdata) {
+	instance.on('0', function(flowdata) {
+		var temp = flowdata.data;
+		var options = instance.options;
+		if (temp === true || temp === 1 || temp === 'on')
+			options.enabled = true;
+		else
+			options.enabled = false;
+
+		instance.status(global.FLOWBOARD ? '{0} +-{1} {2}'.format(options.temp_required, options.hysteresis, options.enabled ? 'Enabled' : 'Disabled') : 'Flowbard not found.', global.FLOWBOARD ? null : 'red');
+	});
+
+	instance.on('1', function(flowdata) {
+
 		var val;
 		var options = instance.options;
 
@@ -84,6 +92,12 @@ exports.install = function(instance) {
 	});
 
 	function send(options) {
+		if (!options.enabled) {			
+			options.heating = false;
+			instance.send(1, true);
+			return;
+		}
+
 		if (options.temp_current < (options.temp_required - options.hysteresis)) {
 			// start
 			options.heating = true;
@@ -94,7 +108,7 @@ exports.install = function(instance) {
 			instance.send(1, true);
 		}
 		
-		instance.flowboard && instance.flowboard('options', options);			
+		instance.flowboard('options', options);			
 	};
 
 	instance.on('options', instance.reconfigure);
@@ -107,10 +121,12 @@ exports.install = function(instance) {
 				instance.options.temp_required = data.temp_required;
 				instance.options.hysteresis = data.hysteresis;
 				instance.reconfigure();
+				// send options to designer
+				instance.reconfig();
 				break;
 
 			case 'getoptions':
-				instance.flowboard && instance.flowboard('options', instance.options);
+				instance.flowboard('options', instance.options);
 				break;
 		}
 	});
