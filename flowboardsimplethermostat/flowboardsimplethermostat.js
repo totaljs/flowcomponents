@@ -3,6 +3,7 @@ exports.title = 'Simple thermostat';
 exports.group = 'Flowbard';
 exports.color = '#AC92EC';
 exports.icon = 'fa-thermometer-half';
+exports.click = true;
 exports.input = 2;
 exports.output = ['red', 'blue'];
 exports.version = '1.0.0';
