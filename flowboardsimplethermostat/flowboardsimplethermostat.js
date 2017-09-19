@@ -39,30 +39,34 @@ exports.html = `<div class="padding">
 exports.install = function(instance) {
 
 
-	instance.reconfigure = function() {
-
+	instance.custom.reconfigure = function() {
 		var options = instance.options;
 
 		instance.options = U.extend({ temp_required: 21, hysteresis: 0.5, temp_current: 21, enabled: true }, instance.options, true);		
-
 		send(instance.options);
+		instance.custom.status();
+	};
 
+
+	instance.custom.status = function() {
+		var options = instance.options;
 		instance.status(global.FLOWBOARD ? '{0} +-{1} {2}'.format(options.temp_required, options.hysteresis, instance.options.enabled ? 'Enabled' : 'Disabled') : 'Flowbard not found.', global.FLOWBOARD ? null : 'red');
+		instance.flowboard('options', instance.options);
 	};
 
 	instance.on('0', function(flowdata) {
 		var temp = flowdata.data;
 		var options = instance.options;
+
 		if (temp === true || temp === 1 || temp === 'on')
 			options.enabled = true;
 		else
 			options.enabled = false;
 
-		instance.status(global.FLOWBOARD ? '{0} +-{1} {2}'.format(options.temp_required, options.hysteresis, options.enabled ? 'Enabled' : 'Disabled') : 'Flowbard not found.', global.FLOWBOARD ? null : 'red');
+		instance.custom.status();
 	});
 
 	instance.on('1', function(flowdata) {
-
 		var val;
 		var options = instance.options;
 
@@ -111,16 +115,15 @@ exports.install = function(instance) {
 		instance.flowboard('options', options);			
 	};
 
-	instance.on('options', instance.reconfigure);
-	instance.reconfigure();
+	instance.on('options', instance.custom.reconfigure);
+	instance.custom.reconfigure();
 
 	instance.on('flowboard', function(type, data) {
 		switch (type) {
-
 			case 'setoptions':
 				instance.options.temp_required = data.temp_required;
 				instance.options.hysteresis = data.hysteresis;
-				instance.reconfigure();
+				instance.custom.reconfigure();
 				// send options to designer
 				instance.reconfig();
 				break;
@@ -129,5 +132,10 @@ exports.install = function(instance) {
 				instance.flowboard('options', instance.options);
 				break;
 		}
+	});
+
+	instance.on('click', function() {
+		instance.options.enabled = !instance.options.enabled;
+		instance.custom.status();
 	});
 };
