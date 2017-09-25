@@ -27,7 +27,8 @@
       "https://rawgit.com/totaljs/flowcomponents/v4.0.0/uniqueinterval/uniqueinterval.js",
       "https://rawgit.com/totaljs/flowcomponents/v4.0.0/megatimer/megatimer.js",
       "https://rawgit.com/totaljs/flowcomponents/v4.0.0/comment/comment.js",
-      "https://rawgit.com/totaljs/flowcomponents/v4.0.0/lastdata/lastdata.js"
+      "https://rawgit.com/totaljs/flowcomponents/v4.0.0/lastdata/lastdata.js",
+      "https://rawgit.com/totaljs/flowcomponents/v4.0.0/event/event.js"
     ]
   },
   {
