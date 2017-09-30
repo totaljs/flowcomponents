@@ -238,6 +238,7 @@ exports.install = function(instance) {
 		var daily = instance.options.type[0] === 'D';
 
 		output.id = instance.id;
+		output.name = instance.name;
 		output.hours = [];
 		output.days = [];
 		output.months = [];
