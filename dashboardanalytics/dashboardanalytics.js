@@ -29,7 +29,7 @@ This components sends to Dashboard two types of data:
 - \`stats\` with stats`;
 
 exports.html = `<div class="padding">
-	<div data-jc="dropdown" data-jc-path="type" class="m" data-jc-config="items:,@(Hourly: Sum values)|sum,@(Hourly: A maximum value)|max,@(Hourly: A minimum value)|min,@(Hourly: An average value)|avg,@(Hourly: An average (median) value)|median,@(Daily: Sum values)|Dsum,@(Daily: A maximum value)|Dmax,@(Daily: A minimum value)|Dmin,@(Daily: An average value)|Davg,@(Daily: An average (median) value)|Dmedian;required:true">@(Type)</div>
+	<div data-jc="dropdown" data-jc-path="type" class="m" data-jc-config="items:,@(Hourly\: Sum values)|sum,@(Hourly\: A maximum value)|max,@(Hourly\: A minimum value)|min,@(Hourly\: An average value)|avg,@(Hourly\: An average (median) value)|median,@(Daily\: Sum values)|Dsum,@(Daily\: A maximum value)|Dmax,@(Daily\: A minimum value)|Dmin,@(Daily\: An average value)|Davg,@(Daily\: An average (median) value)|Dmedian;required:true">@(Type)</div>
 	<div data-jc="codemirror" data-jc-path="fn" data-jc-config="type:javascript" class="m">@(Analyzator)</div>
 	<div class="row">
 		<div class="col-md-3 m">
@@ -123,7 +123,7 @@ exports.install = function(instance) {
 			current.decimals = instance.options.decimals;
 			current.datetime = F.datetime;
 			instance.send2(current);
-			instance.dashboard && instance.dashboard('laststate', current);
+			instance.dashboard('laststate', current);
 			instance.custom.status();
 			EMIT('flow.dashboardanalytics', instance, current);
 		});
@@ -221,7 +221,7 @@ exports.install = function(instance) {
 				instance.stats();
 				break;
 			case 'laststate':
-				instance.dashboard && instance.dashboard(type, current);
+				instance.dashboard(type, current);
 				break;
 		}
 	});
