@@ -3,8 +3,7 @@ exports.title = 'Simple thermostat';
 exports.group = 'Flowbard';
 exports.color = '#AC92EC';
 exports.icon = 'fa-thermometer-half';
-exports.click = true;
-exports.input = ['green', 'blue', 'yellow', 'black', 'grey'];
+exports.input = ['green', 'blue', 'yellow'];
 exports.output = ['red', 'lightgrey' , 'blue'];
 exports.version = '1.0.0';
 exports.author = 'Martin Smola';
@@ -14,9 +13,7 @@ exports.readme = `# Flowbard: Simple thermostat
 ### Inputs
 - First input can be used to enable/disable the thermostat. Disabling will also send 'true' to second output.
 - Second input is for current temperature.
-- Third input is to set Day mode.
-- Fourth input is to set Night mode.
-- Fifth input is to set Away mode.
+- Third input .
 
 ### Outputs
 - Data are send to first output when the heating should start and second to stop the heating.`;
@@ -40,7 +37,7 @@ exports.html = `<div class="padding">
 	</div>	
 	<div class="row">
 		<div class="col-md-6 m">	
-			<div data-jc="textbox" data-jc-path="hysteresis" data-jc-config="placeholder:0.5">Hysteresis &#8451;</div>
+			<div data-jc="textbox" data-jc-path="hysteresis" data-jc-config="placeholder:0.5;type:number">Hysteresis &#8451;</div>
 			<div class="help m">@(If desired temperature is 21&#8451; and hysteresis 0.5&#8451; then heatings starts at 20.5&#8451; and stops at 21.5&#8451;)</div>
 		</div>
 	</div>	
@@ -50,14 +47,15 @@ exports.install = function(instance) {
 
 
 	instance.custom.reconfigure = function() {
-		instance.options = U.extend({ temp_heating_day: 22, temp_heating_night: 21, temp_heating_away: 20, hysteresis: 0.5, temp_current: 21, enabled: false, heating: false, mode: 'away', name: instance.name }, instance.options, true);		
+		instance.options = U.extend({ temp_heating_day: 22, temp_heating_night: 21, temp_heating_away: 20, hysteresis: 0.5, temp_current: 21, enabled: false, heating: false, mode: 'day' }, instance.options, true);
+		instance.options.name = instance.name;		
 		send();
 	};
 
 
 	instance.custom.status = function() {
 		var options = instance.options;	
-		instance.status(global.FLOWBOARD ? '{0} | +-{1} | {2} | {3}'.format(options['temp_heating_'+ options.mode] || '??', options.hysteresis, options.enabled ? 'enabled' : 'disabled', options.mode) : 'Flowbard not found.', global.FLOWBOARD ? null : 'red');
+		instance.status(global.FLOWBOARD ? 'C:{0} | S:{1} | +-{2} | {3} | M:{4}'.format(options.temp_current, options['temp_heating_'+ options.mode] || '??', options.hysteresis, options.enabled ? 'enabled' : 'disabled', options.mode) : 'Flowbard not found.', global.FLOWBOARD ? null : 'red');
 		instance.flowboard('options', options);
 	};
 
@@ -77,7 +75,7 @@ exports.install = function(instance) {
 	// temperature
 	instance.on('1', function(flowdata) {
 		var options = instance.options;
-		var val = options.temp_current = getVal(flowdata.data, options.property);
+		var val = getVal(flowdata.data, options.property);
 
 		if (!val)
 			return;
@@ -90,45 +88,31 @@ exports.install = function(instance) {
 			}
 		}	
 	
+		options.temp_current = val;	
+	
 		send();
 	});
 
 	// set day mode
 	instance.on('2', function(flowdata) {
-		var options = instance.options;
+		var o = instance.options;
 		var m = flowdata.data;
 
-		if (!m)
-			options.mode = 'day';
 		// if data is a string with one of the supported modes then set it as current mode
-		else if (m === 'day' || m === 'night' || m === 'away')
-			options.mode = m;
-		// if data is object with mode property then set it as current mode
-		else if (m.mode && (m.mode === 'day' || m.mode === 'night' || m.mode === 'away'))
-			options.mode = m.mode;
-		else // default mode is 'day'
-			options.mode = 'day';
+		if (m === 'day' || m === 'night' || m === 'away')
+			o.mode = m;
+		else // off
+			o.mode = '';
 
-		send();
-	});
-
-	// set night mode
-	instance.on('3', function(flowdata) {
-		instance.options.mode = 'night';
-		send();
-	});
-
-	// set away mode
-	instance.on('4', function(flowdata) {
-		instance.options.mode = 'away';
 		send();
 	});
 
 	function send() {
 		var options = instance.options;
 
-		if (!options.enabled) {			
+		if (!options.enabled || !options.mode) {			
 			options.heating = false;
+			options.cooling = false;
 			instance.send(1, true);
 		} else {
 			if (options.temp_current < (options['temp_heating_' + options.mode] - options.hysteresis)) {
@@ -140,7 +124,7 @@ exports.install = function(instance) {
 				options.heating = false;
 				instance.send(1, true);
 			}
-		}	
+		}
 
 		instance.custom.status();
 	};
@@ -172,7 +156,7 @@ exports.install = function(instance) {
 				break;
 
 			case 'getoptions':
-				instance.flowboard('options', options);
+				instance.flowboard('options', instance.options);
 				break;
 		}
 	});
