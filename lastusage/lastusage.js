@@ -1,19 +1,19 @@
 exports.id = 'lastusage';
-exports.title = 'Last usage';
+exports.title = 'Last Usage';
 exports.version = '1.0.0';
 exports.author = 'Peter Širka';
 exports.color = '#656D78';
 exports.input = true;
 exports.icon = 'calendar';
 exports.options = { format: 'dd.MM.yyyy HH:mm:ss' };
-exports.readme = `# Last usage
+exports.readme = `# Last Usage
 
 This component remembers date and time of last usage.`;
 
 exports.html = `<div class="padding">
 	<div class="row">
 		<div class="col-md-4">
-			<div data-jc="textbox" data-jc-path="format" data-placeholder="@(dd.MM.yyyy HH:mm:ss)" data-maxlength="25" data-align="center">@(Date format)</div>
+			<div data-jc="textbox" data-jc-path="format" data-jc-config="placeholder:@(dd.MM.yyyy HH:mm:ss);maxlength:25;align:center">@(Date format)</div>
 		</div>
 	</div>
 </div>`;

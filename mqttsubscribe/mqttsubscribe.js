@@ -1,50 +1,66 @@
 exports.id = 'mqttsubscribe';
 exports.title = 'MQTT subscribe';
 exports.group = 'MQTT';
-exports.color = '#656D78';
+exports.color = '#888600';
 exports.version = '1.0.0';
 exports.icon = 'clock-o';
 exports.output = 1;
 exports.author = 'Martin Smola';
 exports.options = {};
 
-exports.html = `
-	<div class="padding">
-		<div data-jc="dropdown" data-jc-path="broker" data-source="mqttconfig.brokers" class="m" data-required="true">@(Select a broker)</div>		
-		<div data-jc="textbox" data-jc-path="topic" data-placeholder="hello/world" data-required="true" class="m">Topic</div>
-		<div data-jc="dropdown" data-jc-path="qos" data-options=";0;1;2" class="m">@(QoS)</div>
-	</div>
-	<script>
-		ON('open.mqttsubscribe', function(component, options) {
-			TRIGGER('mqtt.brokers', 'mqttconfig.brokers');
-		});
-	</script>
-`;
+exports.html = `<div class="padding">
+	<div data-jc="dropdown" data-jc-path="broker" data-jc-config="datasource:mqttconfig.brokers;required:true" class="m">@(Select a broker)</div>
+	<div data-jc="textbox" data-jc-path="topic" data-jc-config="placeholder:hello/world;required:true" class="m">Topic</div>
+	<div data-jc="dropdown" data-jc-path="qos" data-jc-config="items:,0,1,2" class="m">@(QoS)</div>
+</div>
+<script>
+	var mqttconfig = { brokers: [] };
+	ON('open.mqttsubscribe', function(component, options) {
+		TRIGGER('mqtt.brokers', 'mqttconfig.brokers');
+	});
+	ON('save.mqttsubscribe', function(component, options) {
+		!component.name && (component.name = options.broker + ' -> ' + options.topic);
+	});
+</script>`;
 
 exports.readme = `
 # MQTT subscribe
 
+The data recieved are passed to the output as follows:
+\`\`\`javascript
+{
+	topic: '/lights/on',
+	data: 'kitchen'
+}
+\`\`\`
 
+If the topic is wildcard then there's an array of matches in flowdata repository which can be used in Function component like so:
+\`\`\`javascript
+// wildcard -> /+/status
+// topic -> /devicename/status
+
+var match = flowdata.get('mqtt_wildcard');
+// match === ['devicename']
+\`\`\`
+ 
+More on wildcard topics [here](https://mosquitto.org/man/mqtt-7.html)
 `;
 
 exports.install = function(instance) {
 
 	var added = false;
 	var subscribed = false;
-	var isWildcard = false;
 
 	instance.custom.reconfigure = function(o, old_options) {
 
 		added = false;
 		subscribed = false;
 
-		if (!MQTT.broker(instance.options.broker)) {
+		if (!MQTT.broker(instance.options.broker))
 			return instance.status('No broker', 'red');
-		}
 
 		if (instance.options.broker && instance.options.topic) {
 
-			isWildcard = instance.options.topic.endsWith('#');
 
 			if (!added)
 				MQTT.add(instance.options.broker);
@@ -56,6 +72,7 @@ exports.install = function(instance) {
 				MQTT.unsubscribe(instance.options.broker, instance.id, old_options.topic);
 				MQTT.subscribe(instance.options.broker, instance.id, instance.options.topic, instance.options.qos);
 			}
+
 			added = true;
 			subscribed = true;
 			return;
@@ -107,25 +124,52 @@ exports.install = function(instance) {
 				instance.reconfig();
 				instance.custom.reconfigure();
 				break;
-		};
-
-
-	};
+		}
+	}
 
 	function message(brokerid, topic, message) {
 		if (brokerid !== instance.options.broker)
 			return;
 
-		if (isWildcard) {
-			if (!topic.startsWith(instance.options.topic.substring(0, instance.options.topic.length - 1)))
-				return;
-		} else {
-			if (instance.options.topic !== topic)
-				return;
+		var match = mqttWildcard(topic, instance.options.topic);
+		if (match) {
+			var flowdata = instance.make({ topic: topic, data: message })
+			flowdata.set('mqtt_wildcard', match);
+			instance.send2(flowdata);
 		}
-
-		instance.send({topic: topic, data: message});
-	};
+	}
 
 	instance.custom.reconfigure();
 };
+
+// https://github.com/hobbyquaker/mqtt-wildcard
+function mqttWildcard(topic, wildcard) {
+    if (topic === wildcard) {
+        return [];
+    } else if (wildcard === '#') {
+        return [topic];
+    }
+
+    var res = [];
+
+    var t = String(topic).split('/');
+    var w = String(wildcard).split('/');
+
+    var i = 0;
+    for (var lt = t.length; i < lt; i++) {
+        if (w[i] === '+') {
+            res.push(t[i]);
+        } else if (w[i] === '#') {
+            res.push(t.slice(i).join('/'));
+            return res;
+        } else if (w[i] !== t[i]) {
+            return null;
+        }
+    }
+
+    if (w[i] === '#') {
+        i += 1;
+    }
+
+    return (i === w.length) ? res : null;
+}

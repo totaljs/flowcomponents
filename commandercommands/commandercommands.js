@@ -31,7 +31,7 @@ exports.install = function(instance) {
 		obj.user = client.user;
 		var data = instance.make(obj);
 		data.set('client', client);
-		instance.send(0, data);
+		instance.send2(0, data);
 	}
 
 	function process_option(client, body, id) {
@@ -42,7 +42,7 @@ exports.install = function(instance) {
 		obj.user = client.user;
 		var data = instance.make(obj);
 		data.set('client', client);
-		instance.send(1, data);
+		instance.send2(1, data);
 	}
 
 	ON('commander.command', process_command);

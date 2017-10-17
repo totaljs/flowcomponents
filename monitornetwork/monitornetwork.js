@@ -25,10 +25,10 @@ __Data Example__:
 exports.html = `<div class="padding">
 	<div class="row">
 		<div class="col-md-3 m">
-			<div data-jc="textbox" data-jc-path="interval" data-placeholder="@(10000)" data-increment="true" data-jc-type="number" data-required="true" data-maxlength="10">@(Interval in milliseconds)</div>
+			<div data-jc="textbox" data-jc-path="interval" data-jc-config="placeholder:10000;increment:true;type:number;required:true;maxlength:10;align:center">@(Interval in milliseconds)</div>
 		</div>
 		<div class="col-md-3 m">
-			<div data-jc="textbox" data-jc-path="interface" data-placeholder="eth0" data-required="true" data-maxlength="30">@(Network interface)</div>
+			<div data-jc="textbox" data-jc-path="interface" data-jc-config="placeholder:eth0;required:true;maxlength:30">@(Network interface)</div>
 		</div>
 	</div>
 	<div data-jc="textboxlist" data-jc-path="ports">Ports</div>
@@ -84,7 +84,7 @@ exports.install = function(instance) {
 			if (instance.options.enabled) {
 				tproc = setTimeout(instance.custom.run, instance.options.interval);
 				instance.custom.status();
-				instance.send(current);
+				instance.send2(current);
 			}
 		});
 	};

@@ -35,6 +35,12 @@ exports.install = function(instance) {
 		});
 	};
 
+	instance.custom.reset = function(callback) {
+		NOSQL(ID).counter.clear(function() {
+			callback && callback();
+		});
+	};
+
 	instance.custom.status = function() {
 		setTimeout2(instance.id, () => instance.status(count + 'x'), 100);
 	};

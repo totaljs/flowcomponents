@@ -25,10 +25,10 @@ __Data Example__:
 exports.html = `<div class="padding">
 	<div class="row">
 		<div class="col-md-3 m">
-			<div data-jc="textbox" data-jc-path="interval" data-placeholder="@(10000)" data-increment="true" data-jc-type="number" data-required="true" data-maxlength="10">@(Interval in milliseconds)</div>
+			<div data-jc="textbox" data-jc-path="interval" data-jc-config="placeholder:10000;increment:true;type:number;required:true;maxlength:10;align:center">@(Interval in milliseconds)</div>
 		</div>
 		<div class="col-md-3 m">
-			<div data-jc="textbox" data-jc-path="path" data-placeholder="/" data-required="true">@(Path)</div>
+			<div data-jc="textbox" data-jc-path="path" data-jc-config="placeholder:/;required:true">@(Path)</div>
 		</div>
 	</div>
 </div>`;
@@ -63,7 +63,7 @@ exports.install = function(instance) {
 				current.free = line[2].parseInt();
 				current.used = line[1].parseInt();
 				instance.custom.status();
-				instance.send(current);
+				instance.send2(current);
 			});
 		});
 	};
@@ -78,8 +78,7 @@ exports.install = function(instance) {
 	instance.on('click', function() {
 		instance.options.enabled = !instance.options.enabled;
 		instance.custom.status();
-		if (instance.options.enabled)
-			instance.custom.run();
+		instance.options.enabled && instance.custom.run();
 	});
 
 	instance.on('close', function() {

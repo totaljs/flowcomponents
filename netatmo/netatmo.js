@@ -104,7 +104,7 @@ exports.install = function(instance) {
 						return;
 					}
 
-					data.body && data.body.devices && instance.send(instance.custom.prepare(data.body.devices));
+					data.body && data.body.devices && instance.send2(instance.custom.prepare(data.body.devices));
 				});
 			});
 		});

@@ -9,17 +9,17 @@ exports.icon = 'code';
 exports.options = {};
 
 exports.html = `<div class="padding">
-	<div data-jc="dropdown" data-jc-path="operation" data-required="true" data-source="schemaoperations" data-empty="" class="m">@(Perform operation)</div>
+	<div data-jc="dropdown" data-jc-path="operation" data-jc-config="required:true;datasource:schemaoperations;empty:" class="m">@(Perform operation)</div>
 </div><script>
 TRIGGER('schemacodelist', 'schemaoperations');
 </script>`;
 
 exports.readme = `# Schema
 
-Prepares data according to the schema.
+Prepares a data according to the schema and performs specific operation.
 
 - \`green\` without error
-- \`red\` with error`
+- \`red\` with error`;
 
 exports.install = function(instance) {
 
@@ -34,16 +34,16 @@ exports.install = function(instance) {
 		if (type) {
 			method(type, response.data, function(err, response) {
 				if (err)
-					instance.send(1, err);
+					instance.send2(1, err);
 				else
-					instance.send(0, response);
+					instance.send2(0, response);
 			});
 		} else {
 			method(response.data, function(err, response) {
 				if (err)
-					instance.send(1, err);
+					instance.send2(1, err);
 				else
-					instance.send(0, response);
+					instance.send2(0, response);
 			});
 		}
 	});

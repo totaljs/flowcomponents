@@ -10,7 +10,7 @@ exports.author = 'Martin Smola';
 exports.icon = 'compress';
 
 exports.html = `<div class="padding">
-	<div data-jc="textboxlist" data-jc-path="props" data-maxlength="50" data-placeholder="property name" data-icon="fa-list">Properties</div>
+	<div data-jc="textboxlist" data-jc-path="props" data-jc-config="maxlength:50;placeholder:@(a property name);icon:list">@(Properties)</div>
 	<div class="help">@(Data comming to each of the inputs will be assign to a property from top to bottom. The first input to the first property.)</div>
 	<script>
 		ON('save.mergetoobject', function(component, options) {
@@ -38,12 +38,12 @@ exports.install = function(instance) {
 		if (!prop)
 			instance.debug('No property name for current input:', response.index);
 		else
-			data[id][prop] = response.data;	
+			data[id][prop] = response.data;
 
 		instance.status(Object.keys(data[id]).join(', '), 'red');
 		if (Object.keys(data[id]).length === instance.options.props.length) {
 			response.data = data[id];
-			instance.send(response);
+			instance.send2(response);
 			setTimeout2(instance.id, () => instance.status(''), 500, 10);
 			data[id] = {};
 		}
@@ -56,9 +56,9 @@ exports.install = function(instance) {
 	instance.on('options', function() {
 		if (instance.options.props && instance.options.props.length)
 			instance.status('');
-		else 
+		else
 			instance.status('Not configured', 'red');
 	});
 
-	instance.status(instance.options.props && instance.options.props.lenght ? '' : 'Not configured', 'red');
+	instance.status(instance.options.props && instance.options.props.length ? '' : 'Not configured', 'red');
 };

@@ -7,7 +7,7 @@ exports.input = true;
 exports.output = 1;
 exports.version = '1.0.0';
 exports.author = 'Martin Smola';
-exports.options = { 
+exports.options = {
 	outputs: 1,
 	code: `send('Hello world!');`};
 
@@ -19,7 +19,7 @@ If \`send\` function isn't called the data flow will not continue.
 __Custom function__:
 
 \`\`\`javascript
-value;    	// 
+value;    	//
 send;    	// send data to next component, optionaly specify output index -> send(0, data);
 instance; 	// ref to value.instance, available methods get, set, rem for storing temporary data related to this instance of Function component and  debug, status and error for sending data to designer
 global;   	// ref to value.global, available methods get, set, rem for storing persistent data globally accessible in any component
@@ -37,11 +37,11 @@ send();
 exports.html = `<div class="padding">
 	<div class="row">
 		<div class="col-md-3">
-			<div data-jc="textbox" data-jc-type="number" data-jc-path="outputs" data-validate="value > 0" data-increment="true" data-maxlength="3">Number of outputs</div>
+			<div data-jc="textbox" data-jc-path="outputs" data-jc-config="type:number;validation:value > 0;increment:true;maxlength:3">@(Number of outputs)</div>
 			<div class="help m">@(Minimum is 1)</div>
 		</div>
 	</div>
-	<div data-jc="codemirror" data-type="javascript" data-jc-path="code" data-required="true" data-height="500px">@(Code)</div>
+	<div data-jc="codemirror" data-jc-path="code" data-jc-config="type:javascript;required:true;height:500">@(Code)</div>
 </div>
 <script>
 	var function_outputs_count;
@@ -49,7 +49,7 @@ exports.html = `<div class="padding">
 	ON('open.function', function(component, options) {
 		function_outputs_count = options.outputs = options.outputs || 1;
 	});
-	
+
 	ON('save.function', function(component, options) {
 		if (function_outputs_count !== options.outputs) {
 			component.connections = {};
@@ -76,14 +76,14 @@ exports.install = function(instance) {
 
 				if (!data){
 					if (!index)
-						return instance.send(flowdata.clone());
+						return instance.send2(flowdata.clone());
 					data = index;
 					index = 0;
 				}
 
 				flowdata = flowdata.clone();
 				flowdata.data = data;
-				instance.send(index, flowdata);
+				instance.send2(index, flowdata);
 			}
 		},
 		global: {
@@ -121,7 +121,7 @@ exports.install = function(instance) {
 	instance.on('data', function(flowdata) {
 		VALUE.flowdata = flowdata;
 
-		ready && fn(VALUE, function(err, value) {
+		ready && fn(VALUE, function(err) {
 			if (err)
 				return instance.error('Error while processing function ' + err);
 		});

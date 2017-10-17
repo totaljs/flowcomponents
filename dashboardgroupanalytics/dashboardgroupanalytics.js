@@ -6,13 +6,19 @@ exports.group = 'Dashboard';
 exports.color = '#5CB36D';
 exports.input = true;
 exports.output = 1;
-exports.options = { fn: 'next({ value: value.count, group: value.brand });', format: '{0}x', decimals: 2, statshours: 24, statsdays: 14, statsmonths: 12, statsyears: 5 };
+exports.options = { fn: 'next({ value: value.count, group: value.brand });\n// or can return array:\n// next([{ value: value.count, group: value.brand }]);', format: '{0}x', decimals: 2, statshours: 24, statsdays: 14, statsmonths: 12, statsyears: 5, clearsignal: true };
 exports.readme = `# Group Analytics
 
 Creates a group analytics automatically according a value and group. The value must be a \`Number\` and group must be a \`String\`. The output is \`Object\`:
 
 \`\`\`javascript
 {
+	meta: {                // meta info
+		last: 'Audi',      // {String} last processed group
+		lastvalue: 50      // {Number} last calculated value,
+		groups: [],        // {String Array} all groups
+		datetime: ...      // {Date} processed date and time
+	},
 	Audi: {
 		count: 4,          // {Number} count of analyzed values in the hour
 		decimals: 0,       // {Number} count of decimals
@@ -22,6 +28,7 @@ Creates a group analytics automatically according a value and group. The value m
 		raw: 50,           // {Number} last raw value
 		type: 'sum',       // {String} type of analytics
 		value: 50,         // {Number} last calculated value
+		datetime: ...      // {Date} processed date and time
 	},
 	BMW: {
 		count: 2,          // {Number} count of analyzed values in the hour
@@ -32,21 +39,23 @@ Creates a group analytics automatically according a value and group. The value m
 		raw: 30,           // {Number} last raw value
 		type: 'sum',       // {String} type of analytics
 		value: 30,         // {Number} last calculated value
+		datetime: ...      // {Date} processed date and time
 	}
 }
 \`\`\``;
 
 exports.html = `<div class="padding">
-	<div data-jc="dropdown" data-jc-path="type" class="m" data-options=";@(Hourly: Sum values)|sum;@(Hourly: A maximum value)|max;@(Hourly: A minimum value)|min;@(Hourly: An average value)|avg;@(Hourly: An average (median) value)|median;@(Daily: Sum values)|Dsum;@(Daily: A maximum value)|Dmax;@(Daily: A minimum value)|Dmin;@(Daily: An average value)|Davg;@(Daily: An average (median) value)|Dmedian" data-required="true">@(Type)</div>
-	<div data-jc="codemirror" data-jc-path="fn" data-type="javascript" class="m">@(Analyzator)</div>
+	<div data-jc="dropdown" data-jc-path="type" class="m" data-jc-config="items:,@(Hourly\\: Sum values)|sum,@(Hourly\\: A maximum value)|max,@(Hourly\\: A minimum value)|min,@(Hourly\\: An average value)|avg,@(Hourly\\: An average (median) value)|median,@(Daily\\: Sum values)|Dsum,@(Daily\\: A maximum value)|Dmax,@(Daily\\: A minimum value)|Dmin,@(Daily\\: An average value)|Davg,@(Daily\\: An average (median) value)|Dmedian;required:true">@(Type)</div>
+	<div data-jc="codemirror" data-jc-path="fn" data-jc-config="type:javascript" class="m">@(Analyzator)</div>
 	<div class="row">
 		<div class="col-md-3 m">
-			<div data-jc="textbox" data-jc-path="format" data-placeholder="@(e.g. {0}x)" data-maxlength="10" data-align="center">@(Format)</div>
+			<div data-jc="textbox" data-jc-path="format" data-jc-config="placeholder:@(e.g. {0}x);maxlength:10;align:center">@(Format)</div>
 		</div>
 		<div class="col-md-3 m">
-			<div data-jc="textbox" data-jc-path="decimals" data-maxlength="10" data-align="center" data-increment="true" data-jc-type="number">@(Decimals)</div>
+			<div data-jc="textbox" data-jc-path="decimals" data-jc-config="maxlength:10;align:center;increment:true;type:number">@(Decimals)</div>
 		</div>
 	</div>
+	<div data-jc="checkbox" data-jc-path="clearsignal">@(Send an empty data when the current stats have expired)</div>
 </div>`;
 
 exports.install = function(instance) {
@@ -66,76 +75,106 @@ exports.install = function(instance) {
 	instance.on('data', function(response) {
 		fn && fn(response.data, function(err, value) {
 
-			if (err || value == null || value.value == null || !value.group)
+			if (err || value == null)
 				return;
 
-			var val = value.value;
-			var group = value.group;
+			if (value instanceof Array) {
+				if (value.length === 1)
+					instance.processvalue(value[0]);
+				else {
+					value.wait(function(item, next) {
+						instance.processvalue(item);
+						setImmediate(next);
+					});
+				}
+			} else
+				instance.processvalue(value);
 
-			var type = typeof(val);
-			if (type === 'string') {
-				val = val.parseFloat2();
-				type = 'number';
-			}
-
-			if (isNaN(val))
-				return;
-
-			cache.$datetime = F.datetime;
-			!cache[group] && (cache[group] = { count: 0 });
-
-			var atmp = cache[group];
-			atmp.count++;
-			atmp.raw = val;
-			atmp.datetime = F.datetime;
-
-			switch (instance.options.type) {
-				case 'max':
-				case 'Dmax':
-					atmp.number = atmp.number == null ? val : Math.max(atmp.number, val);
-					break;
-				case 'min':
-				case 'Dmin':
-					atmp.number = atmp.number == null ? val : Math.min(atmp.number, val);
-					break;
-				case 'sum':
-				case 'Dsum':
-					atmp.number = atmp.number == null ? val : atmp.number + val;
-					break;
-				case 'avg':
-				case 'Davg':
-					!atmp.avg && (atmp.avg = { count: 0, sum: 0 });
-					atmp.avg.count++;
-					atmp.avg.sum += val;
-					atmp.number = atmp.avg.sum / atmp.avg.count;
-					break;
-				case 'median':
-				case 'Dmedian':
-					!atmp.median && (atmp.median = []);
-					atmp.median.push(val);
-					atmp.median.sort((a, b) => a - b);
-					var half = Math.floor(atmp.median.length / 2);
-					atmp.number = atmp.median.length % 2 ? atmp.median[half] : (atmp.median[half - 1] + atmp.median[half]) / 2.0;
-					break;
-			}
-
-			!current[group] && (current[group] = {});
-			var btmp = current[group];
-			btmp.previous = btmp.value;
-			btmp.value = atmp.number;
-			btmp.raw = atmp.raw;
-			btmp.format = instance.options.format;
-			btmp.type = instance.options.type[0] === 'D' ? instance.options.type.substring(1) : instance.options.type;
-			btmp.count = atmp.count;
-			btmp.period = instance.options.type[0] === 'D' ? 'daily' : 'hourly';
-			btmp.decimals = instance.options.decimals;
-			btmp.datetime = F.datetime;
-			instance.send2(current);
-			instance.dashboard && instance.dashboard('laststate', current);
-			instance.custom.status();
-			EMIT('flow.dashboardgroupanalytics', instance, current);
 		});
 	});
+
+	instance.processvalue = function(value) {
+
+		if (!value || !value.group || value.value == null)
+			return false;
+
+		var val = value.value;
+		var group = value.group;
+
+		var type = typeof(val);
+		if (type === 'string') {
+			val = val.parseFloat2();
+			type = 'number';
+		}
+
+		if (isNaN(val))
+			return false;
+
+		cache.$datetime = F.datetime;
+		!cache[group] && (cache[group] = { count: 0 });
+
+		var atmp = cache[group];
+		atmp.count++;
+		atmp.raw = val;
+		atmp.datetime = F.datetime;
+
+		switch (instance.options.type) {
+			case 'max':
+			case 'Dmax':
+				atmp.number = atmp.number == null ? val : Math.max(atmp.number, val);
+				break;
+			case 'min':
+			case 'Dmin':
+				atmp.number = atmp.number == null ? val : Math.min(atmp.number, val);
+				break;
+			case 'sum':
+			case 'Dsum':
+				atmp.number = atmp.number == null ? val : atmp.number + val;
+				break;
+			case 'avg':
+			case 'Davg':
+				!atmp.avg && (atmp.avg = { count: 0, sum: 0 });
+				atmp.avg.count++;
+				atmp.avg.sum += val;
+				atmp.number = atmp.avg.sum / atmp.avg.count;
+				break;
+			case 'median':
+			case 'Dmedian':
+				!atmp.median && (atmp.median = []);
+				atmp.median.push(val);
+				atmp.median.sort((a, b) => a - b);
+				var half = Math.floor(atmp.median.length / 2);
+				atmp.number = atmp.median.length % 2 ? atmp.median[half] : (atmp.median[half - 1] + atmp.median[half]) / 2.0;
+				break;
+		}
+
+		!current.meta && (current.meta = { groups: NOSQL(dbname).meta('groups') || [] });
+		!current[group] && (current[group] = {});
+
+		var btmp = current[group];
+		btmp.previous = btmp.value;
+		btmp.value = atmp.number;
+		btmp.raw = atmp.raw;
+		btmp.format = instance.options.format;
+		btmp.type = instance.options.type[0] === 'D' ? instance.options.type.substring(1) : instance.options.type;
+		btmp.count = atmp.count;
+		btmp.period = instance.options.type[0] === 'D' ? 'daily' : 'hourly';
+		btmp.decimals = instance.options.decimals;
+		btmp.datetime = F.datetime;
+
+		current.meta.last = group;
+		current.meta.lastvalue = atmp.number;
+		current.meta.datetime = F.datetime;
+
+		if (current.meta.groups.indexOf(group) === -1)
+			current.meta.groups.push(group);
+
+		instance.send2(current);
+		instance.dashboard && instance.dashboard('laststate', current);
+		instance.custom.status();
+		EMIT('flow.dashboardgroupanalytics', instance, current);
+		return true;
+	};
 
 	instance.on('service', function() {
 		if (fn) {
@@ -162,17 +201,19 @@ exports.install = function(instance) {
 		}
 
 		var keys = Object.keys(cache);
-		var all = [];
+		var all = NOSQL(dbname).meta('groups') || [];
+
 		var dt = cache.$datetime;
 		var id = +dt.format('yyyyMMddHH');
 		var w = +dt.format('w');
 
-		keys.forEach(function(key) {
+		for (var i = 0, length = keys.length; i < length; i++) {
 
+			var key = keys[i];
 			if (key === '$datetime')
-				return;
+				continue;
 
-			all.push(key);
+			all.indexOf(key) === -1 && all.push(key);
 
 			var item = cache[key];
 			var doc = {};
@@ -193,7 +234,7 @@ exports.install = function(instance) {
 
 			NOSQL(dbname).update(doc, doc).where('id', doc.id).where('group', doc.group).callback(function() {
 				// Sends stats
-				instance.stats();
+				setTimeout2('stats.' + instance.id, instance.stats, 3000);
 			});
 
 			item.count = 0;
@@ -210,11 +251,37 @@ exports.install = function(instance) {
 					item.avg.sum = 0;
 					break;
 			}
-		});
+		}
+
+		var keys = Object.keys(current);
+		for (var i = 0, length = keys.length; i < length; i++) {
+			var key = keys[i];
+			if (key !== 'meta') {
+				var tmp = current[key];
+				tmp.count = 0;
+				tmp.value = null;
+				tmp.year = dt.getFullYear();
+				tmp.month = dt.getMonth() + 1;
+				tmp.day = dt.getDate();
+				tmp.hour = dt.getHours();
+			}
+		}
+
+		if (current.meta) {
+			current.meta.last = '';
+			current.meta.lastvalue = null;
+			current.meta.datetime = F.datetime;
+			current.meta.groups = all;
+		}
 
 		cache.$datetime = F.datetime;
 		NOSQL(dbname).meta('groups', all);
 		instance.custom.save_temporary();
+
+		if (instance.options.clearsignal) {
+			instance.dashboard && instance.dashboard('laststate', current);
+			instance.send2(current);
+		}
 	};
 
 	instance.custom.reconfigure = function() {
@@ -324,6 +391,9 @@ exports.install = function(instance) {
 				instance.custom.save();
 			} else
 				cache.$datetime = F.datetime;
+
+			current.meta = {};
+			current.meta.groups = NOSQL(dbname).meta('groups') || EMPTYARRAY;
 		});
 	};
 };

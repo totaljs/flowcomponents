@@ -58,7 +58,7 @@ exports.install = function(instance) {
 		chunk.toString('utf8').parseTerminal(fields, instance.custom.parse);
 		current.count = current.cores.length;
 		if (current.count) {
-			instance.send(current);
+			instance.send2(current);
 			instance.custom.status();
 		}
 	};

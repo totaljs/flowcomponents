@@ -17,8 +17,8 @@ This component can send message.
 - input has to be a Markdown content`;
 
 exports.html = `<div class="padding">
-	<div data-jc="dropdown" data-jc-path="from" data-source="messengerdata.users" data-empty="" class="m" data-required="true">@(Who is the sender?)</div>
-	<div data-jc="dropdown" data-jc-path="location" data-source="messengerdata.channels" data-empty="@(Current location)" class="m">@(Location)</div>
+	<div data-jc="dropdown" data-jc-path="from" data-jc-config="datasource:messengerdata.users;required:true;empty:" class="m">@(Who is the sender?)</div>
+	<div data-jc="dropdown" data-jc-path="location" data-jc-config="datasource:messengerdata.channels;empty:@(Current location);required:true" class="m">@(Location)</div>
 </div>
 <script>TRIGGER('{0}', 'messengerdata');</script>`.format(TRIGGER);
 

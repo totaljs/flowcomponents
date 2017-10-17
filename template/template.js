@@ -9,7 +9,7 @@ exports.icon = 'code';
 exports.options = { template: '<h1>Hello @{model.firstname}</h1>' };
 
 exports.html = `<div class="padding">
-	<div data-jc="codemirror" data-jc-path="template" data-required="true">@(Template)</div>
+	<div data-jc="codemirror" data-jc-path="template" data-jc-config="required:true">@(Template)</div>
 </div>`;
 
 exports.readme = `# Template
@@ -26,7 +26,7 @@ exports.install = function(instance) {
 		if (can) {
 			try {
 				response.data = F.viewCompile('@{nocompress all}\n' + instance.options.template, response.data, '', response.parent);
-				instance.send(response);
+				instance.send2(response);
 			} catch (e) {}
 		}
 	});

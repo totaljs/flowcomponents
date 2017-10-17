@@ -29,7 +29,7 @@ exports.install = function(instance) {
 
 		if (cache[ip]) {
 			response.data.geoip = cache[ip];
-			instance.send(response.data);
+			instance.send2(response.data);
 			return;
 		}
 
@@ -46,7 +46,7 @@ exports.install = function(instance) {
 			var data = res.parseJSON();
 			if (data) {
 				response.data.geoip = cache[ip] = data;
-				instance.send(response.data);
+				instance.send2(response.data);
 			}
 		});
 	});

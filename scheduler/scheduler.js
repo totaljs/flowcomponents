@@ -11,23 +11,23 @@ exports.options = { time: '', repeat: '' };
 exports.html = `<div class="padding">
 	<div class="row">
 		<div class="col-md-3 m">
-			<div data-jc="textbox" data-jc-path="time" data-placeholder="12:00" data-required="true">@(Time)</div>
+			<div data-jc="textbox" data-jc-path="time" data-jc-config="placeholder:12:00;required:true">@(Time)</div>
 			<div class="help">@(Time of the day the flow will be triggered.)</div>
 		</div>
 		<div class="col-md-3 m">
-			<div data-jc="textbox" data-jc-path="repeat" data-placeholder="1 week" data-required="true">@(Frequency)</div>
+			<div data-jc="textbox" data-jc-path="repeat" data-jc-config="placeholder:1 week;required:true">@(Frequency)</div>
 			<div class="help">@(Set to '1 week' for the scheduler to run every week)</div>
 		</div>
 		<div class="col-md-3 m">
-			<div data-jc="textbox" data-jc-path="start" data-placeholder="2 days" data-required="true">@(Start)</div>
+			<div data-jc="textbox" data-jc-path="start" data-jc-config="placeholder:2 days;required:true">@(Start)</div>
 			<div class="help">@(When to start this scheduler. e.g. for tommorow set to '1 day')</div>
 		</div>
 	</div>
 	<section>
 		<label><i class="fa fa-random"></i>@(Output data)</label>
 		<div class="padding">
-			<div data-jc="dropdown" data-jc-path="datatype" data-options=";String|string;Integer|integer;Float|float;Boolean|boolean;Date|date;Object|object;Base64 as Buffer|buffer" class="m">@(Data type (String by default))</div>
-			<div data-jc="textbox" data-jc-path="data" data-placeholder="@(e.g. Hello world or { hello: 'world'} or ['hello', 'world'])">@(Data)</div>
+			<div data-jc="dropdown" data-jc-path="datatype" data-jc-config="items:,String|string,Integer|integer,Float|float,Boolean|boolean,Date|date,Object|object,Base64 as Buffer|buffer" class="m">@(Data type (String by default))</div>
+			<div data-jc="textbox" data-jc-path="data" data-jc-config="placeholder:@(e.g. Hello world or { hello: 'world'} or ['hello', 'world'])">@(Data)</div>
 		</div>
 	</section>
 </div>`;
@@ -47,10 +47,9 @@ In Frequency and Start fields following can be used:
 
 exports.install = function(instance) {
 
-	var value;
-	var id;
+	var value, id;
 
-	instance.on('click', () => value && instance.send(value));
+	instance.on('click', () => value && instance.send2(value));
 
 	instance.reconfigure = function() {
 		var options = instance.options;

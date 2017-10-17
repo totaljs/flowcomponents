@@ -12,7 +12,7 @@ exports.options = { route: 0 };
 exports.cloning = false;
 
 exports.html = `<div class="padding">
-	<div data-jc="dropdown" data-jc-path="route" data-source="receiverroutes" data-empty="" class="m">@(Choose a route)</div>
+	<div data-jc="dropdown" data-jc-path="route" data-jc-config="datasource:receiverroutes;empty:" class="m">@(Choose a route)</div>
 </div>
 <script>ON('open.receiver', function(component, options) {
 	TRIGGER('{0}', 'receiverroutes');
@@ -51,7 +51,7 @@ exports.install = function(instance) {
 		data.url = controller.url;
 		data.id = controller.id;
 		data.path = controller.req.split;
-		instance.send(data);
+		instance.send2(data);
 	};
 
 	F.on('controller', instance.custom.event);

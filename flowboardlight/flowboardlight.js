@@ -44,7 +44,7 @@ exports.install = function(instance) {
 				// 0: off, 1: on
 
 				// Sends data to device
-				instance.send(data);
+				instance.send2(data);
 
 				// Change status and last know state
 				instance.status(arr[data]);

@@ -9,18 +9,18 @@ exports.icon = 'commenting-o';
 exports.html = `<div class="padding">
 	<div class="row">
 		<div class="col-md-6 m">
-			<div data-jc="textbox" data-jc-path="key" class="m" data-required="true" data-maxlength="30" data-jc-type="password">@(NEXMO Key)</div>
+			<div data-jc="textbox" data-jc-path="key" class="m" data-jc-config="required:true;maxlength:30;type:password">@(NEXMO Key)</div>
 		</div>
 		<div class="col-md-6 m">
-			<div data-jc="textbox" data-jc-path="secret" class="m" data-required="true" data-maxlength="35" data-jc-type="password">@(NEXMO Secret)</div>
+			<div data-jc="textbox" data-jc-path="secret" class="m" data-jc-config="required:true;maxlength:35;type:password">@(NEXMO Secret)</div>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-md-6 m">
-			<div data-jc="textbox" data-jc-path="sender" class="m" data-required="true" data-maxlength="30" data-placeholder="@(Phone number or Text)">@(Sender name)</div>
+			<div data-jc="textbox" data-jc-path="sender" class="m" data-jc-config="required:true;maxlength:30;placeholder:@(Phone number or Text)">@(Sender name)</div>
 		</div>
 		<div class="col-md-6 m">
-			<div data-jc="textbox" data-jc-path="target" class="m" data-required="true" data-maxlength="30" data-placeholder="@(International format)">@(Phone number)</div>
+			<div data-jc="textbox" data-jc-path="target" class="m" data-jc-config="required:true;maxlength:30;placeholder:@(International format)">@(Phone number)</div>
 		</div>
 	</div>
 </div>`;

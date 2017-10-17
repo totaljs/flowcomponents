@@ -11,7 +11,7 @@ exports.options = { delay: 1000 };
 exports.html = `<div class="padding">
 	<div class="row">
 		<div class="col-md-3">
-			<div data-jc="textbox" data-jc-path="delay" data-placeholder="@(In milliseconds)" data-maxlength="10" data-jc-type="number" data-increment="true" data-align="center">@(Delay)</div>
+			<div data-jc="textbox" data-jc-path="delay" data-jc-config="placeholder:@(In milliseconds);maxlength:10;type:number;increment:true;align:center">@(Delay)</div>
 		</div>
 	</div>
 </div>`;
@@ -36,7 +36,7 @@ exports.install = function(instance) {
 		var item = queue.shift();
 		item && (timeout = setTimeout(function() {
 			timeout = null;
-			instance.send(item);
+			instance.send2(item);
 			instance.custom.send();
 			if (queue.length)
 				instance.status(queue.length + 'x pending', 'red');

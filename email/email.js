@@ -12,18 +12,18 @@ exports.html = `<div class="padding">
 		<div class="padding npb">
 			<div class="row">
 				<div class="col-md-6 m">
-					<div data-jc="textbox" data-jc-path="smtp" data-required="true" data-maxlength="50">@(SMTP server)</div>
+					<div data-jc="textbox" data-jc-path="smtp" data-jc-config="required:true;maxlength:50">@(SMTP server)</div>
 				</div>
 				<div class="col-md-6 m">
-					<div data-jc="textbox" data-jc-path="port" data-required="true" data-maxlength="4" data-jc-type="number" data-jc-value="25">@(Port)</div>
+					<div data-jc="textbox" data-jc-path="port" data-jc-config="required:true;maxlength:4;type:number" data-jc-value="25">@(Port)</div>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-md-6 m">
-					<div data-jc="textbox" data-jc-path="user" data-maxlength="50" data-placeholder="@(SMTP user)">User</div>
+					<div data-jc="textbox" data-jc-path="user" data-jc-config="maxlength:50;placeholder:@(SMTP user)">User</div>
 				</div>
 				<div class="col-md-6 m">
-					<div data-jc="textbox" data-jc-path="password" data-maxlength="50" data-placeholder="@(SMTP password)" data-jc-type="password">@(Password)</div>
+					<div data-jc="textbox" data-jc-path="password" data-jc-config="maxlength:50;placeholder="@(SMTP password);type:password">@(Password)</div>
 				</div>
 			</div>
 		</div>
@@ -35,13 +35,13 @@ exports.html = `<div class="padding">
 			<div class="b">@(Message)</div>
 			<div class="row mt10">
 				<div class="col-md-6 m">
-					<div data-jc="textbox" data-jc-path="from" data-required="true" data-maxlength="120" data-jc-type="email" data-jc-value="'@'" data-icon="fa-envelope-o">@(From)</div>
+					<div data-jc="textbox" data-jc-path="from" data-jc-config="required:true;maxlength:120;type:email;icon:envelope-o" data-jc-value="'@'">@(From)</div>
 				</div>
 				<div class="col-md-6 m">
-					<div data-jc="textbox" data-jc-path="target" data-required="true" data-maxlength="120" data-jc-type="email" data-jc-value="'@'" data-icon="fa-envelope-o">@(To)</div>
+					<div data-jc="textbox" data-jc-path="target" data-jc-config="required:true;maxlength:120;type:email;icon:envelope-o" data-jc-value="'@'">@(To)</div>
 				</div>
 			</div>
-			<div data-jc="textbox" data-jc-path="subject" class="m" data-required="true" data-maxlength="100" data-jc-value="'@'">@(Subject)</div>
+			<div data-jc="textbox" data-jc-path="subject" class="m" data-jc-config="required:true;maxlength:100" data-jc-value="'@'">@(Subject)</div>
 		</div>
 	</section>
 </div>`;

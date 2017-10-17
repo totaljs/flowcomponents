@@ -8,8 +8,8 @@ exports.version = '1.0.0';
 exports.author = 'Martin Smola';
 
 exports.html = `<div class="padding">
-	<div data-jc="dropdown" data-jc-path="datatype" data-options=";String|string;Integer|integer;Float|float;Boolean|boolean;Date|date;Object|object;Base64 as Buffer|buffer" class="m">@(Data type (String by default))</div>
-	<div data-jc="textbox" data-jc-path="data" data-placeholder="@(e.g. Hello world or { hello: 'world'} or ['hello', 'world']))">@(Data)</div>
+	<div data-jc="dropdown" data-jc-path="datatype" data-jc-config="items:,String|string,Integer|integer,Float|float,Boolean|boolean,Date|date,Object|object,Base64 as Buffer|buffer" class="m">@(Data type (String by default))</div>
+	<div data-jc="textbox" data-jc-path="data" data-jc-config="placeholder:@(e.g. Hello world or { hello: 'world'} or ['hello', 'world']))">@(Data)</div>
 </div>`;
 
 exports.readme = `# Trigger
@@ -21,7 +21,7 @@ exports.install = function(instance) {
 
 	var value;
 
-	instance.on('click', () => instance.send(value));
+	instance.on('click', () => instance.send2(value));
 
 	instance.reconfigure = function() {
 		var options = instance.options;

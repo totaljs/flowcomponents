@@ -6,7 +6,7 @@ exports.output = 1;
 exports.click = true;
 exports.author = 'Martin Smola';
 exports.icon = 'calendar';
-exports.options = { 
+exports.options = {
 	weekly: {
 		days: {
 			monday: [],
@@ -40,40 +40,40 @@ exports.html = `
 		.weekly-day-button>button { width: 100%; }
 		.weekly-inline-edit .button-remove { margin-top: 10px; }
 	</style>
-	<div class="padding">	
+	<div class="padding">
 
 		<div class="row m">
 			<div class="col-md-3">
 				<div data-jc="checkbox" data-jc-path="enabled">@(Enabled)</div>
-				<div data-jc="dropdown" data-jc-path="type" data-options=";@(Hourly)|hourly;@(Daily)|daily;@(Weekly)|weekly;@(Monthly)|monthly;@(Yearly)|yearly" class="m">Timer type</div>
+				<div data-jc="dropdown" data-jc-path="type" data-jc-config="items:,@(Hourly)|hourly,@(Daily)|daily,@(Weekly)|weekly,@(Monthly)|monthly,@(Yearly)|yearly" class="m">Timer type</div>
 			</div>
 		</div>
 
 		<section class="m">
 			<label><i class="fa fa-database"></i>@(Data)</label>
-			<div class="padding npb">	
+			<div class="padding npb">
 				<div class="row">
 					<div class="col-md-3">
-						<div data-jc="dropdown" data-jc-path="datatype" data-options=";String|string;Number|number;Boolean|boolean;Date|date;Object|object" class="m">@(Data type (String by default))</div>
+						<div data-jc="dropdown" data-jc-path="datatype" data-jc-config="items:,String|string,Number|number,Boolean|boolean,Date|date,Object|object" class="m">@(Data type (String by default))</div>
 					</div>
 					<div class="col-md-9">
-						<div data-jc="textbox" data-jc-path="ondata" data-placeholder="@(e.g. Hello world or 123 or { hello: 'world'} or ['hello', 'world']))" class="m">@(On data)</div>
-						<div data-jc="textbox" data-jc-path="offdata" data-placeholder="@(e.g. Hello world or 123 or { hello: 'world'} or ['hello', 'world']))" class="m">@(Off data)</div>
+						<div data-jc="textbox" data-jc-path="ondata" data-jc-config="placeholder:@(e.g. Hello world or 123 or { hello: 'world'} or ['hello', 'world']))" class="m">@(On data)</div>
+						<div data-jc="textbox" data-jc-path="offdata" data-jc-config="placeholder:@(e.g. Hello world or 123 or { hello: 'world'} or ['hello', 'world']))" class="m">@(Off data)</div>
 					</div>
-				</div>				
+				</div>
 			</div>
 		</section>
 
-		<div data-jc="visible" data-jc-path="type" data-if="value === 'daily'">
+		<div data-jc="visible" data-jc-path="type" data-jc-config="if:value === 'daily'">
 			<section>
 				<label><i class="fa fa-edit"></i>@(Daily timer)</label>
 				<div class="padding npb">
-					@TODO				
+					@TODO
 				</div>
 			</section>
 		</div>
 
-		<div data-jc="visible" data-jc-path="type" data-if="value === 'hourly'">
+		<div data-jc="visible" data-jc-path="type" data-jc-config="if:value === 'hourly'">
 			<section>
 				<label><i class="fa fa-edit"></i>@(Hourly timer)</label>
 				<div class="padding npb">
@@ -82,7 +82,7 @@ exports.html = `
 			</section>
 		</div>
 
-		<div data-jc="visible" data-jc-path="type" data-if="value === 'weekly'">
+		<div data-jc="visible" data-jc-path="type" data-jc-config="if:value === 'weekly'">
 			<section>
 				<label><i class="fa fa-calendar"></i>@(Weekly timer)</label>
 				<div class="padding npb">
@@ -185,12 +185,12 @@ exports.html = `
 		</div>
 
 	</div>
-							
+
 	<script type="text/html" id="template-weekly-inline-edit">
 		<div class="weekly-inline-edit hidden" id="weekly-inline-edit">
 			<div class="inline-edit">
-				<div data-jc="dropdown" data-jc-path="megatimercomponent.form.type" data-options="On|on;Off|off" class="m">@(Type)</div>
-				<div data-jc="dropdown" data-jc-path="megatimercomponent.form.time" data-source="megatimercomponent.hours" class="m">@(Time)</div>
+				<div data-jc="dropdown" data-jc-path="megatimercomponent.form.type" data-jc-config="items:On|on,Off|off" class="m">@(Type)</div>
+				<div data-jc="dropdown" data-jc-path="megatimercomponent.form.time" data-jc-config="datasource:megatimercomponent.hours" class="m">@(Time)</div>
 				<button class="button"><i class="fa fa-check"></i>&nbsp;@(Set)</button>
 				<button class="button button-remove"><i class="fa fa-trash"></i>&nbsp;@(Remove)</button>
 			</div>
@@ -201,14 +201,12 @@ exports.html = `
 
 		$('body').append($('#template-weekly-inline-edit').html());
 
-		COMPONENT('megatimercomponent-hours', function() {
-			var self = this;
-			var $form;
-			var visible = false;
-			var index;
-			var $parent;
+		COMPONENT('megatimercomponent-hours', function(self) {
 
-			self.make = function() {				
+			var index, $parent, $form;
+			var visible = false;
+
+			self.make = function() {
 				$form = $('#weekly-inline-edit');
 				$parent = self.element.parent();
 				self.element.on('click', function(e){
@@ -220,8 +218,8 @@ exports.html = `
 					var pos = $this.offset();
 					$form.css({top: pos.top + 30, left: pos.left, width: $this.css('width')});
 					$form.find('.button-remove').attr('data-index', data.index);
-					$form.removeClass('hidden');	
-					visible = true;	
+					$form.removeClass('hidden');
+					visible = true;
 					SET('megatimercomponent.form', { type: data.type || 'on', time: data.time || '12:00'});
 
 					$form.find('button').off('click').on('click', function(){
@@ -245,7 +243,7 @@ exports.html = `
 					});
 					$form.off('click').on('click', function(e){
 						e.stopPropagation();
-					});			
+					});
 				});
 
 				$('body').on('click', function(){
@@ -263,18 +261,11 @@ exports.html = `
 
 		var megatimercomponent = {};
 		megatimercomponent.hours = ["00:00","00:15","00:30","00:45","01:00","01:15","01:30","01:45","02:00","02:15","02:30","02:45","03:00","03:15","03:30","03:45","04:00","04:15","04:30","04:45","05:00","05:15","05:30","05:45","06:00","06:15","06:30","06:45","07:00","07:15","07:30","07:45","08:00","08:15","08:30","08:45","09:00","09:15","09:30","09:45","10:00","10:15","10:30","10:45","11:00","11:15","11:30","11:45","12:00","12:15","12:30","12:45","13:00","13:15","13:30","13:45","14:00","14:15","14:30","14:45","15:00","15:15","15:30","15:45","16:00","16:15","16:30","16:45","17:00","17:15","17:30","17:45","18:00","18:15","18:30","18:45","19:00","19:15","19:30","19:45","20:00","20:15","20:30","20:45","21:00","21:15","21:30","21:45","22:00","22:15","22:30","22:45","23:00","23:15","23:30","23:45"];
-
-		
-		
-	</script>
-
-`;
+	</script>`;
 
 exports.readme = `# Timer
 
-Timer will trigger flow at the given times and dates. You can optionally define a data-type of the output and the data.
-
-`;
+Timer will trigger flow at the given times and dates. You can optionally define a data-type of the output and the data.`;
 
 var WEEKDAYS = {
 	'monday': 1,
@@ -284,7 +275,7 @@ var WEEKDAYS = {
 	'friday': 5,
 	'saturday': 6,
 	'sunday': 7
-}
+};
 
 exports.install = function(instance) {
 	instance.options.enabled = true;
@@ -323,10 +314,10 @@ exports.install = function(instance) {
 			var daynumber = WEEKDAYS[dayname]; // sunday === 7 not 0 !!!
 			var day = weekly.days[dayname];
 			var add = 0;
-			
+
 			if (daynumber < todayday)
 				// 7 - (wed - tue) => 7 - (3 - 2) => 7 - 1 => 6
-				add = 7 - (todayday - daynumber); 
+				add = 7 - (todayday - daynumber);
 
 			if (daynumber > todayday)
 				add = daynumber - todayday;
@@ -363,9 +354,8 @@ exports.install = function(instance) {
 		instance.status(options.type);
 
 		if (timers[options.type])
-		 	timers[options.type]();
-	};
-
+			timers[options.type]();
+	}
 
 	F.on('service', function(){
 
@@ -387,13 +377,12 @@ exports.install = function(instance) {
 
 		var t = queue[index];
 
-		t.expire = new Date().setTime(t.expire + delay); 
+		t.expire = new Date().setTime(t.expire + delay);
 
-		var key = t.type + 'data';		
+		var key = t.type + 'data';
 		var data = instance.options[key];
 		data = instance.options.datatype === 'object' ? JSON.parse(data) : data;
-		instance.options.enabled && instance.send(data);
-
+		instance.options.enabled && instance.send2(data);
 	});
 
 };

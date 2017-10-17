@@ -6,6 +6,7 @@ __Requirements__:
 
 - install Node.js platform +v6
 - install Total.js framework `$ npm install total.js`
+- important __Flow 4.0__
 
 ## Creating own components
 
