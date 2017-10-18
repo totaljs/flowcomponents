@@ -57,8 +57,11 @@ exports.html = `
 exports.readme = `# Cron
 [node-schedule](https://www.npmjs.com/package/node-schedule) on npmjs.com
 
-value after | will be send to output when cronjob fires.
+Syntax:
+<cron string> | <data (only string supported)> | <comment>
 
+Cron string:
+* * * * * *
 second (0 - 59, OPTIONAL)
 minute (0 - 59)
 hour (0 - 23)
@@ -66,10 +69,16 @@ day of month (1 - 31)
 month (1 - 12)
 day of week (0 - 7) (0 or 7 is Sun)
 
-Examples
-0 16 * * * -> fire every day at 16:00
-* 0 16 * * * -> start firing at 16:00 every day and it will keep firing every second until 16:01
-19 * * * -> every day at 19 o'clock	
+Examples of cron string:
+0 16 * * *      -> trigger every day at 16:00
+* 0 16 * * *    -> trigger at 16:00 every day and it will keep triggering every second until 16:01
+20,40 19 * * *  -> every day at 19:20 and 19:40	
+*/5 * * * *     -> trigger every 5 seconds
+0 20 * * 1      -> every monday at 20:00
+
+Full example:
+* 0 16 * * * | hello data | this is hello comment
+
 `;
 
 exports.install = function(instance) {
@@ -89,20 +98,17 @@ exports.install = function(instance) {
 
 	function reconfigure(o, old_options) {
 		var options = instance.options;
-		cancelJobs();
 		startJobs(options.jobs);
 	}
 
-	function cancelJobs() {
+	function startJobs(newjobs) {
 
 		jobs.forEach(function(job){
-			console.log('Cancel', job);
 			job.cancel();
 		});
-	};
 
-	function startJobs(newjobs) {
 		jobs = [];
+
 		newjobs.forEach(function(job){
 			job = job.split('|');
 
