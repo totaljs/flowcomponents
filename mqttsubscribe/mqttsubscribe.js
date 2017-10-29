@@ -63,7 +63,7 @@ exports.install = function(instance) {
 
 
 			if (!added)
-				MQTT.add(instance.options.broker);
+				MQTT.add(instance.options.broker, instance.id);
 
 			if (!subscribed)
 				MQTT.subscribe(instance.options.broker, instance.id, instance.options.topic);
