@@ -52,7 +52,7 @@ exports.install = function(instance) {
 
 		if (instance.options.broker) {
 
-			!added && MQTT.add(instance.options.broker);
+			!added && MQTT.add(instance.options.broker, instance.id);
 			added = true;
 			ready = true;
 			PUBLISH_OPTIONS.retain = instance.options.retain || false;
