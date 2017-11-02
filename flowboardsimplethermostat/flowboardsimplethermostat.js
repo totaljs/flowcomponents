@@ -11,12 +11,16 @@ exports.options = { temp_heating_day: 21, temp_heating_night: 21, temp_heating_a
 exports.readme = `# Flowbard: Simple thermostat
 
 ### Inputs
-- First input can be used to enable/disable the thermostat. Disabling will also send 'true' to second output.
-- Second input is for current temperature.
-- Third input .
+- First  -> can be used to enable/disable the thermostat. Disabling will also send 'true' to second output
+- Second -> current temperature
+- Third  -> set mode (day, night, away)
 
 ### Outputs
-- Data are send to first output when the heating should start and second to stop the heating.`;
+The data sent to output is last temperature recieved from second input
+- First  -> start heating
+- Second -> stop heating or cooling
+- Third  -> start cooling (NOT IMPLEMENTED YET)
+`;
 
 exports.html = `<div class="padding">
 	<div class="row">
@@ -45,6 +49,7 @@ exports.html = `<div class="padding">
 
 exports.install = function(instance) {
 
+	var lastdata;
 
 	instance.custom.reconfigure = function() {
 		instance.options = U.extend({ temp_heating_day: 22, temp_heating_night: 21, temp_heating_away: 20, hysteresis: 0.5, temp_current: 21, enabled: false, heating: false, mode: 'day' }, instance.options, true);
@@ -89,7 +94,8 @@ exports.install = function(instance) {
 		}	
 	
 		options.temp_current = val;	
-	
+		lastdata = val;
+
 		send();
 	});
 
@@ -108,21 +114,24 @@ exports.install = function(instance) {
 	});
 
 	function send() {
+		if (!lastdata) 
+			return;
+		
 		var options = instance.options;
 
 		if (!options.enabled || !options.mode) {			
 			options.heating = false;
 			options.cooling = false;
-			instance.send(1, true);
+			instance.send(1, lastdata);
 		} else {
 			if (options.temp_current < (options['temp_heating_' + options.mode] - options.hysteresis)) {
 				// start
 				options.heating = true;
-				instance.send(0, true);
+				instance.send(0, lastdata);
 			} else if (options.temp_current > (options['temp_heating_' + options.mode] + options.hysteresis)) {
 				// stop
 				options.heating = false;
-				instance.send(1, true);
+				instance.send(1, lastdata);
 			}
 		}
 
