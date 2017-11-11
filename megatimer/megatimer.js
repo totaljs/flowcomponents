@@ -256,7 +256,7 @@ exports.html = `
 		function megatimercomponent_add(el){
 			var day = el.attr('data-day');
 			PUSH('settings.megatimer.weekly.days.' + day, { type: 'on', time: '12:00' }, true);
-			CHANGE('settings.megatimer');
+			FIND('.settings.megatimer.weekly.days.' + day).change(true);
 		}
 
 		var megatimercomponent = {};
