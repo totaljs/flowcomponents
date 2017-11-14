@@ -74,7 +74,8 @@
     "items": [
       "https://rawgit.com/totaljs/flowcomponents/master/dashboardanalytics/dashboardanalytics.js",
       "https://rawgit.com/totaljs/flowcomponents/master/dashboardgroupanalytics/dashboardgroupanalytics.js",
-      "https://rawgit.com/totaljs/flowcomponents/master/dashboardoutput/dashboardoutput.js"
+      "https://rawgit.com/totaljs/flowcomponents/master/dashboardoutput/dashboardoutput.js",
+      "https://rawgit.com/totaljs/flowcomponents/master/dashboardaction/dashboardaction.js"
     ]
   },
   {
