@@ -38,8 +38,10 @@ exports.install = function(instance) {
 			e.name = '';
 		}
 
-		if (e.fn)
+		if (e.fn) {
 			ON(e.name, e.fn);
+			instance.status('');
+		}
 		else
 			instance.status('Not configured', 'red');
 	};
