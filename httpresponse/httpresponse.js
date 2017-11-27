@@ -34,7 +34,7 @@ exports.install = function(instance) {
 			return;
 		}
 
-		var datatype = instance.options.datatype;
+		var datatype = instance.options.datatype || 'json';
 
 		if (datatype === 'emptyresponse')
 			return ctrl.plain('');
