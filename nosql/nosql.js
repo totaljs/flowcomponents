@@ -85,6 +85,7 @@ exports.install = function(instance) {
 
 			nosql.find().make(function(builder) {
 				builder.where('id', flowdata.data.id);
+				builder.first();
 				builder.callback(function(err, response) {
 					err && instance.error(err);
 
