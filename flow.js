@@ -104,8 +104,7 @@ FLOW.register = function(name, options, fn) {
 		options = EMPTYOBJECT;
 	}
 
-	var id = name.slug().replace(/\-/g, '');
-	var close = [];
+	var id = name.slug().replace(/-/g, '');
 
 	console.log('============================================================');
 	console.log('Total.js Flow Test Interface');
