@@ -53,8 +53,12 @@ exports.install = function(instance) {
 
 	var fn;
 
+	var send = function(index, value) {
+		instance.send2(index, value);
+	};
+
 	instance.on('data', function(response) {
-		fn && fn(response.data, instance.send2, instance, response);
+		fn && fn(response.data, send, instance, response);
 	});
 
 	instance.reconfigure = function() {
