@@ -44,9 +44,15 @@ exports.install = function(instance) {
 			instance.debug('No property name for current input:', response.index);
 
 		instance.status(Object.keys(data[id]).join(', '), 'red');
+
 		if (Object.keys(data[id]).length === instance.options.props.length) {
-			response.data = data[id];
-			instance.send2(response);
+
+			if (instance.options.id) {
+				response.data = data[id];
+				instance.send2(response);
+			} else
+				instance.send2(data[id]);
+
 			setTimeout2(instance.id, () => instance.status(''), 500, 10);
 			data[id] = null;
 		}
