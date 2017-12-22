@@ -7,7 +7,7 @@ exports.output = 1;
 exports.author = 'Peter Širka';
 exports.icon = 'code';
 exports.version = '1.0.0';
-exports.options = { outputs: 1, code: 'send(0, value)' };
+exports.options = { outputs: 1, code: 'send(0, value);' };
 
 exports.html = `<div class="padding">
 	<div class="row">
