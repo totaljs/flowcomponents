@@ -1,7 +1,8 @@
+
 // TEST INTERFACE FOR TOTAL.JS FLOW COMPONENT
 require('total.js');
 require('../flow');
-FLOWINIT(require('./' + U.getName(process.argv[1].replace(/\-run\.js$/, ''))));
+FLOWINIT(require('./' + U.getName(process.argv[1].replace(/-run\.js$/, ''))));
 
 // `assert` is a global variable
 
