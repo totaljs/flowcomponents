@@ -5,25 +5,25 @@ exports.color = '#656D78';
 exports.icon = 'code';
 exports.input = true;
 exports.output = 1;
-exports.version = '1.0.0';
+exports.version = '1.1.0';
 exports.author = 'Martin Smola';
 exports.options = {
 	outputs: 1,
-	code: `send('Hello world!');`};
+	code: 'send(\'Hello world!\');'
+};
 
 exports.readme = `# Function
-Allows you to do sync operation on data
 
-If \`send\` function isn't called the data flow will not continue.
+Allows you to do sync operation on data. If \`send\` function isn't called the data flow will not continue.
 
 __Custom function__:
 
 \`\`\`javascript
-value;    	//
-send;    	// send data to next component, optionaly specify output index -> send(0, data);
-instance; 	// ref to value.instance, available methods get, set, rem for storing temporary data related to this instance of Function component and  debug, status and error for sending data to designer
-global;   	// ref to value.global, available methods get, set, rem for storing persistent data globally accessible in any component
-flowdata; 	// ref to value.flowdata, instance of FlowData - available methods get, set, rem for storing temporary data related to current flow
+data;          // received data
+send;          // send data to next component, optionaly specify output index -> send(0, data);
+instance;      // ref to value.instance, available methods get, set, rem for storing temporary data related to this instance of Function component and  debug, status and error for sending data to designer
+global;        // ref to value.global, available methods get, set, rem for storing persistent data globally accessible in any component
+flowdata;      // ref to value.flowdata, instance of FlowData - available methods get, set, rem for storing temporary data related to current flow
 flowdata.data; // user defined data recieved from previous component
 
 // Example:
@@ -100,6 +100,7 @@ exports.install = function(instance) {
 		fn = SCRIPT(`
 			var instance = value.instance;
 			var flowdata = value.flowdata;
+			var data = flowdata.data;
 			var Date = value.Date;
 			var Object = value.Object;
 			var global = value.global;
