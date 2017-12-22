@@ -10,7 +10,7 @@ exports.author = 'Martin Smola';
 exports.icon = 'compress';
 
 exports.html = `<div class="padding">
-	<div data-jc="textboxlist" data-jc-path="props" data-jc-config="maxlength:50;placeholder:@(a property name);icon:list">@(Properties)</div>
+	<div data-jc="textboxlist" data-jc-path="props" data-jc-config="maxlength:50;placeholder:@(Type a property name and press enter);icon:list">@(Properties)</div>
 	<div class="help">@(Data comming to each of the inputs will be assign to a property from top to bottom. The first input to the first property.)</div>
 	<script>
 		ON('save.mergetoobject', function(component, options) {
