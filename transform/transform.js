@@ -6,8 +6,7 @@ exports.input = true;
 exports.output = 1;
 exports.author = 'Peter Širka';
 exports.icon = 'random';
-exports.options = { fn: `// Expects "String"
-next(value.toUpperCase())` };
+exports.options = { fn: 'next(value.toUpperCase())' };
 
 exports.html = `<div class="padding">
 	<div data-jc="dropdown" data-jc-path="parser" class="m" data-jc-config="items:,@(XML to Object)|xml,@(Line to Array)|array,@(JSON to Object)|json,@(Custom)|custom;required:true">@(From which data-type)</div>
@@ -18,13 +17,13 @@ exports.html = `<div class="padding">
 
 exports.readme = `# Data transformation
 
-This component tries to transform \`string\` to \`object\`.
+This component tries to transform \`string\` to \`object\` with except "custom parser".
 
 __Custom function__:
 
 \`\`\`javascript
-// value {String} contains received data
-// next(newvalue) returns transformed value (IMPORTANT)
+// value {Object} contains received data
+// next(newValue) returns transformed value (IMPORTANT)
 // Example:
 
 var lines = value.split('\\n');
