@@ -28,7 +28,8 @@
       "https://rawgit.com/totaljs/flowcomponents/master/megatimer/megatimer.js",
       "https://rawgit.com/totaljs/flowcomponents/master/comment/comment.js",
       "https://rawgit.com/totaljs/flowcomponents/master/lastdata/lastdata.js",
-      "https://rawgit.com/totaljs/flowcomponents/master/event/event.js"
+      "https://rawgit.com/totaljs/flowcomponents/master/event/event.js",
+      "https://rawgit.com/totaljs/flowcomponents/master/code/code.js"
     ]
   },
   {
