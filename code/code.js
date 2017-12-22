@@ -34,7 +34,7 @@ exports.html = `<div class="padding">
 	});
 </script>`;
 
-exports.readme = `# Data transformation
+exports.readme = `# Code
 
 This component executes custom JavaScript code as it is and it doesn't contain any secure scope.
 

@@ -1,18 +1,14 @@
-# Data transformation
+# Code
 
-This component tries to transform `string` to `object`.
-
-__Custom function__:
+This component executes custom JavaScript code as it is and it doesn't contain any secure scope.
 
 ```javascript
-// value {String} contains received data
-// next(newvalue) returns transformed value (IMPORTANT)
+// value {Object} contains received data
+// send(outputIndex, newValue) sends a new value
+// instance {Object} a current component instance
+// flowdata {Object} a current flowdata
 // Example:
 
-var lines = value.split('\n');
-var obj = {};
-obj.name = lines[0];
-obj.price = lines[1];
-
-next(obj);
+// send() can be execute multiple times
+send(0, value);
 ```
