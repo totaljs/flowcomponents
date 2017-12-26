@@ -7,7 +7,7 @@ exports.icon = 'clock-o';
 exports.input = false;
 exports.output = 0;
 exports.author = 'Martin Smola';
-exports.options = {};
+exports.options = { host: '127.0.0.1', port: 1883 };
 exports.traffic = false;
 exports.npm = ['mqtt'];
 
@@ -29,6 +29,11 @@ exports.html = `<div class="padding">
 				</div>
 				<div class="col-md-6">
 					<div data-jc="textbox" data-jc-path="password" data-jc-config="type:password" class="m">Password</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<div data-jc="textbox" data-jc-path="clientid" class="m">Client id</div>
 				</div>
 			</div>
 		</div>
@@ -89,6 +94,9 @@ exports.install = function(instance) {
 			opts.username = o.username;
 			opts.password = o.password;
 		}
+
+		if (o.clientid)
+			opts.clientId = o.clientid;
 
 		broker = new Broker(opts);
 		MQTT_BROKERS.push(broker);
