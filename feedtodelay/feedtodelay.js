@@ -17,7 +17,6 @@ exports.html = `<div class="padding">
 </div>`;
 
 exports.readme = `# Feed to delay
-
 It will only send data if it doesn't recieve anything in past x seconds.
 So if it keeps getting new data before the timeout it will never send anything.`;
 
@@ -28,19 +27,15 @@ exports.install = function(instance) {
 
 	instance.on('data', function(flowdata) {
 
-		if (waiting) {
+		if (waiting)
 			clearTimeout(timeout);
-			timeout = setTimeout(function(){
-				instance.send2(flowdata);
-				waiting = false;
-			}, instance.options.timeout * 1000);
-		} else {
+		else
 			waiting = true;
-			timeout = setTimeout(function(){
-				instance.send2(flowdata);
-				waiting = false;
-			}, instance.options.timeout * 1000);
-		}		
+		
+		timeout = setTimeout(function(){
+			instance.send2(flowdata);
+			waiting = false;
+		}, instance.options.timeout * 1000);
 	});
 
 	instance.on('close', () => timeout && clearTimeout(timeout));
