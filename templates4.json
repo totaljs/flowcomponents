@@ -47,6 +47,7 @@
     "name": "IoT",
     "items": [
       "https://rawgit.com/totaljs/flowcomponents/master/netatmo/netatmo.js",
+      "https://rawgit.com/totaljs/flowcomponents/master/mosca/mosca.js",
       "https://rawgit.com/totaljs/flowcomponents/master/mqtt/mqtt.js",
       "https://rawgit.com/totaljs/flowcomponents/master/mqttpublish/mqttpublish.js",
       "https://rawgit.com/totaljs/flowcomponents/master/mqttsubscribe/mqttsubscribe.js"

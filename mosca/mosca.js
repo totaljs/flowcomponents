@@ -13,9 +13,9 @@ exports.npm = ['mosca'];
 
 exports.html = `<div class="padding">
 	<div class="row">
-		<!--<div class="col-md-6">
-			<div data-jc="textbox" data-jc-path="host" data-jc-config="placeholder:127.0.0.1;disabled:true" class="m">Hostname or IP address</div>
-		</div>-->
+		<div class="col-md-6">
+			<div data-jc="textbox" data-jc-path="host" data-jc-config="placeholder:127.0.0.1" class="m">Hostname or IP address (default 127.0.0.1)</div>
+		</div>
 		<div class="col-md-6">
 			<div data-jc="textbox" data-jc-path="port" data-jc-config="placeholder:1883" class="m">Port (1883 by default)</div>
 		</div>
@@ -75,20 +75,28 @@ exports.install = function(instance) {
 		});
 
 		server.on('clientConnected', function(client) {
-			instance.send2(1, {
+			instance.send2(0, {
 				id: client.id
 			});
 		});
 
 		server.on('clientDisconnected', function(client) {
-			instance.send2(2, {
+			instance.send2(1, {
 				id: client.id
 			});
 		});
 
 		// fired when a message is received
 		server.on('published', function(packet) {
-			instance.send2(3, packet);
+			packet.payload = packet.payload.toString();
+
+			if (packet.payload[0] === '{') {
+				TRY(function() {
+					packet.payload = JSON.parse(packet.payload);
+				});
+			}
+
+			instance.send2(2, packet);
 		});
 	};
 
