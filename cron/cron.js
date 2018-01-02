@@ -71,7 +71,7 @@ day of week (0 - 7) (0 or 7 is Sun)
 
 or 
 
-@startup to run once at the start or restart of an app
+@startup to run once at the start or restart of an app (after 5 seconds)
 
 Examples of cron string:
 0 16 * * *      -> trigger every day at 16:00
