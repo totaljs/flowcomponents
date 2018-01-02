@@ -290,7 +290,7 @@ Broker.prototype.close = function(callback) {
 	var self = this;
 	self.closing = true;
 
-	if (self.connected || self.connecting)
+	if (self.connected || self.connecting && self.client.end)
 		self.client.end(/*cb*/);
 	//else
 		cb();
