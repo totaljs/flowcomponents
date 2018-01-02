@@ -69,19 +69,26 @@ day of month (1 - 31)
 month (1 - 12)
 day of week (0 - 7) (0 or 7 is Sun)
 
+or 
+
+@startup to run once at the start or restart of an app
+
 Examples of cron string:
 0 16 * * *      -> trigger every day at 16:00
 * 0 16 * * *    -> trigger at 16:00 every day and it will keep triggering every second until 16:01
 20,40 19 * * *  -> every day at 19:20 and 19:40	
 */5 * * * *     -> trigger every 5 seconds
 0 20 * * 1      -> every monday at 20:00
+@startup        -> runs once at startup
 
 Full example:
 * 0 16 * * * | hello data | this is hello comment
-
+@startup | start
 `;
 
 exports.install = function(instance) {
+
+	var startup = true;
 
 	var schedule = require('node-schedule');
 
@@ -110,15 +117,23 @@ exports.install = function(instance) {
 		jobs = [];
 
 		newjobs.forEach(function(job){
-			job = job.split('|');
+			job = job.split('|').trim();
 
-			var j = schedule.scheduleJob(job[0].trim(), function(){
-				instance.send(job[1].trim());
+			if (job[0] === '@startup' && startup) {
+				setTimeout(function(){
+					instance.send(job[1]);
+				}, 5000);
+				return;
+			}
+
+			var j = schedule.scheduleJob(job[0], function(){
+				instance.send(job[1]);
 			});
 
 			jobs.push(j);
 		});
-
+		
+		startup = false;
 	};
 };
 
