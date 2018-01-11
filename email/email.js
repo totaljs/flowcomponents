@@ -12,7 +12,7 @@ exports.options = { errors: true };
 exports.html = `<div class="padding">
 	<section>
 		<label><i class="fa fa-lock"></i>@(SMTP sender)</label>
-		<div class="padding npb">
+		<div class="padding">
 			<div class="row">
 				<div class="col-md-6 m">
 					<div data-jc="textbox" data-jc-path="smtp" data-jc-config="required:true;maxlength:50">@(SMTP server)</div>
