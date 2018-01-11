@@ -6,7 +6,7 @@ exports.input = true;
 exports.output = 1;
 exports.author = 'Peter Širka';
 exports.icon = 'code';
-exports.version = '1.0.0';
+exports.version = '1.1.0';
 exports.options = { outputs: 1, code: 'send(0, value);' };
 
 exports.html = `<div class="padding">
@@ -53,19 +53,18 @@ exports.install = function(instance) {
 
 	var fn;
 
-	var send = function(index, value) {
-		instance.send2(index, value);
-	};
-
 	instance.on('data', function(response) {
-		fn && fn(response.data, send, instance, response);
+		fn && fn(response.data, instance, response);
 	});
 
 	instance.reconfigure = function() {
 		try {
 			if (instance.options.code) {
 				instance.status('');
-				fn = new Function('value', 'send', 'instance', 'flowdata', instance.options.code);
+
+				var code = 'var send = function(index, value) { flowdata.data = value; instance.send2(index, value); };' + instance.options.code;
+
+				fn = new Function('value', 'instance', 'flowdata', code);
 			} else {
 				instance.status('Not configured', 'red');
 				fn = null;
