@@ -15,7 +15,7 @@ exports.html = `<div class="padding">
 			<div data-jc="dropdown" data-jc-path="method" data-jc-config="required:true;items:,GET,POST,PUT,DELETE">@(HTTP method)</div>
 		</div>
 		<div class="col-md-6 m">
-			<div data-jc="dropdown" data-jc-path="stringify" data-jc-config="required:true;items:,URL encoded|encoded,JSON|json,RAW|raw,none|None">@(Serialization)</div>
+			<div data-jc="dropdown" data-jc-path="stringify" data-jc-config="required:true;items:,URL encoded|encoded,JSON|json,RAW|raw,None|none">@(Serialization)</div>
 		</div>
 	</div>
 	<div data-jc="checkbox" data-jc-path="chunks">@(Download the content <b>in chunks</b>)</div>
