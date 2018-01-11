@@ -57,7 +57,7 @@ __Response:__
 \`\`\`
 
 __Dynamic arguments__:
-Are performed via FlowData repository and can be used for URL address or for custom headers/cookies/auth. Use \`repository\` component for creating of dynamic arguments. Dynamic values are replaced in the form \`{ key }\`:
+Are performed via FlowData repository and can be used for URL address or for custom headers/cookies/auth. Use \`repository\` component for creating of dynamic arguments. Dynamic values are replaced in the form \`{key}\`:
 
 - url address e.g. \`https://.../{key}/\`
 - headers values e.g. \`{token}\`
