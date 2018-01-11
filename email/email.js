@@ -4,7 +4,10 @@ exports.group = 'Notifications';
 exports.color = '#8CC152';
 exports.input = true;
 exports.author = 'Peter Širka';
-exports.icon = 'commenting-o';
+exports.version = '1.2.0';
+exports.output = ['green', 'red'];
+exports.icon = 'envelope-o';
+exports.options = { errors: true };
 
 exports.html = `<div class="padding">
 	<section>
@@ -23,9 +26,10 @@ exports.html = `<div class="padding">
 					<div data-jc="textbox" data-jc-path="user" data-jc-config="maxlength:50;placeholder:@(SMTP user)">User</div>
 				</div>
 				<div class="col-md-6 m">
-					<div data-jc="textbox" data-jc-path="password" data-jc-config="maxlength:50;placeholder="@(SMTP password);type:password">@(Password)</div>
+					<div data-jc="textbox" data-jc-path="password" data-jc-config="maxlength:50;placeholder="@(SMTP password)">@(Password)</div>
 				</div>
 			</div>
+			<div data-jc="checkbox" data-jc-path="errors">@(Enable internal error handling)</div>
 		</div>
 	</section>
 	<br />
@@ -48,26 +52,69 @@ exports.html = `<div class="padding">
 
 exports.readme = `# Email sender
 
-The component has to be configured.`;
+You need to configure this component.
+
+__Outputs__:
+- \`green\` message has been sent successfully
+- \`red\` an error while sending
+
+__Dynamic arguments__:
+Are performed via FlowData repository and can be used for subject, from/to addresses or attachments. Use \`repository\` component for creating of dynamic arguments. Examples:
+
+- subject \`{name}\`
+- from address e.g. \`{from}\`
+- to address e.g. \`{to}\`
+
+__Attachments__:
+\`FlowData\` repository needs to contain \`attachments\` key with user-defined array in the form:
+
+\`\`\`javascript
+[
+	{ filename: '/absolute/path/to/some/file.pdf', name: 'report.pdf' },
+	{ filename: '/or/absolute/path/to/package.zip' }
+]\`\`\``;
 
 exports.install = function(instance) {
 
 	var can = false;
 	var smtp = null;
 
+	var arg = function(val, msg) {
+		return typeof(val) === 'string' ? val.replace(/\{[a-z0-9,-.]+\}/gi, function(text) {
+			var val = msg.get(text.substring(1, text.length - 1).trim());
+			return val == null ? '' : val;
+		}) : val;
+	};
+
 	instance.on('data', function(response) {
-		can && instance.custom.send(response.data);
+		can && instance.custom.send(response.data, response);
 	});
 
-	instance.custom.send = function(body) {
+	instance.custom.send = function(body, msg) {
 		var options = instance.options;
-		var message = Mail.create(options.subject, typeof(body) === 'object' ? JSON.stringify(body) : body.toString());
-		message.from(options.from);
-		message.to(options.target);
+		var message = Mail.create(arg(options.subject, msg), typeof(body) === 'object' ? JSON.stringify(body) : body.toString());
+		message.from(arg(options.from, msg));
+		message.to(arg(options.target, msg));
 		message.send(options.smtp, smtp);
+
+		var a = msg.get('attachments');
+		if (a instanceof Array) {
+			for (var i = 0; i < a.length; i++)
+				message.attachment(a[i].filename, a[i].name);
+		}
+
+		message.callback(function(err) {
+			if (err) {
+				options.errors && instance.error(err);
+				msg.data = err;
+				instance.send2(1, msg);
+			} else
+				instance.send2(0, msg);
+		});
 	};
 
 	instance.reconfigure = function() {
+
 		var options = instance.options;
 		can = options.smtp && options.subject;
 
