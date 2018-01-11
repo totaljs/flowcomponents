@@ -7,7 +7,7 @@ exports.output = 1;
 exports.author = 'Peter Širka';
 exports.icon = 'code';
 exports.version = '1.1.0';
-exports.options = { outputs: 1, code: 'send(0, value);' };
+exports.options = { outputs: 1, code: 'send(0, value);', keepmessage: true };
 
 exports.html = `<div class="padding">
 	<div class="row">
@@ -16,7 +16,8 @@ exports.html = `<div class="padding">
 			<div class="help m">@(Minimum is 1)</div>
 		</div>
 	</div>
-	<div data-jc="codemirror" data-jc-path="code" data-jc-config="type:javascript;required:true;height:500">@(Code)</div>
+	<div data-jc="codemirror" data-jc-path="code" data-jc-config="type:javascript;required:true;height:500" class="m">@(Code)</div>
+	<div data-jc="checkbox" data-jc-path="keepmessage">@(Keep message instance)</div>
 </div>
 <script>
 	var code_outputs_count;
@@ -54,17 +55,15 @@ exports.install = function(instance) {
 	var fn;
 
 	instance.on('data', function(response) {
-		fn && fn(response.data, instance, response);
+		fn && fn(response.data, instance, response, instance.options);
 	});
 
 	instance.reconfigure = function() {
 		try {
 			if (instance.options.code) {
 				instance.status('');
-
-				var code = 'var send = function(index, value) { flowdata.data = value; instance.send2(index, value); };' + instance.options.code;
-
-				fn = new Function('value', 'instance', 'flowdata', code);
+				var code = 'var send = function(index, value) { if (options.keepmessage) { flowdata.data = value; instance.send2(index, flowdata); } else instance.send2(index, value);};' + instance.options.code;
+				fn = new Function('value', 'instance', 'flowdata', 'options', code);
 			} else {
 				instance.status('Not configured', 'red');
 				fn = null;
