@@ -15,7 +15,7 @@ exports.install = function(instance) {
 	var lastdata = null;
 
 	instance.on('data', function(response) {
-		lastdata = response.data;
+		instance.lastdata = lastdata = response.data;
 		instance.dashboard && instance.dashboard('laststate', lastdata);
 	});
 
@@ -26,4 +26,5 @@ exports.install = function(instance) {
 				break;
 		}
 	});
+
 };
