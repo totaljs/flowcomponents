@@ -6,10 +6,13 @@ exports.input = false;
 exports.output = 1;
 exports.author = 'Peter Širka';
 exports.icon = 'bullhorn';
+exports.options = { fn: `function(a, b) {
+	// your code
+}` }
 
 exports.html = `<div class="padding">
 	<div data-jc="textbox" data-jc-path="name" data-jc-config="required:true;maxlength:50" class="m">@(Event name)</div>
-	<div data-jc="codemirror" data-jc-path="fn" data-jc-config="type:javascript;required:true;height:500">@(Event function)</div>
+	<div data-jc="codemirror" data-jc-path="fn" data-jc-config="type:javascript;required:true;height:300">@(Event function)</div>
 </div>`;
 
 exports.readme = `# Event capturing
