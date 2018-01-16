@@ -39,10 +39,10 @@ exports.html = `<div class="padding">
 			<div class="b">@(Message)</div>
 			<div class="row mt10">
 				<div class="col-md-6 m">
-					<div data-jc="textbox" data-jc-path="from" data-jc-config="required:true;maxlength:120;type:email;icon:envelope-o" data-jc-value="'@'">@(From)</div>
+					<div data-jc="textbox" data-jc-path="from" data-jc-config="required:true;maxlength:120;icon:envelope-o" data-jc-value="'@'">@(From)</div>
 				</div>
 				<div class="col-md-6 m">
-					<div data-jc="textbox" data-jc-path="target" data-jc-config="required:true;maxlength:120;type:email;icon:envelope-o" data-jc-value="'@'">@(To)</div>
+					<div data-jc="textbox" data-jc-path="target" data-jc-config="required:true;maxlength:120;icon:envelope-o" data-jc-value="'@'">@(To)</div>
 				</div>
 			</div>
 			<div data-jc="textbox" data-jc-path="subject" class="m" data-jc-config="required:true;maxlength:100" data-jc-value="'@'">@(Subject)</div>
