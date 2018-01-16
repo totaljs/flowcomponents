@@ -44,6 +44,7 @@ This component executes custom JavaScript code as it is and it doesn't contain a
 // send(outputIndex, newValue) sends a new value
 // instance {Object} a current component instance
 // flowdata {Object} a current flowdata
+// repository {Object} a current repository of flowdata
 // Example:
 
 // send() can be execute multiple times
@@ -55,7 +56,7 @@ exports.install = function(instance) {
 	var fn;
 
 	instance.on('data', function(response) {
-		fn && fn(response.data, instance, response, instance.options);
+		fn && fn(response.data, instance, response, response.repository, instance.options);
 	});
 
 	instance.reconfigure = function() {
@@ -63,7 +64,7 @@ exports.install = function(instance) {
 			if (instance.options.code) {
 				instance.status('');
 				var code = 'var send = function(index, value) { if (options.keepmessage) { flowdata.data = value; instance.send2(index, flowdata); } else instance.send2(index, value);};' + instance.options.code;
-				fn = new Function('value', 'instance', 'flowdata', 'options', code);
+				fn = new Function('value', 'instance', 'flowdata', 'options', 'repository', code);
 			} else {
 				instance.status('Not configured', 'red');
 				fn = null;
