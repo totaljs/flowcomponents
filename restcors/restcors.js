@@ -1,0 +1,41 @@
+exports.id = 'restcors';
+exports.title = 'CORS';
+exports.group = 'REST';
+exports.color = '#6B9CE6';
+exports.input = 0;
+exports.output = 1;
+exports.author = 'Peter Širka';
+exports.icon = 'globe';
+exports.version = '1.0.0';
+exports.options = { methods: ['GET', 'POST', 'PUT', 'DELETE'], url: '/api/*' };
+
+exports.html = `<div class="padding">
+	<div data-jc="textbox" data-jc-path="url" data-jc-config="required:true;placeholder:/api/*">@(URL address)</div>
+	<div class="help m">@(URL address can contain <code>*</code> as wildcard routing.)</div>
+	<div data-jc="dropdowncheckbox" data-jc-path="methods" data-jc-config="items:GET,POST,PUT,DELETE;cleaner:false;alltext:">@(Allowed methods)</div>
+</div>
+<script>
+	ON('save.restcors', function(component, options) {
+		!component.name && (component.name = options.url);
+	});
+</script>`.format(exports.id);
+
+exports.readme = `# REST: CORS
+
+Enables CORS for 3rd party client-side applications. __Our recommendation:__ is to use wildcard for the entire API.`;
+
+exports.install = function(instance) {
+
+	var old;
+
+	instance.on('close', () => old && UNINSTALL('cors', 'id:' + instance.id));
+	instance.reconfigure = function() {
+		var options = instance.options;
+		old && UNINSTALL('cors', 'id:' + instance.id);
+		old = true;
+		CORS(options.url, options.methods, true);
+	};
+
+	instance.on('options', instance.reconfigure);
+	instance.reconfigure();
+};

@@ -1,8 +1,8 @@
-exports.id = 'restendpoint';
-exports.title = 'Endpoint';
+exports.id = 'restroute';
+exports.title = 'Route';
 exports.group = 'REST';
-exports.color = '#6B5223';
-exports.input = false;
+exports.color = '#6B9CE6';
+exports.input = 0;
 exports.output = 1;
 exports.author = 'Peter Širka';
 exports.icon = 'globe';
@@ -24,7 +24,7 @@ exports.html = `<div class="padding">
 			<div class="help"><i class="fa fa-warning"></i>@(For received data)</div>
 		</div>
 		<div class="col-md-9 m">
-			<div data-jc="dropdowncheckbox" data-jc-path="middleware" data-jc-config="datasource:flowrestendpointdata.middleware;cleaner:false;alltext:">@(Middleware)</div>
+			<div data-jc="dropdowncheckbox" data-jc-path="middleware" data-jc-config="datasource:restroutedata.middleware;alltext:">@(Middleware)</div>
 			<div class="help"><i class="fa fa-warning"></i>@(Order is very important)</div>
 		</div>
 	</div>
@@ -32,39 +32,38 @@ exports.html = `<div class="padding">
 </div>
 <hr class="nmt nmb" />
 <div class="padding">
-	<div data-jc="dropdown" data-jc-path="schema" data-jc-config="required:true;datasource:flowrestendpointdata.schemas;empty:" class="m">@(Schema)</div>
-	<div data-jc="dropdowncheckbox" data-jc-path="operation" data-jc-config="required:true;datasource:flowrestendpointdata.operations2;cleaner:false;alltext:">@(Operation)</div>
+	<div data-jc="dropdown" data-jc-path="schema" data-jc-config="required:true;datasource:restroutedata.schemas;empty:" class="m">@(Schema)</div>
+	<div data-jc="dropdowncheckbox" data-jc-path="operation" data-jc-config="required:true;datasource:restroutedata.operations2;alltext:">@(Operation)</div>
 	<div class="help m"><i class="fa fa-warning"></i>@(Order is very important)</div>
-	<div data-jc="dropdown" data-jc-path="output" data-jc-config="datasource:settings.restendpoint.operation;empty:@(All responses)" class="m">@(Response)</div>
+	<div data-jc="dropdown" data-jc-path="output" data-jc-config="datasource:settings.restroute.operation;empty:@(All responses)" class="m">@(Response)</div>
 </div>
 <script>
-	var flowrestendpointdata = { schemas: [], operations: [] };
 
-	ON('open.restendpoint', function(instance) {
-		TRIGGER('{0}', 'flowrestendpointdata');
+	ON('open.restroute', function(instance) {
+		TRIGGER('{0}', 'restroutedata');
 	});
 
-	WATCH('flowrestendpointdata.operations', flowrestendpointrebind);
-	WATCH('settings.restendpoint.schema', flowrestendpointrebind, true);
+	WATCH('restroutedata.operations', restrouterebind);
+	WATCH('settings.restroute.schema', restrouterebind, true);
 
-	function flowrestendpointrebind() {
-		setTimeout2('flowrestendpointrebind', function() {
+	function restrouterebind() {
+		setTimeout2('restrouterebind', function() {
 			var arr = [];
-			settings.restendpoint.schema && flowrestendpointdata.operations.forEach(function(item) {
-				item.idschema === settings.restendpoint.schema && arr.push(item);
+			settings.restroute.schema && restroutedata.operations.forEach(function(item) {
+				item.idschema === settings.restroute.schema && arr.push(item);
 			});
-			SET('flowrestendpointdata.operations2', arr, true);
+			SET('restroutedata.operations2', arr, true);
 		}, 1000);
 	}
 
-	ON('save.restendpoint', function(component, options) {
+	ON('save.restroute', function(component, options) {
 		!component.name && (component.name = options.method + ' ' + options.url);
 	});
 </script>`.format(exports.id);
 
-exports.readme = `# REST: Endpoint
+exports.readme = `# REST: Route
 
-This component creates REST endpoint (Total.js route) for receiving data. It handles errors automatically.`;
+This component creates a REST endpoint/route (Total.js route) for receiving data. It handles errors automatically.`;
 
 exports.install = function(instance) {
 
@@ -116,7 +115,7 @@ exports.install = function(instance) {
 		for (var i = 0; i < options.operation.length; i++)
 			schema.push(options.operation[i] === options.output ? '[{0}]'.format(options.operation[i]) : options.operation[i]);
 
-		instance.status(options.schema + ': ' + schema.join(', '));
+		instance.status(options.schema.replace(/^default\//, '') + ': ' + schema.join(', '));
 
 		ROUTE(options.url, function() {
 			var self = this;
@@ -126,7 +125,7 @@ exports.install = function(instance) {
 				else {
 					var message = instance.make(err ? err : response);
 					message.repository.controller = self;
-					instance.send(0, message);
+					instance.send2(message);
 				}
 			});
 		}, flags, options.size || 5);
