@@ -69,13 +69,6 @@ exports.install = function(instance) {
 	var flags = null;
 	var cookies2 = null;
 
-	var arg = function(val, msg) {
-		return typeof(val) === 'string' ? val.replace(/\{[a-z0-9,-.]+\}/gi, function(text) {
-			var val = msg.get(text.substring(1, text.length - 1).trim());
-			return val == null ? '' : val;
-		}) : val;
-	};
-
 	instance.on('data', function(response) {
 		can && instance.custom.send(response);
 	});
@@ -88,25 +81,25 @@ exports.install = function(instance) {
 
 		options.headers && Object.keys(options.headers).forEach(function(key) {
 			!headers && (headers = {});
-			headers[key] = arg(options.headers[key], response);
+			headers[key] = response.arg(options.headers[key]);
 		});
 
 		if (options.username && options.userpassword) {
 			!headers && (headers = {});
-			headers['Authorization'] = 'Basic ' + U.createBuffer(arg(options.username + ':' + options.userpassword, response)).toString('base64');
+			headers['Authorization'] = 'Basic ' + U.createBuffer(response.arg(options.username + ':' + options.userpassword)).toString('base64');
 		}
 
 		options.cookies && Object.keys(options.cookies).forEach(function(key) {
 			!cookies && (cookies = {});
-			cookies[key] = arg(options.cookies[key], response);
+			cookies[key] = response.arg(options.cookies[key]);
 		});
 
 		if (options.chunks) {
-			U.download(arg(options.url, response), flags, options.stringify === 'none' ? null : response.data, function(err, response) {
+			U.download(response.arg(options.url), flags, options.stringify === 'none' ? null : response.data, function(err, response) {
 				response.on('data', (chunks) => instance.send2(chunks));
 			}, cookies || cookies2, headers);
 		} else {
-			U.request(arg(options.url, response), flags, options.stringify === 'none' ? null : response.data, function(err, data, status, headers, host) {
+			U.request(response.arg(options.url), flags, options.stringify === 'none' ? null : response.data, function(err, data, status, headers, host) {
 				if (response && !err) {
 					response.data = { data: data, status: status, headers: headers, host: host };
 					instance.send2(response);

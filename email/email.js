@@ -79,22 +79,15 @@ exports.install = function(instance) {
 	var can = false;
 	var smtp = null;
 
-	var arg = function(val, msg) {
-		return typeof(val) === 'string' ? val.replace(/\{[a-z0-9,-.]+\}/gi, function(text) {
-			var val = msg.get(text.substring(1, text.length - 1).trim());
-			return val == null ? '' : val;
-		}) : val;
-	};
-
 	instance.on('data', function(response) {
 		can && instance.custom.send(response.data, response);
 	});
 
 	instance.custom.send = function(body, msg) {
 		var options = instance.options;
-		var message = Mail.create(arg(options.subject, msg), typeof(body) === 'object' ? JSON.stringify(body) : body.toString());
-		message.from(arg(options.from, msg));
-		message.to(arg(options.target, msg));
+		var message = Mail.create(msg.arg(options.subject), typeof(body) === 'object' ? JSON.stringify(body) : body.toString());
+		message.from(msg.arg(options.from));
+		message.to(msg.arg(options.target));
 		message.send(options.smtp, smtp);
 
 		var a = msg.get('attachments');
