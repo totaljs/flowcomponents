@@ -25,7 +25,7 @@ exports.html = `<div class="padding">
 		</div>
 	</section>
 	<br />
-	<div data-jc="codemirror" data-jc-path="code" data-jc-config="type:javascript;required:true;height:500">@(Middleware declaration)</div>
+	<div data-jc="codemirror" data-jc-path="code" data-jc-config="type:javascript;required:true;height:500;tabs:true;trim:true">@(Middleware declaration)</div>
 </div>
 <script>
 	ON('save.restmiddleware', function(component, options) {

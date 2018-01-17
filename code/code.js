@@ -16,7 +16,7 @@ exports.html = `<div class="padding">
 			<div class="help m">@(Minimum is 1)</div>
 		</div>
 	</div>
-	<div data-jc="codemirror" data-jc-path="code" data-jc-config="type:javascript;required:true;height:500" class="m">@(Code)</div>
+	<div data-jc="codemirror" data-jc-path="code" data-jc-config="type:javascript;required:true;height:500;tabs:true;trim:true" class="m">@(Code)</div>
 	<div data-jc="checkbox" data-jc-path="keepmessage">@(Keep message instance)</div>
 </div>
 <script>

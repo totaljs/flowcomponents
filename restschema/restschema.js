@@ -33,7 +33,7 @@ exports.html = `<div class="padding">
 		</div>
 	</section>
 	<br />
-	<div data-jc="codemirror" data-jc-path="code" data-jc-config="type:javascript;required:true;height:500">@(Schema declaration)</div>
+	<div data-jc="codemirror" data-jc-path="code" data-jc-config="type:javascript;required:true;height:500;trim:true;tabs:true">@(Schema declaration)</div>
 	<div class="help"><a href="https://docs.totaljs.com/latest/en.html#api~SchemaBuilder" target="_blank"><i class="fa fa-book"></i>@(Documentation)</a></div>
 </div>
 <script>
