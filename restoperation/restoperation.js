@@ -42,7 +42,7 @@ This component creates user-defined Total.js operation.`;
 
 exports.install = function(instance) {
 
-	var oldname, fn;
+	var oldname;
 
 	instance.on('close', () => instance.options.name && UNINSTALL('operation', instance.options.name));
 
@@ -59,8 +59,7 @@ exports.install = function(instance) {
 		oldname = options.name;
 
 		try {
-			fn = new Function('$', options.code);
-			NEWOPERATION(oldname, fn);
+			NEWOPERATION(oldname, new Function('$', options.code));
 			instance.status(options.name);
 		} catch (e) {
 			UNINSTALL('operation', options.name);
