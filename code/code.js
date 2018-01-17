@@ -63,7 +63,7 @@ exports.install = function(instance) {
 		try {
 			if (instance.options.code) {
 				instance.status('');
-				var code = 'var send = function(index, value) { if (options.keepmessage) { flowdata.data = value; console.log(1); instance.send2(index, flowdata); } else instance.send2(index, value);};' + instance.options.code;
+				var code = 'var send = function(index, value) { if (options.keepmessage) { flowdata.data = value; instance.send2(index, flowdata); } else instance.send2(index, value);};' + instance.options.code;
 				fn = new Function('value', 'instance', 'flowdata', 'options', 'repository', code);
 			} else {
 				instance.status('Not configured', 'red');

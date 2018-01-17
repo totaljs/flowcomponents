@@ -133,7 +133,7 @@ exports.install = function(instance) {
 
 			self.id = id;
 
-			if (self.hasConnection(1)) {
+			if (instance.hasConnection(1)) {
 				var data = {};
 				data.query = self.query;
 				data.user = self.user;
@@ -142,7 +142,7 @@ exports.install = function(instance) {
 				data.params = self.params;
 				var msg = instance.make(data, 1);
 				msg.repository.controller = self;
-				self.send(msg);
+				instance.send(1, msg);
 			}
 
 			action(self, function(err, response) {
@@ -150,10 +150,10 @@ exports.install = function(instance) {
 					self.invalid().push(err);
 				else {
 					instance.options.respond && self.json(response);
-					if (self.hasConnection(0)) {
+					if (instance.hasConnection(0)) {
 						var message = instance.make(err ? err : response);
 						message.repository.controller = self;
-						instance.send2(message);
+						instance.send(0, message);
 					}
 				}
 			});
