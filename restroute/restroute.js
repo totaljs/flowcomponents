@@ -3,11 +3,11 @@ exports.title = 'Route';
 exports.group = 'REST';
 exports.color = '#6B9CE6';
 exports.input = 0;
-exports.output = 1;
+exports.output = ['#6BAD57', '#F6BB42'];
 exports.author = 'Peter Širka';
 exports.icon = 'globe';
 exports.version = '1.0.0';
-exports.options = { method: 'GET', url: '', auth: false, middleware: [], length: 5, operation: [], output: '' };
+exports.options = { method: 'GET', url: '', auth: false, middleware: [], length: 5, operation: [], output: '', respond: false, timeout: 5 };
 
 exports.html = `<div class="padding">
 	<div class="row">
@@ -23,12 +23,18 @@ exports.html = `<div class="padding">
 			<div data-jc="textbox" data-jc-path="length" data-jc-config="type:number;maxlength:5;increment:true;align:center">@(Max. size in kB)</div>
 			<div class="help"><i class="fa fa-warning"></i>@(For received data)</div>
 		</div>
-		<div class="col-md-9 m">
+		<div class="col-md-3 m">
+			<div data-jc="textbox" data-jc-path="timeout" data-jc-config="type:number;maxlength:5;increment:true;align:center">@(Timeout)</div>
+			<div class="help"><i class="fa fa-clock-o"></i>@(In seconds)</div>
+		</div>
+		<div class="col-md-6 m">
 			<div data-jc="dropdowncheckbox" data-jc-path="middleware" data-jc-config="datasource:restroutedata.middleware;alltext:">@(Middleware)</div>
 			<div class="help"><i class="fa fa-warning"></i>@(Order is very important)</div>
 		</div>
 	</div>
+	<hr />
 	<div data-jc="checkbox" data-jc-path="auth">@(Enables authorization)</div>
+	<div data-jc="checkbox" data-jc-path="respond">@(Automatically respond with JSON + 200 OK?)</div>
 </div>
 <hr class="nmt nmb" />
 <div class="padding">
@@ -63,7 +69,12 @@ exports.html = `<div class="padding">
 
 exports.readme = `# REST: Route
 
-This component creates a REST endpoint/route (Total.js route) for receiving data. It handles errors automatically.`;
+This component creates a REST endpoint/route (Total.js route) for receiving data. It handles errors automatically.
+
+__Outputs__:
+
+- first output contains a __response__
+- second output contains received data`;
 
 exports.install = function(instance) {
 
@@ -92,7 +103,7 @@ exports.install = function(instance) {
 			UNINSTALL('route', 'id:' + instance.id);
 
 		// Timeout 5000
-		var flags = [5000];
+		var flags = [options.timeout * 1000];
 
 		if (options.method !== 'GET')
 			flags.push(options.method.toLowerCase());
@@ -108,7 +119,7 @@ exports.install = function(instance) {
 		flags.push('*' + options.schema);
 		flags.push('id:' + instance.id);
 
-		var code = 'if (self.body.$async) { self.body.$async(next{0}).{1}; } else { $ASYNC(self.schema,next{0}).{1}; }'.format(output == null ? '' : ',' + output, builder.join('.'));
+		var code = 'if (self.body.$async) { self.body.$async(next{0}).{1}; } else { $ASYNC(self.schema,next{0},self).{1}; }'.format(output == null ? '' : ',' + output, builder.join('.'));
 		action = new Function('self', 'next', code);
 
 		var schema = [];
@@ -117,15 +128,33 @@ exports.install = function(instance) {
 
 		instance.status(options.schema.replace(/^default\//, '') + ': ' + schema.join(', '));
 
-		ROUTE(options.url, function() {
+		ROUTE(options.url, function(id) {
 			var self = this;
+
+			self.id = id;
+
+			if (self.hasConnection(1)) {
+				var data = {};
+				data.query = self.query;
+				data.user = self.user;
+				data.session = self.session;
+				data.body = self.body;
+				data.params = self.params;
+				var msg = instance.make(data, 1);
+				msg.repository.controller = self;
+				self.send(msg);
+			}
+
 			action(self, function(err, response) {
 				if (err)
 					self.invalid().push(err);
 				else {
-					var message = instance.make(err ? err : response);
-					message.repository.controller = self;
-					instance.send2(message);
+					instance.options.respond && self.json(response);
+					if (self.hasConnection(0)) {
+						var message = instance.make(err ? err : response);
+						message.repository.controller = self;
+						instance.send2(message);
+					}
 				}
 			});
 		}, flags, options.size || 5);
