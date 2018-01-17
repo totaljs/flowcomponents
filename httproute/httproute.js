@@ -47,7 +47,7 @@ exports.html = `<div class="padding">
 		</div>
 	</section>
 	<br />
-	<div data-jc="checkbox" data-jc-path="emptyresponse" class="b black">@(Automaticlly respond with 200 OK?)</div>
+	<div data-jc="checkbox" data-jc-path="emptyresponse" class="b black">@(Automatically respond with 200 OK?)</div>
 	<div class="help m">@(If not checked you need to use HTTP response component to respond to the request.)</div>
 	<hr />
 	<div data-jc="keyvalue" data-jc-path="headers" data-jc-config="placeholderkey:@(Header name);placeholdervalue:@(Header value and press enter)" class="m">@(Custom headers)</div>
