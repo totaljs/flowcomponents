@@ -64,7 +64,22 @@ exports.html = `<div class="padding">
 
 	ON('save.restroute', function(component, options) {
 		!component.name && (component.name = options.method + ' ' + options.url);
+		var builder = [];
+		builder.push('### Configuration');
+		builder.push('');
+		builder.push('- __' + options.method + ' ' + options.url + '__');
+		options.middleware.length && builder.push('- middleware: __' + options.middleware.join(', ') + '__');
+		builder.push('- @(authorization): __' + options.auth.toString() + '__');
+		builder.push('- @(auto-responding): __' + options.respond.toString() + '__');
+		builder.push('- @(maximum request data length): __' + options.length + ' kB__');
+		builder.push('- @(timeout for response): __' + options.timeout + ' @(seconds)__');
+		builder.push('---');
+		builder.push('- @(schema): __' + options.schema + '__');
+		builder.push('- @(operation): __' + options.operation.join(', ') + '__');
+		builder.push('- @(response): __' + (options.output ? options.output : '@(All responses)') + '__');
+		component.notes = builder.join('\\n');
 	});
+
 </script>`.format(exports.id);
 
 exports.readme = `# REST: Route
