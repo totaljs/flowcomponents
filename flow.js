@@ -62,6 +62,10 @@ Component.prototype.signal = function(index, data) {
 	return this;
 };
 
+Component.prototype.make = function(data, index) {
+	return new FlowData(data, false, +index);
+};
+
 Component.prototype.send = Component.prototype.send2 = function(index, message) {
 
 	if (message === undefined) {
