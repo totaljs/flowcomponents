@@ -1,3 +1,3 @@
-# REST: Response
+# REST: Operation
 
-This component responds with JSON.
+This component evaluates some registered Total.js operation.
