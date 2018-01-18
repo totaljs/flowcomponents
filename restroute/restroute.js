@@ -65,7 +65,7 @@ exports.html = `<div class="padding">
 	ON('save.restroute', function(component, options) {
 		!component.name && (component.name = options.method + ' ' + options.url);
 		var builder = [];
-		builder.push('### Configuration');
+		builder.push('### @(Configuration)');
 		builder.push('');
 		builder.push('- __' + options.method + ' ' + options.url + '__');
 		options.middleware.length && builder.push('- middleware: __' + options.middleware.join(', ') + '__');
