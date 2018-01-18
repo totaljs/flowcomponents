@@ -6,6 +6,7 @@ exports.color = '#656D78';
 exports.input = true;
 exports.icon = 'calendar';
 exports.options = { format: 'dd.MM.yyyy HH:mm:ss' };
+exports.traffic = false;
 exports.readme = `# Last Usage
 
 This component remembers date and time of last usage.`;
