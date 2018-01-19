@@ -7,7 +7,7 @@ exports.output = ['#6BAD57', '#F6BB42'];
 exports.author = 'Peter Širka';
 exports.icon = 'globe';
 exports.version = '1.0.0';
-exports.options = { method: 'GET', url: '', auth: false, middleware: [], length: 5, operation: [], output: '', respond: false, timeout: 5, cacheexpire: '', cachepolicy: 0 };
+exports.options = { method: 'GET', url: '', auth: false, middleware: [], length: 5, operation: [], output: '', respond: false, timeout: 5, cacheexpire: '5 minutes', cachepolicy: 0 };
 
 exports.html = `<div class="padding">
 	<div class="row">
@@ -48,7 +48,8 @@ exports.html = `<div class="padding">
 			<div class="help">@(User instance must contain <code>id</code> property.)</div>
 		</div>
 		<div class="col-md-3 m">
-			<div data-jc="textbox" data-jc-path="cacheexpire" data-jc-config="maxlength:20;align:center;placeholder:@(5 minutes)">@(Expiration)</div>
+			<div data-jc="textbox" data-jc-path="cacheexpire" data-jc-config="maxlength:20;align:center">@(Expiration)</div>
+			<div class="help">@(E.g. <code>5 minutes</code>)</div>
 		</div>
 	</div>
 </div>
