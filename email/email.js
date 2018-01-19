@@ -119,23 +119,26 @@ exports.install = function(instance) {
 		message.from(msg.arg(options.from));
 
 		var target = msg.arg(options.target);
-		if (target instanceof Array) {
+		if (target && target.indexOf(',') !== -1) {
+			target = target.split(',');
 			for (var i = 0; i < target.length; i++)
-				message.to(target[i]);
+				message.to(target[i].trim());
 		} else if (target)
 			message.to(target);
 
 		target = msg.arg(options.cc);
-		if (target instanceof Array) {
+		if (target && target.indexOf(',') !== -1) {
+			target = target.split(',');
 			for (var i = 0; i < target.length; i++)
-				message.cc(target[i]);
+				message.cc(target[i].trim());
 		} else if (target)
 			message.cc(target);
 
 		target = msg.arg(options.bcc);
-		if (target instanceof Array) {
+		if (target && target.indexOf(',') !== -1) {
+			target = target.split(',');
 			for (var i = 0; i < target.length; i++)
-				message.bcc(target[i]);
+				message.bcc(target[i].trim());
 		} else if (target)
 			message.bcc(target);
 
