@@ -6,6 +6,7 @@ exports.color = '#656D78';
 exports.input = true;
 exports.icon = 'calendar';
 exports.options = { format: 'dd.MM.yyyy HH:mm:ss' };
+exports.dateupdated = '2018-01-19T11:57:00.000Z';
 exports.traffic = false;
 exports.readme = `# Last Usage
 

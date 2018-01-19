@@ -7,6 +7,7 @@ exports.author = 'Peter Širka';
 exports.version = '1.2.0';
 exports.output = ['green', 'red'];
 exports.icon = 'envelope-o';
+exports.dateupdated = '2018-01-19T11:57:00.000Z';
 exports.options = { errors: true, type: 'smtp' };
 
 exports.html = `<div class="padding">
