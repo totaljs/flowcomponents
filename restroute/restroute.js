@@ -7,7 +7,7 @@ exports.output = ['#6BAD57', '#F6BB42'];
 exports.author = 'Peter Širka';
 exports.icon = 'globe';
 exports.version = '1.0.0';
-exports.options = { method: 'GET', url: '', auth: false, middleware: [], length: 5, operation: [], output: '', respond: false, timeout: 5 };
+exports.options = { method: 'GET', url: '', auth: false, middleware: [], length: 5, operation: [], output: '', respond: false, timeout: 5, cacheexpire: '', cachepolicy: 0 };
 
 exports.html = `<div class="padding">
 	<div class="row">
@@ -42,6 +42,15 @@ exports.html = `<div class="padding">
 	<div data-jc="dropdowncheckbox" data-jc-path="operation" data-jc-config="required:true;datasource:restroutedata.operations2;alltext:">@(Operation)</div>
 	<div class="help m"><i class="fa fa-warning"></i>@(Order is very important)</div>
 	<div data-jc="dropdown" data-jc-path="output" data-jc-config="datasource:settings.restroute.operation;empty:@(All responses)" class="m">@(Response)</div>
+	<div class="row">
+		<div class="col-md-9 m">
+			<div data-jc="dropdown" data-jc-path="cachepolicy" data-jc-config="type:number;items:@(no cache)|0,@(URL)|1,@(URL + query string)|2,@(URL + query string + user instance)|3">@(Cache policy)</div>
+			<div class="help">@(User instance must contain <code>id</code> property.)</div>
+		</div>
+		<div class="col-md-3 m">
+			<div data-jc="textbox" data-jc-path="cacheexpire" data-jc-config="maxlength:20;align:center;placeholder:@(5 minutes)">@(Cache expire)</div>
+		</div>
+	</div>
 </div>
 <script>
 
@@ -73,6 +82,7 @@ exports.html = `<div class="padding">
 		builder.push('- @(auto-responding): __' + options.respond.toString() + '__');
 		builder.push('- @(maximum request data length): __' + options.length + ' kB__');
 		builder.push('- @(timeout for response): __' + options.timeout + ' @(seconds)__');
+		builder.push('- @(cache): __' + (options.cachepolicy ? options.cacheexpire : '@(no cache)') + '__');
 		builder.push('---');
 		builder.push('- @(schema): __' + options.schema + '__');
 		builder.push('- @(operation): __' + options.operation.join(', ') + '__');
@@ -89,7 +99,8 @@ This component creates a REST endpoint/route (Total.js route) for receiving data
 __Outputs__:
 
 - first output contains a __response__
-- second output contains received data`;
+- second output contains received data
+```;
 
 exports.install = function(instance) {
 
@@ -100,6 +111,12 @@ exports.install = function(instance) {
 	instance.reconfigure = function() {
 
 		var options = instance.options;
+
+		if (!options.url) {
+			instance.status('Not configured', 'red');
+			return;
+		}
+
 		var builder = [];
 		var output = options.output ? options.operation.indexOf(options.output) : null;
 
@@ -144,7 +161,9 @@ exports.install = function(instance) {
 		instance.status(options.schema.replace(/^default\//, '') + ': ' + schema.join(', '));
 
 		ROUTE(options.url, function(id) {
+
 			var self = this;
+			var key;
 
 			self.id = id;
 
@@ -160,19 +179,52 @@ exports.install = function(instance) {
 				instance.send(1, msg);
 			}
 
+			switch (instance.options.cachepolicy) {
+
+				case 1: // URL
+					key = 'rr' + instance.id + self.url.hash();
+					break;
+				case 2: // URL + query
+				case 3: // URL + query + user
+					key = self.url;
+					var keys = Object.keys(self.query);
+					keys.sort();
+					for (var i = 0, length = keys.length; i < length; i++)
+						key += keys[i] + self.query[keys[i]] + '&';
+					if (instance.options.cachepolicy === 3 && self.user)
+						key += 'iduser' + self.user.id;
+					key = 'rr' + instance.id + key.hash();
+					break;
+			}
+
+			if (key && F.cache.get2(key)) {
+				var response = F.cache.get2(key);
+				instance.options.respond && self.json(response);
+				if (instance.hasConnection(0)) {
+					var message = instance.make(response);
+					message.repository.controller = self;
+					message.repository.cache = true;
+					instance.send(0, message);
+				}
+				return;
+			}
+
 			action(self, function(err, response) {
 				if (err)
 					self.invalid().push(err);
 				else {
+					instance.options.cacheexpire && F.cache.set(key, response, instance.options.cacheexpire);
 					instance.options.respond && self.json(response);
 					if (instance.hasConnection(0)) {
-						var message = instance.make(err ? err : response);
+						var message = instance.make(response);
 						message.repository.controller = self;
 						instance.send(0, message);
 					}
 				}
 			});
 		}, flags, options.size || 5);
+
+		instance.status('');
 	};
 
 	instance.on('options', instance.reconfigure);
