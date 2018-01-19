@@ -48,7 +48,7 @@ exports.html = `<div class="padding">
 			<div class="help">@(User instance must contain <code>id</code> property.)</div>
 		</div>
 		<div class="col-md-3 m">
-			<div data-jc="textbox" data-jc-path="cacheexpire" data-jc-config="maxlength:20;align:center;placeholder:@(5 minutes)">@(Cache expire)</div>
+			<div data-jc="textbox" data-jc-path="cacheexpire" data-jc-config="maxlength:20;align:center;placeholder:@(5 minutes)">@(Expiration)</div>
 		</div>
 	</div>
 </div>
