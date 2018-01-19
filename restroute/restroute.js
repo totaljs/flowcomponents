@@ -100,7 +100,7 @@ __Outputs__:
 
 - first output contains a __response__
 - second output contains received data
-```;
+`;
 
 exports.install = function(instance) {
 
