@@ -32,21 +32,28 @@ exports.install = function(instance) {
 		NOSQL('flowlastusage').counter.hit(instance.id, 1);
 	});
 
-	instance.custom.status = function() {
+	instance.custom.status = function(skip) {
 		lastusage && setTimeout2(instance.id, function() {
+
+			instance.status(lastusage.format(instance.options.format));
+
+			if (skip)
+				return;
+
 			var data = {};
 			data.id = instance.id;
 			data.date = lastusage;
 			data.name = instance.name;
 			NOSQL('flowlastusage').update(data, data).where('id', data.id);
-			instance.status(lastusage.format(instance.options.format));
 		}, 1000);
 	};
 
 	instance.on('options', instance.custom.status);
 
 	NOSQL('flowlastusage').one().where('id', instance.id).callback(function(err, response) {
-		if (response)
+		if (response) {
 			lastusage = response.date;
+			instance.custom.status(true);
+		}
 	});
 };
