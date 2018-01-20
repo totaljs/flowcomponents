@@ -20,6 +20,7 @@ exports.html = `<div class="padding">
 	</div>
 	<div data-jc="checkbox" data-jc-path="chunks">@(Download the content <b>in chunks</b>)</div>
 	<div data-jc="checkbox" data-jc-path="persistentcookies">@(Keep persistent cookies)</div>
+	<div data-jc="checkbox" data-jc-path="nodns">@(Disable DNS cache)</div>
 </div>
 <hr class="nmt nmb" />
 <div class="padding">
@@ -88,6 +89,8 @@ exports.install = function(instance) {
 			!headers && (headers = {});
 			headers['Authorization'] = 'Basic ' + U.createBuffer(response.arg(options.username + ':' + options.userpassword)).toString('base64');
 		}
+
+		!options.nodns && options.push('dnscache');
 
 		options.cookies && Object.keys(options.cookies).forEach(function(key) {
 			!cookies && (cookies = {});
