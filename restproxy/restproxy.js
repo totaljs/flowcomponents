@@ -7,7 +7,7 @@ exports.output = ['#6BAD57', '#F6BB42'];
 exports.author = 'Peter Širka';
 exports.icon = 'globe';
 exports.version = '1.0.0';
-exports.options = { method: 'GET', url: '', target: '', headersreq: true, headersres: false, auth: false, middleware: [], length: 5, respond: false, timeout: 5, cacheexpire: '5 minutes', cachepolicy: 0 };
+exports.options = { method: 'GET', url: '', target: '', headersreq: true, headersres: false, nodns: false, auth: false, middleware: [], length: 5, respond: false, timeout: 5, cacheexpire: '5 minutes', cachepolicy: 0 };
 
 exports.html = `<div class="padding">
 	<div class="row">
@@ -45,6 +45,7 @@ exports.html = `<div class="padding">
 	<div data-jc="checkbox" data-jc-path="headersres">@(Copy headers from response)</div>
 	<div data-jc="checkbox" data-jc-path="auth">@(Enables authorization)</div>
 	<div data-jc="checkbox" data-jc-path="respond">@(Automatically respond with JSON + 200 OK?)</div>
+	<div data-jc="checkbox" data-jc-path="nodns">@(Disable DNS cache)</div>
 </div>
 <hr class="nmt nmb" />
 <div class="padding">
@@ -197,6 +198,7 @@ exports.install = function(instance) {
 				builder.url(instance.options.target + query);
 				builder.method(instance.options.method.toLowerCase());
 				instance.options.method !== 'GET' && builder.json(self.body);
+				instance.options.nodns && builder.noDnsCache();
 
 				var headers;
 
