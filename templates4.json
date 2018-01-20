@@ -30,7 +30,8 @@
       "https://rawgit.com/totaljs/flowcomponents/master/lastdata/lastdata.js",
       "https://rawgit.com/totaljs/flowcomponents/master/event/event.js",
       "https://rawgit.com/totaljs/flowcomponents/master/code/code.js",
-      "https://rawgit.com/totaljs/flowcomponents/master/repository/repository.js"
+      "https://rawgit.com/totaljs/flowcomponents/master/repository/repository.js",
+      "https://rawgit.com/totaljs/flowcomponents/master/console/console.js"
     ]
   },
   {
