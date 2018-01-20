@@ -100,8 +100,7 @@ This component creates a REST endpoint/route (Total.js route) for receiving data
 __Outputs__:
 
 - first output contains a __response__
-- second output contains received data
-`;
+- second output contains received data`;
 
 exports.install = function(instance) {
 
@@ -215,7 +214,7 @@ exports.install = function(instance) {
 				if (err)
 					self.invalid().push(err);
 				else {
-					instance.options.cacheexpire && F.cache.set(key, response, instance.options.cacheexpire);
+					key && instance.options.cacheexpire && F.cache.set(key, response, instance.options.cacheexpire);
 					instance.options.respond && self.json(response);
 					if (instance.hasConnection(0)) {
 						var message = instance.make(response);
