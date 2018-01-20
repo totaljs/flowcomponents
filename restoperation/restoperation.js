@@ -11,6 +11,7 @@ exports.options = { name: '', code: `// Properties:
 // $.value; {Object} received data
 // $.error; {ErrorBuilder} instance
 // $.options; {FlowData} object
+// $.options.flowinstance {Flow component instance} object
 
 // Methods
 // $.callback([value]);
@@ -22,12 +23,12 @@ $.success();` };
 exports.html = `<div class="padding">
 	<section>
 		<div class="padding bg-smoke">
-			<div data-jc="textbox" data-jc-path="name" data-jc-config="required:true;maxlength:30;placeholder:@(e.g. Product)">@(Schema name)</div>
-			<div class="help">Use a-z characters only.</div>
+			<div data-jc="textbox" data-jc-path="name" data-jc-config="required:true;maxlength:30;placeholder:@(e.g. Product)">@(Operation name)</div>
+			<div class="help">@(Use a-z characters only.)</div>
 		</div>
 	</section>
 	<br />
-	<div data-jc="codemirror" data-jc-path="code" data-jc-config="type:javascript;required:true;height:500;tabs:true;trim:true">@(Schema declaration)</div>
+	<div data-jc="codemirror" data-jc-path="code" data-jc-config="type:javascript;required:true;height:500;tabs:true;trim:true">@(Declaration)</div>
 	<div class="help"><a href="https://docs.totaljs.com/latest/en.html#api~Operations" target="_blank"><i class="fa fa-book"></i>@(Documentation)</a></div>
 </div>
 <script>

@@ -167,6 +167,7 @@ exports.install = function(instance) {
 			var key;
 
 			self.id = id;
+			self.flowinstance = instance;
 
 			if (instance.hasConnection(1)) {
 				var data = {};

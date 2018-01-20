@@ -29,7 +29,9 @@ This component evaluates some registered Total.js operation.`;
 
 exports.install = function(instance) {
 	instance.on('data', function(data) {
+		data.flowinstance = instance;
 		instance.options.name && OPERATION(instance.options.name, data.data, function(err, response) {
+			data.flowinstance = undefined;
 			if (err) {
 				if (instance.options.keepmessage)
 					data.data = err;
