@@ -42,7 +42,8 @@
       "https://rawgit.com/totaljs/flowcomponents/master/httplistener/httplistener.js",
       "https://rawgit.com/totaljs/flowcomponents/master/httpreceiver/httpreceiver.js",
       "https://rawgit.com/totaljs/flowcomponents/master/httpresponse/httpresponse.js",
-      "https://rawgit.com/totaljs/flowcomponents/master/httproute/httproute.js"
+      "https://rawgit.com/totaljs/flowcomponents/master/httproute/httproute.js",
+      "https://rawgit.com/totaljs/flowcomponents/master/httproute/httpredirect.js"
     ]
   },
   {
