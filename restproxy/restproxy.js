@@ -3,12 +3,12 @@ exports.title = 'Proxy';
 exports.group = 'REST';
 exports.color = '#6B9CE6';
 exports.input = 0;
-exports.output = ['#6BAD57', '#F6BB42'];
+exports.output = ['#6BAD57', '#F6BB42', '#666D77'];
 exports.author = 'Peter Širka';
 exports.icon = 'globe';
 exports.version = '1.0.0';
 exports.cloning = false;
-exports.options = { method: 'GET', url: '', target: '', headersreq: true, headersres: false, nodns: false, auth: false, middleware: [], length: 5, respond: false, timeout: 5, cacheexpire: '5 minutes', cachepolicy: 0 };
+exports.options = { method: 'GET', url: '', target: '', headersreq: true, headersres: false, nodns: false, auth: false, middleware: [], length: 5, respond: false, timeout: 5, cacheexpire: '5 minutes', cachepolicy: 0, duration: false };
 
 exports.html = `<div class="padding">
 	<div class="row">
@@ -42,6 +42,7 @@ exports.html = `<div class="padding">
 		</div>
 	</div>
 	<hr />
+	<div data-jc="checkbox" data-jc-path="duration" class="b">@(Measure duration)</div>
 	<div data-jc="checkbox" data-jc-path="headersreq">@(Copy headers to request)</div>
 	<div data-jc="checkbox" data-jc-path="headersres">@(Copy headers from response)</div>
 	<div data-jc="checkbox" data-jc-path="auth">@(Enables authorization)</div>
@@ -89,17 +90,22 @@ exports.html = `<div class="padding">
 
 exports.readme = `# REST: Proxy
 
-This component creates a REST proxy between local endpoint and external API.
+This component creates a REST proxy between local endpoint and external API. Proxy supports dynamic arguments between URL addresses via \`{key}\` markup (keys must be same).
 
 __Outputs__:
 
 - first output contains a __response__
-- second output contains received data`;
+- second output contains received data
+- third output contains a average time of duration \`Number\``;
 
 exports.install = function(instance) {
 
 	var action = null;
 	var Qs = require('querystring');
+	var durcount = 0;
+	var dursum = 0;
+	var params = false;
+	var PARAMS = /\{[a-z0-9,-._]+\}/gi;
 
 	instance.on('close', () => UNINSTALL('route', 'id:' + instance.id));
 
@@ -111,6 +117,8 @@ exports.install = function(instance) {
 			instance.status('Not configured', 'red');
 			return;
 		}
+
+		params = options.url.indexOf('{') !== -1;
 
 		if (action)
 			UNINSTALL('route', 'id:' + instance.id);
@@ -135,7 +143,10 @@ exports.install = function(instance) {
 		ROUTE(options.url, function(id) {
 
 			var self = this;
-			var key;
+			var key, beg;
+
+			if (instance.options.duration)
+				beg = new Date();
 
 			self.id = id;
 			self.flowinstance = instance;
@@ -175,13 +186,18 @@ exports.install = function(instance) {
 			if (key && F.cache.get2(key)) {
 
 				var response = F.cache.get2(key);
-
 				self.status = response.status;
 
 				if (instance.options.headersres && response.headers) {
 					var headers = Object.keys(response.headers);
 					for (var i = 0; i < headers.length; i++)
 						self.header(headers[i], response.headers[headers[i]]);
+				}
+
+				if (instance.options.duration) {
+					durcount++;
+					dursum += ((new Date() - beg) / 1000).floor(2);
+					setTimeout2(instance.id, instance.custom.duration, 500, 10);
 				}
 
 				instance.options.respond && self.json(response.data);
@@ -198,7 +214,11 @@ exports.install = function(instance) {
 
 			RESTBuilder.make(function(builder) {
 				var query = self.req.uri.search ? '?' + Qs.stringify(self.query) : '';
-				builder.url(instance.options.target + query);
+				if (params)
+					builder.url(instance.options.target.replace(PARAMS, text => self.params[text.substring(1, text.length - 1).trim()] || text) + query);
+				else
+					builder.url(instance.options.target + query);
+
 				builder.method(instance.options.method.toLowerCase());
 				instance.options.method !== 'GET' && builder.json(self.body);
 				instance.options.nodns && builder.noDnsCache();
@@ -238,6 +258,12 @@ exports.install = function(instance) {
 							self.header(headers[i], output.headers[headers[i]]);
 					}
 
+					if (instance.options.duration) {
+						durcount++;
+						dursum += ((new Date() - beg) / 1000).floor(2);
+						setTimeout2(instance.id, instance.custom.duration, 500, 10);
+					}
+
 					if (err) {
 						self.status = output.status > 399 && output.status < 505 ? output.status : 200;
 						self.content(output.response, output['content-type']);
@@ -258,6 +284,12 @@ exports.install = function(instance) {
 		}, flags, options.size || 5);
 
 		instance.status('');
+	};
+
+	instance.custom.duration = function() {
+		var avg = (dursum / durcount).floor(2);
+		instance.status(avg + ' sec.');
+		instance.send2(2, avg);
 	};
 
 	instance.on('options', instance.reconfigure);

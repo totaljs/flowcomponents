@@ -3,12 +3,12 @@ exports.title = 'Route';
 exports.group = 'REST';
 exports.color = '#6B9CE6';
 exports.input = 0;
-exports.output = ['#6BAD57', '#F6BB42'];
+exports.output = ['#6BAD57', '#F6BB42', '#666D77'];
 exports.author = 'Peter Širka';
 exports.icon = 'globe';
 exports.version = '1.0.0';
 exports.cloning = false;
-exports.options = { method: 'GET', url: '', auth: false, middleware: [], length: 5, operation: [], output: '', respond: false, timeout: 5, cacheexpire: '5 minutes', cachepolicy: 0 };
+exports.options = { method: 'GET', url: '', duration: false, auth: false, middleware: [], length: 5, operation: [], output: '', respond: false, timeout: 5, cacheexpire: '5 minutes', cachepolicy: 0 };
 
 exports.html = `<div class="padding">
 	<div class="row">
@@ -34,6 +34,7 @@ exports.html = `<div class="padding">
 		</div>
 	</div>
 	<hr />
+	<div data-jc="checkbox" data-jc-path="duration" class="b">@(Measure duration)</div>
 	<div data-jc="checkbox" data-jc-path="auth">@(Enables authorization)</div>
 	<div data-jc="checkbox" data-jc-path="respond">@(Automatically respond with JSON + 200 OK?)</div>
 </div>
@@ -106,6 +107,8 @@ __Outputs__:
 exports.install = function(instance) {
 
 	var action = null;
+	var dursum = 0;
+	var durcount = 0;
 
 	instance.on('close', () => UNINSTALL('route', 'id:' + instance.id));
 
@@ -165,6 +168,10 @@ exports.install = function(instance) {
 
 			var self = this;
 			var key;
+			var beg;
+
+			if (instance.options.duration)
+				beg = new Date();
 
 			self.id = id;
 			self.flowinstance = instance;
@@ -204,6 +211,13 @@ exports.install = function(instance) {
 			if (key && F.cache.get2(key)) {
 				var response = F.cache.get2(key);
 				instance.options.respond && self.json(response);
+
+				if (instance.options.duration) {
+					durcount++;
+					dursum += ((new Date() - beg) / 1000).floor(2);
+					setTimeout2(instance.id, instance.custom.duration, 500, 10);
+				}
+
 				if (instance.hasConnection(0)) {
 					var message = instance.make(response);
 					message.repository.controller = self;
@@ -214,6 +228,13 @@ exports.install = function(instance) {
 			}
 
 			action(self, function(err, response) {
+
+				if (instance.options.duration) {
+					durcount++;
+					dursum += ((new Date() - beg) / 1000).floor(2);
+					setTimeout2(instance.id, instance.custom.duration, 500, 10);
+				}
+
 				if (err)
 					self.invalid().push(err);
 				else {
@@ -230,6 +251,19 @@ exports.install = function(instance) {
 
 		instance.status('');
 	};
+
+	instance.custom.duration = function() {
+		var avg = (dursum / durcount).floor(2);
+		instance.status(avg + ' sec.');
+		instance.send2(2, avg);
+	};
+
+	instance.on('service', function(counter) {
+		if (counter % 5 === 0) {
+			dursum = 0;
+			durcount = 0;
+		}
+	});
 
 	instance.on('options', instance.reconfigure);
 	instance.reconfigure();
