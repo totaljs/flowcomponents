@@ -7,6 +7,7 @@ exports.output = 1;
 exports.author = 'Peter Širka';
 exports.icon = 'suitcase';
 exports.version = '1.0.0';
+exports.cloning = false;
 exports.options = { code: 'set(\'token\', \'123456\');\nsend();' };
 exports.readme = `# Repository
 

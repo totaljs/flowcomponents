@@ -8,6 +8,7 @@ exports.author = 'Peter Širka';
 exports.icon = 'globe';
 exports.version = '1.0.0';
 exports.options = { channel: '' };
+exports.cloning = false;
 exports.html = `<div class="padding">
 	<div class="row">
 		<div class="col-md-6">

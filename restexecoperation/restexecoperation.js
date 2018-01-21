@@ -7,6 +7,7 @@ exports.output = ['red', 'green'];
 exports.author = 'Peter Širka';
 exports.icon = 'code';
 exports.version = '1.0.0';
+exports.cloning = false;
 exports.options = { name: '', keepmessage: true };
 
 exports.html = `<div class="padding">
