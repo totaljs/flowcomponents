@@ -6,3 +6,4 @@ __Outputs__:
 
 - first output contains a __response__
 - second output contains received data
+- third output contains a average time of duration `Number`
