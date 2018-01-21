@@ -5,7 +5,7 @@ exports.color = '#5D9CEC';
 exports.icon = 'globe';
 exports.input = false;
 exports.output = 1;
-exports.version = '1.0.0';
+exports.version = '1.1.0';
 exports.author = 'Martin Smola';
 exports.cloning = false;
 exports.readme = `# HTTP route
@@ -15,10 +15,12 @@ When a request comes in bellow object is available at \`flowdata.data\`:
 {
 	params: { id: '1' },     // params for dynamic routes, e.g. /test/{id}
 	query: { msg: 'Hello' }, // parsed query string, e.g. /test/1?msg=Hello
-	body: { test: 'OK' },     // object if json requests otherwise string
-	session: {},			 // sesion data
-	user: {},				 // user
-	files: []				 // files
+	body: { test: 'OK' },    // object if json requests otherwise string
+	headers: {},             // headers data
+	session: {},			 // session data
+	user: {},				 // user,
+	files: []				 // files,
+	url: '/users/',          // Relative URL address
 }
 \`\`\`
 
@@ -78,7 +80,9 @@ exports.install = function(instance) {
 			body: this.body,
 			session: this.session,
 			user: this.user,
-			files: this.files
+			files: this.files,
+			headers: this.req.headers,
+			url: this.url
 		};
 
 		if (params.length) {

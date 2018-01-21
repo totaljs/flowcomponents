@@ -7,6 +7,7 @@ exports.output = ['#6BAD57', '#F6BB42'];
 exports.author = 'Peter Širka';
 exports.icon = 'globe';
 exports.version = '1.0.0';
+exports.cloning = false;
 exports.options = { method: 'GET', url: '', auth: false, middleware: [], length: 5, operation: [], output: '', respond: false, timeout: 5, cacheexpire: '5 minutes', cachepolicy: 0 };
 
 exports.html = `<div class="padding">
@@ -175,6 +176,8 @@ exports.install = function(instance) {
 				data.session = self.session;
 				data.body = self.body;
 				data.params = self.params;
+				data.headers = self.req.headers;
+				data.url = self.url;
 				var msg = instance.make(data, 1);
 				msg.repository.controller = self;
 				instance.send(1, msg);
