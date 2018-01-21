@@ -15,21 +15,20 @@ exports.readme = `# Pass
 
 ### Outputs
 - the data from first input will pass only if the component is enabled
-- if the checkbox 'Pass data from all inputs to output?' in Settings form is checked and the component is enabled then the data will be passed to output.
-`;
+- if the checkbox 'Pass data from all inputs to output?' in Settings form is checked and the component is enabled then the data will be passed to output.`;
 
 exports.html = `<div class="padding">
 	<div class="row">
 		<div class="col-md-6 m">
 			<div data-jc="textbox" data-jc-path="inputs" data-jc-config="type:number;increment:true">@(Number of inputs)</div>
 			<div class="help m">@(This doesn't include the first input for data.)</div>
-			<div data-jc="checkbox" data-jc-path="passallinputs" data-jc-config="placeholder:path.to.value">@(Pass data from all inputs to output?)</div>	
-			<div class="help m">@(Only the data from first input are passed by default.)</div>		
+			<div data-jc="checkbox" data-jc-path="passallinputs" data-jc-config="placeholder:path.to.value">@(Pass data from all inputs to output?)</div>
+			<div class="help m">@(Only the data from first input are passed by default.)</div>
 		</div>
-	</div>	
+	</div>
 </div>
 <script>
-ON('save.pass', function(component, options) {    
+ON('save.pass', function(component, options) {
     component.input = options.inputs + 1;
 });
 </script>`;
@@ -74,7 +73,7 @@ exports.install = function(instance) {
 
 		var temp = flowdata.data;
 		var enabled = false;
-		if (temp === 'on' || temp === true || temp === 1) 
+		if (temp === 'on' || temp === true || temp === 1)
 			enabled = true;
 
 		instance.options.values[index - 1] = enabled;
@@ -88,7 +87,7 @@ exports.install = function(instance) {
 		instance.options.enabled && instance.send(flowdata);
 	});
 
-	instance.on('click', function(flowdata) {
+	instance.on('click', function() {
 		instance.options.enabled = instance.options.enabled;
 		instance.custom.status();
 	});
