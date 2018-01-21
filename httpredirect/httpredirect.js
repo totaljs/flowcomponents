@@ -8,7 +8,7 @@ exports.output = 1;
 exports.version = '1.0.0';
 exports.author = 'Peter Širka';
 exports.cloning = false;
-exports.options = { redirect: {}, permanent: '', path: true };
+exports.options = { redirect: {}, permanent: false, path: true };
 exports.readme = `# HTTP Redirect
 
 Creates a Total.js redirect for GET requests. __IMPORTANT__: data are sent only while the request is redirected on a relative URL address.
@@ -17,7 +17,8 @@ Creates a Total.js redirect for GET requests. __IMPORTANT__: data are sent only 
 {
 	query: { msg: 'Hello' }, // parsed query string, e.g. /test/1?msg=Hello
 	headers: {}, // Header keys
-	uri: {} // Parsed URL
+	uri: {}, // Parsed URL,
+	url: '' // Relative URL
 }
 \`\`\``;
 
