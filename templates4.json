@@ -31,7 +31,8 @@
       "https://rawgit.com/totaljs/flowcomponents/master/event/event.js",
       "https://rawgit.com/totaljs/flowcomponents/master/code/code.js",
       "https://rawgit.com/totaljs/flowcomponents/master/repository/repository.js",
-      "https://rawgit.com/totaljs/flowcomponents/master/console/console.js"
+      "https://rawgit.com/totaljs/flowcomponents/master/console/console.js",
+      "https://rawgit.com/totaljs/flowcomponents/master/duration/duration.js"
     ]
   },
   {
@@ -43,7 +44,7 @@
       "https://rawgit.com/totaljs/flowcomponents/master/httpreceiver/httpreceiver.js",
       "https://rawgit.com/totaljs/flowcomponents/master/httpresponse/httpresponse.js",
       "https://rawgit.com/totaljs/flowcomponents/master/httproute/httproute.js",
-      "https://rawgit.com/totaljs/flowcomponents/master/httproute/httpredirect.js"
+      "https://rawgit.com/totaljs/flowcomponents/master/httpredirect/httpredirect.js"
     ]
   },
   {
@@ -93,6 +94,20 @@
       "https://rawgit.com/totaljs/flowcomponents/master/monitordisk/monitordisk.js",
       "https://rawgit.com/totaljs/flowcomponents/master/monitornetwork/monitornetwork.js",
       "https://rawgit.com/totaljs/flowcomponents/master/monitorprocess/monitorprocess.js"
+    ]
+  },
+  {
+    "name": "REST",
+    "items": [
+      "https://rawgit.com/totaljs/flowcomponents/master/restcors/restcors.js",
+      "https://rawgit.com/totaljs/flowcomponents/master/restexecoperation/restexecoperation.js",
+      "https://rawgit.com/totaljs/flowcomponents/master/restinterpreter/restinterpreter.js",
+      "https://rawgit.com/totaljs/flowcomponents/master/restmiddleware/restmiddleware.js",
+      "https://rawgit.com/totaljs/flowcomponents/master/restoperation/restoperation.js",
+      "https://rawgit.com/totaljs/flowcomponents/master/restproxy/restproxy.js",
+      "https://rawgit.com/totaljs/flowcomponents/master/restresponse/restresponse.js",
+      "https://rawgit.com/totaljs/flowcomponents/master/restroute/restroute.js",
+      "https://rawgit.com/totaljs/flowcomponents/master/restschema/restschema.js"
     ]
   }
 ]
