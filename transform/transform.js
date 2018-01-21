@@ -11,7 +11,7 @@ exports.options = { fn: 'next(value.toUpperCase())' };
 exports.html = `<div class="padding">
 	<div data-jc="dropdown" data-jc-path="parser" class="m" data-jc-config="items:,@(XML to Object)|xml,@(Line to Array)|array,@(JSON to Object)|json,@(Custom)|custom;required:true">@(From which data-type)</div>
 	<div data-jc="visible" data-jc-path="parser" data-jc-config="if:value === 'custom'">
-		<div data-jc="codemirror" data-jc-path="fn" data-jc-config="type:javascript">@(Custom function)</div>
+		<div data-jc="codemirror" data-jc-path="fn" data-jc-config="type:javascript;tabs:true;trim:true">@(Custom function)</div>
 	</div>
 </div>`;
 
