@@ -37,7 +37,7 @@ exports.html = `<div class="padding">
 			<div class="help"><i class="fa fa-clock-o"></i>@(In seconds)</div>
 		</div>
 		<div class="col-md-6 m">
-			<div data-jc="dropdowncheckbox" data-jc-path="middleware" data-jc-config="datasource:restproxydata.middleware;empty:@(No middleware);alltext:">@(Middleware)</div>
+			<div data-jc="dropdowncheckbox" data-jc-path="middleware" data-jc-config="datasource:restproxydata.middleware;empty:@(No middleware);alltext:;empty:@(No middleware)">@(Middleware)</div>
 			<div class="help"><i class="fa fa-warning"></i>@(Order is very important)</div>
 		</div>
 	</div>

@@ -29,7 +29,7 @@ exports.html = `<div class="padding">
 			<div class="help"><i class="fa fa-clock-o"></i>@(In seconds)</div>
 		</div>
 		<div class="col-md-6 m">
-			<div data-jc="dropdowncheckbox" data-jc-path="middleware" data-jc-config="datasource:restroutedata.middleware;alltext:">@(Middleware)</div>
+			<div data-jc="dropdowncheckbox" data-jc-path="middleware" data-jc-config="datasource:restroutedata.middleware;alltext:;empty:@(No middleware)">@(Middleware)</div>
 			<div class="help"><i class="fa fa-warning"></i>@(Order is very important)</div>
 		</div>
 	</div>
@@ -41,7 +41,7 @@ exports.html = `<div class="padding">
 <hr class="nmt nmb" />
 <div class="padding">
 	<div data-jc="dropdown" data-jc-path="schema" data-jc-config="required:true;datasource:restroutedata.schemas;empty:" class="m">@(Schema)</div>
-	<div data-jc="dropdowncheckbox" data-jc-path="operation" data-jc-config="required:true;datasource:restroutedata.operations2;alltext:">@(Operation)</div>
+	<div data-jc="dropdowncheckbox" data-jc-path="operation" data-jc-config="required:true;datasource:restroutedata.operations2;alltext:;empty:@(No operations)">@(Operation)</div>
 	<div class="help m"><i class="fa fa-warning"></i>@(Order is very important)</div>
 	<div data-jc="dropdown" data-jc-path="output" data-jc-config="datasource:settings.restroute.operation;empty:@(All responses)" class="m">@(Response)</div>
 	<div class="row">
