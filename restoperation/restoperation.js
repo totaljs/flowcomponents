@@ -23,7 +23,7 @@ $.success();` };
 exports.html = `<div class="padding">
 	<section>
 		<div class="padding bg-smoke">
-			<div data-jc="textbox" data-jc-path="name" data-jc-config="required:true;maxlength:30;placeholder:@(e.g. Product)">@(Operation name)</div>
+			<div data-jc="textbox" data-jc-path="name" data-jc-config="required:true;maxlength:30;placeholder:@(e.g. importproducts)">@(Operation name)</div>
 			<div class="help">@(Use a-z characters only.)</div>
 		</div>
 	</section>
