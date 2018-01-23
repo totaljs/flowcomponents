@@ -4,13 +4,19 @@ exports.group = 'HTTP';
 exports.color = '#5D9CEC';
 exports.icon = 'globe';
 exports.input = false;
-exports.output = 1;
+exports.output = ['#6CAC5A', '#37BC9B'];
 exports.version = '1.1.0';
 exports.author = 'Martin Smola';
 exports.cloning = false;
+exports.options = { method: 'GET', url: '', size: 5, cacheexpire: '5 minutes', cachepolicy: 0 };
 exports.readme = `# HTTP route
 
+__Outputs__:
+- first output: raw data (cache is empty or is disabled)
+- second output: cached data
+
 When a request comes in bellow object is available at \`flowdata.data\`:
+
 \`\`\`javascript
 {
 	params: { id: '1' },     // params for dynamic routes, e.g. /test/{id}
@@ -24,8 +30,9 @@ When a request comes in bellow object is available at \`flowdata.data\`:
 }
 \`\`\`
 
-See documentation for flags [here](https://docs.totaljs.com/latest/en.html#api~HttpRouteOptionsFlags~unauthorize)
-Method flags are set automatically e.g. \`get, post, put or delete\`
+See [documentation for flags](https://docs.totaljs.com/latest/en.html#api~HttpRouteOptionsFlags~unauthorize). These method flags are set automatically e.g. \`get, post, put or delete\`
+
+---
 
 \`id:ROUTE_ID\` flag cannot be used since it's already used by this component internally`;
 
@@ -53,8 +60,21 @@ exports.html = `<div class="padding">
 	<div class="help m">@(If not checked you need to use HTTP response component to respond to the request.)</div>
 	<hr />
 	<div data-jc="keyvalue" data-jc-path="headers" data-jc-config="placeholderkey:@(Header name);placeholdervalue:@(Header value and press enter)" class="m">@(Custom headers)</div>
-	<div data-jc="keyvalue" data-jc-path="cookies" data-jc-config="placeholderkey:@(Cookie name);placeholdervalue:@(Cookie value and press enter)" class="m">@(Cookies)</div>
-</div>
+	<div data-jc="keyvalue" data-jc-path="cookies" data-jc-config="placeholderkey:@(Cookie name);placeholdervalue:@(Cookie value and press enter)">@(Cookies)</div>
+	</div>
+	<hr class="nmt" />
+	<div class="padding npt">
+		<div class="row">
+			<div class="col-md-9 m">
+				<div data-jc="dropdown" data-jc-path="cachepolicy" data-jc-config="type:number;items:@(no cache)|0,@(URL)|1,@(URL + query string)|2,@(URL + query string + user instance)|3">@(Cache policy)</div>
+				<div class="help">@(User instance must contain <code>id</code> property.)</div>
+			</div>
+			<div class="col-md-3 m">
+				<div data-jc="textbox" data-jc-path="cacheexpire" data-jc-config="maxlength:20;align:center">@(Expiration)</div>
+				<div class="help">@(E.g. <code>5 minutes</code>)</div>
+			</div>
+		</div>
+	</div>
 <script>
 	ON('open.httproute', function(component, options) {
 		if (options.flags instanceof Array) {
@@ -71,35 +91,10 @@ exports.html = `<div class="padding">
 
 exports.install = function(instance) {
 
-	var id, params;
+	var id;
 
-	instance.custom.action = function() {
-
-		var data = {
-			query: this.query,
-			body: this.body,
-			session: this.session,
-			user: this.user,
-			files: this.files,
-			headers: this.req.headers,
-			url: this.url
-		};
-
-		if (params.length) {
-			data.params = {};
-			for (var i = 0, length = arguments.length; i < length; i++)
-				data.params[params[i]] = arguments[i];
-		}
-
-		data = instance.make(data);
-
-		if (instance.options.emptyresponse) {
-			instance.status('200 OK');
-			setTimeout(self => self.plain(), 100, this);
-		} else
-			data.set('controller', this);
-
-		instance.send(data);
+	instance.custom.emptyresponse = function(self) {
+		self.plain();
 	};
 
 	instance.reconfigure = function() {
@@ -116,14 +111,63 @@ exports.install = function(instance) {
 
 		id && UNINSTALL('route', id);
 		id = 'id:' + instance.id;
-		params = [];
-		options.url.split('/').forEach(param => param[0] === '{' && params.push(param.substring(1, param.length - 1).trim()));
 
 		var flags = options.flags || [];
 		flags.push(id);
 		flags.push(options.method.toLowerCase());
 
-		F.route(options.url, instance.custom.action, flags, options.size || 5);
+		F.route(options.url, function() {
+
+			var key;
+			var self = this;
+
+			if (instance.options.emptyresponse) {
+				instance.status('200 OK');
+				setTimeout(instance.custom.emptyresponse, 100, self);
+				return;
+			}
+
+			switch (instance.options.cachepolicy) {
+				case 1: // URL
+					key = 'rro' + instance.id + self.url.hash();
+					break;
+				case 2: // URL + query
+				case 3: // URL + query + user
+					key = self.url;
+					var keys = Object.keys(self.query);
+					keys.sort();
+					for (var i = 0, length = keys.length; i < length; i++)
+						key += keys[i] + self.query[keys[i]] + '&';
+					if (instance.options.cachepolicy === 3 && self.user)
+						key += 'iduser' + self.user.id;
+					key = 'rro' + instance.id + key.hash();
+					break;
+			}
+
+			if (key && F.cache.get2(key)) {
+				var data = instance.make(F.cache.get2(key));
+				data.repository.controller = self;
+				instance.send2(1, data);
+			} else {
+
+				var data = instance.make({
+					query: self.query,
+					body: self.body,
+					session: self.session,
+					user: self.user,
+					files: self.files,
+					headers: self.req.headers,
+					url: self.url,
+					params: self.params
+				});
+
+				data.repository.controller = self;
+				instance.send2(0, data);
+				key && FINISHED(self.res, () => F.cache.set(key, self.$flowdata.data, instance.options.cacheexpire));
+			}
+
+		}, flags, options.size || 5);
+
 		instance.status('Listening', 'green');
 	};
 
