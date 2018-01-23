@@ -46,7 +46,14 @@ exports.install = function(instance) {
 	var durcount = 0;
 	var dursum = 0;
 
-	instance.on('close', () => instance.options.name && UNINSTALL('middleware', instance.options.name));
+	instance.on('close', () => instance.custom.clear());
+
+	instance.custom.clear = function(name) {
+		if (!name)
+			name = instance.options.name;
+		if (name && F.routes.middleware[name])
+			delete F.routes.middleware[name];
+	};
 
 	instance.reconfigure = function() {
 
@@ -57,7 +64,7 @@ exports.install = function(instance) {
 			return;
 		}
 
-		oldname && UNINSTALL('middleware', oldname);
+		oldname && options.name !== oldname && instance.custom.clear(oldname);
 		oldname = options.name;
 
 		try {
