@@ -259,11 +259,9 @@ exports.install = function(instance) {
 		instance.send2(2, avg);
 	};
 
-	instance.on('service', function(counter) {
-		if (counter % 5 === 0) {
-			dursum = 0;
-			durcount = 0;
-		}
+	instance.on('service', function() {
+		dursum = 0;
+		durcount = 0;
 	});
 
 	instance.on('options', instance.reconfigure);

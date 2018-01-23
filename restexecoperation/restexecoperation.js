@@ -78,10 +78,8 @@ exports.install = function(instance) {
 	};
 
 	instance.on('service', function(counter) {
-		if (counter % 5 === 0) {
-			dursum = 0;
-			durcount = 0;
-		}
+		dursum = 0;
+		durcount = 0;
 	});
 };
 
