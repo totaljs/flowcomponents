@@ -8,7 +8,7 @@ exports.output = ['#6CAC5A', '#37BC9B'];
 exports.version = '1.1.0';
 exports.author = 'Martin Smola';
 exports.cloning = false;
-exports.options = { method: 'GET', url: '', size: 5, cacheexpire: '5 minutes', cachepolicy: 0 };
+exports.options = { method: 'GET', url: '', size: 5, cacheexpire: '5 minutes', cachepolicy: 0, timeout: 5 };
 exports.readme = `# HTTP route
 
 __Outputs__:
@@ -44,13 +44,17 @@ exports.html = `<div class="padding">
 			<div data-jc="dropdown" data-jc-path="method" data-jc-config="required:true;items:,GET,POST,PUT,DELETE,OPTIONS" class="m">@(HTTP method)</div>
 
 			<div class="row">
-				<div class="col-md-8 m">
+				<div class="col-md-6 m">
 					<div data-jc="textbox" data-jc-path="flags" data-jc-config="placeholder:json">@(Additional flags)</div>
 					<div class="help m">@(Separate flags by comma e.g. <code>json, authorize</code>)</div>
 				</div>
-				<div class="col-md-4 m">
-					<div data-jc="textbox" data-jc-path="size" data-jc-config="placeholder:in kB;increment:true;type:number;maxlength:10;align:center">@(Max. request size)</div>
+				<div class="col-md-3 m">
+					<div data-jc="textbox" data-jc-path="size" data-jc-config="placeholder:@(in kB);increment:true;type:number;maxlength:10;align:center">@(Max. request size)</div>
 					<div class="help m">@(In <code>kB</code> kilobytes)</div>
+				</div>
+				<div class="col-md-3 m">
+					<div data-jc="textbox" data-jc-path="timeout" data-jc-config="placeholder:@(in seconds);increment:true;type:number;maxlength:5;align:center">@(Timeout)</div>
+					<div class="help m">@(In seconds.)</div>
 				</div>
 			</div>
 		</div>
@@ -115,6 +119,7 @@ exports.install = function(instance) {
 		var flags = options.flags || [];
 		flags.push(id);
 		flags.push(options.method.toLowerCase());
+		options.timeout && flags.push(options.timeout * 1000);
 
 		F.route(options.url, function() {
 
