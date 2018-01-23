@@ -286,7 +286,7 @@ exports.install = function(instance) {
 
 	instance.custom.reconfigure = function() {
 		if (instance.options.type) {
-			fn = SCRIPT(instance.options.fn);
+			fn = SCRIPT(instance.options.fn + ';\n');
 			instance.status('');
 			instance.custom.init && instance.custom.init();
 		} else {

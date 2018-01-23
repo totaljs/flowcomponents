@@ -209,7 +209,7 @@ exports.install = function(instance) {
 		cache.type = options.type;
 		cache.format = options.format;
 
-		fn = SCRIPT(options.fn);
+		fn = SCRIPT(instance.options.fn + ';\n');
 		instance.custom.status();
 	};
 
