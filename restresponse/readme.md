@@ -1,3 +1,3 @@
-# REST: Operation
+# REST: Response
 
-This component evaluates some registered Total.js operation.
+This component responds with JSON automatically. Output is the message duration `Number` in seconds.
