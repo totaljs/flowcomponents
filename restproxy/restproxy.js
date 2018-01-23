@@ -286,6 +286,11 @@ exports.install = function(instance) {
 		instance.status('');
 	};
 
+	instance.on('service', function() {
+		dursum = 0;
+		durcount = 0;
+	});
+
 	instance.custom.duration = function() {
 		var avg = (dursum / durcount).floor(2);
 		instance.status(avg + ' sec.');
