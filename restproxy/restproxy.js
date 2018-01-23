@@ -134,7 +134,7 @@ exports.install = function(instance) {
 
 		if (options.middleware) {
 			for (var i = 0; i < options.middleware.length; i++)
-				flags.push('#' + options.middleware);
+				flags.push('#' + options.middleware[i]);
 		}
 
 		flags.push('*' + options.schema);
