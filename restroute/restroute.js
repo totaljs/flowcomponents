@@ -156,7 +156,7 @@ exports.install = function(instance) {
 		flags.push('*' + options.schema);
 		flags.push('id:' + instance.id);
 
-		var code = 'if (self.body.$async) { self.body.$async(next{0}).{1}; } else { $ASYNC(self.schema,next{0},self).{1}; }'.format(output == null ? '' : ',' + output, builder.join('.'));
+		var code = 'if (self.body.$async) { self.body.$async(next{0}).{1}; } else { $ASYNC(self.schema,next{0},self).{1}; }'.format(output == null ? ',undefined' : ',' + output, builder.join('.'));
 		action = new Function('self', 'next', code);
 
 		var schema = [];
