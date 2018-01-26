@@ -79,6 +79,7 @@ exports.install = function(instance) {
 
 		var headers = null;
 		var cookies = null;
+		flags = [];
 
 		options.headers && Object.keys(options.headers).forEach(function(key) {
 			!headers && (headers = {});
@@ -89,8 +90,6 @@ exports.install = function(instance) {
 			!headers && (headers = {});
 			headers['Authorization'] = 'Basic ' + U.createBuffer(response.arg(options.username + ':' + options.userpassword)).toString('base64');
 		}
-
-		!options.nodns && options.push('dnscache');
 
 		options.cookies && Object.keys(options.cookies).forEach(function(key) {
 			!cookies && (cookies = {});
@@ -120,10 +119,11 @@ exports.install = function(instance) {
 		if (!can)
 			return;
 
-		flags = ['dnscache'];
+		flags = [];
 		flags.push(options.method.toLowerCase());
 		options.stringify === 'json' && flags.push('json');
 		options.stringify === 'raw' && flags.push('raw');
+		!options.nodns && flags.push('dnscache');
 		if (options.persistentcookies) {
 			flags.push('cookies');
 			cookies2 = {};
