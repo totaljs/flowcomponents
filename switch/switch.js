@@ -181,7 +181,7 @@ exports.install = function(instance) {
 			return function(value) {
 
 				if (typeof value !== 'boolean') {
-					instance.error('Error, input value is not a number: ' + value);
+					instance.error('Error, input value is not a boolean: ' + value);
 					return false;
 				}
 
@@ -197,6 +197,9 @@ exports.install = function(instance) {
 			switch(c_op) {
 				case '==':
 					fn = val => val === c_val;
+					break;
+				case '!==':
+					fn = val => val !== c_val;
 					break;
 				case 'indexOf':
 					fn = val => val.indexOf(c_val) > -1;
