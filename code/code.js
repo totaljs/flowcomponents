@@ -22,11 +22,11 @@ exports.html = `<div class="padding">
 <script>
 	var code_outputs_count;
 
-	ON('open.function', function(component, options) {
+	ON('open.code', function(component, options) {
 		code_outputs_count = options.outputs = options.outputs || 1;
 	});
 
-	ON('save.function', function(component, options) {
+	ON('save.code', function(component, options) {
 		if (code_outputs_count !== options.outputs) {
 			component.connections = {};
 			component.output = options.outputs || 1;
