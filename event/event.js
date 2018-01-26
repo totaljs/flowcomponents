@@ -8,7 +8,7 @@ exports.author = 'Peter Širka';
 exports.icon = 'bullhorn';
 exports.options = { fn: `function(a, b) {
 	// your code
-}` }
+}` };
 
 exports.html = `<div class="padding">
 	<div data-jc="textbox" data-jc-path="name" data-jc-config="required:true;maxlength:50" class="m">@(Event name)</div>
