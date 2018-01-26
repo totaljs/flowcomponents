@@ -82,8 +82,14 @@ exports.html = `<div class="padding">
 <script>
 	ON('open.httproute', function(component, options) {
 		if (options.flags instanceof Array) {
+			var method = options.method.toLowerCase();
 			options.flags = options.flags.remove(function(item) {
-				return item.substring(0, 3) === 'id:';
+				switch (typeof(item)) {
+					case 'string':
+						return item.substring(0, 3) === 'id:' || item === method;
+					case 'number': // timeout
+						return true;
+				}
 			}).join(', ');
 		}
 	});
@@ -129,6 +135,21 @@ exports.install = function(instance) {
 			if (instance.options.emptyresponse) {
 				instance.status('200 OK');
 				setTimeout(instance.custom.emptyresponse, 100, self);
+
+				if (instance.hasConnection(0)) {
+					var data = instance.make({
+						query: self.query,
+						body: self.body,
+						session: self.session,
+						user: self.user,
+						files: self.files,
+						headers: self.req.headers,
+						url: self.url,
+						params: self.params
+					});
+					instance.send2(0, data);
+				}
+
 				return;
 			}
 

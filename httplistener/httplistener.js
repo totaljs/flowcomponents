@@ -40,33 +40,35 @@ exports.install = function(instance) {
 			return;
 
 		var data = {};
-		data.user = null;
-		data.session = null;
+		data.body = EMPTYOBJECT;
+		data.extension = U.getExtension(req.uri.pathname);
+		data.file = true;
+		data.files = EMPTYARRAY;
+		data.id = null;
 		data.ip = req.ip;
 		data.method = req.method;
-		data.query = req.query;
-		data.url = req.url;
-		data.id = null;
 		data.path = req.split;
-		data.file = true;
-		data.extension = U.getExtension(req.uri.pathname);
+		data.query = req.query;
+		data.session = null;
+		data.url = req.url;
+		data.user = null;
 		instance.send2(data);
 	};
 
 	instance.custom.event = function(controller) {
 		var data = {};
-		data.user = controller.user;
-		data.session = controller.session;
+		data.body = controller.body;
+		data.extension = null;
+		data.file = false;
+		data.files = controller.files;
+		data.id = controller.id;
 		data.ip = controller.ip;
 		data.method = controller.method;
-		data.body = controller.body;
-		data.files = controller.files;
-		data.query = controller.query;
-		data.url = controller.url;
-		data.id = controller.id;
 		data.path = controller.req.split;
-		data.file = false;
-		data.extension = null;
+		data.query = controller.query;
+		data.session = controller.session;
+		data.url = controller.url;
+		data.user = controller.user;
 		instance.send2(data);
 	};
 
