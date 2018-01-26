@@ -36,7 +36,7 @@ exports.install = function(instance) {
 
 	instance.custom.eventstaticfiles = function(req) {
 
-		if (!req.isStaticFile)
+		if (!U.isStaticFile(req.uri.pathname))
 			return;
 
 		var data = {};
@@ -44,14 +44,12 @@ exports.install = function(instance) {
 		data.session = null;
 		data.ip = req.ip;
 		data.method = req.method;
-		data.body = req.body;
-		data.files = req.files;
 		data.query = req.query;
 		data.url = req.url;
 		data.id = null;
-		data.path = req.req.split;
+		data.path = req.split;
 		data.file = true;
-		data.extension = req.extension;
+		data.extension = U.getExtension(req.uri.pathname);
 		instance.send2(data);
 	};
 
@@ -72,19 +70,19 @@ exports.install = function(instance) {
 		instance.send2(data);
 	};
 
-	F.on('controller', instance.custom.event);
+	ON('controller', instance.custom.event);
 
 	instance.reconfigure = function() {
 		var options = instance.options;
 		if (options.staticfiles)
-			F.on('request', instance.custom.eventstaticfiles);
+			ON('request', instance.custom.eventstaticfiles);
 		else
-			F.removeListener('request', instance.custom.eventstaticfiles);
+			OFF('request', instance.custom.eventstaticfiles);
 	};
 
 	instance.on('close', function() {
-		F.removeListener('request', instance.custom.event);
-		F.removeListener('controller', instance.custom.event);
+		OFF('request', instance.custom.event);
+		OFF('controller', instance.custom.event);
 	});
 
 	instance.reconfigure();
