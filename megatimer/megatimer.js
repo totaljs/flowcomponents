@@ -1,6 +1,6 @@
 exports.id = 'megatimer';
 exports.title = 'Megatimer';
-exports.group = 'Inputs';
+exports.group = 'Time';
 exports.color = '#F6BB42';
 exports.output = 1;
 exports.click = true;

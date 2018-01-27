@@ -1,6 +1,6 @@
 exports.id = 'duration';
 exports.title = 'Duration';
-exports.group = 'Common';
+exports.group = 'Time';
 exports.color = '#656D78';
 exports.output = 1;
 exports.input = 2;

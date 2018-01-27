@@ -1,6 +1,6 @@
 exports.id = 'logtodb';
 exports.title = 'Log to DB';
-exports.group = 'Common';
+exports.group = 'Databases';
 exports.color = '#B0C4DE';
 exports.author = 'Martin Smola';
 exports.icon = 'log';

@@ -1,6 +1,7 @@
 exports.id = 'uniqueinterval';
 exports.title = 'Unique in interval';
 exports.version = '1.0.0';
+exports.group = 'Time';
 exports.author = 'Peter Širka';
 exports.color = '#656D78';
 exports.input = true;

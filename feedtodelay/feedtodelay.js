@@ -2,6 +2,7 @@ exports.id = 'feedtodelay';
 exports.title = 'Feed to delay';
 exports.color = '#656D78';
 exports.icon = 'clock-o';
+exports.group = 'Time';
 exports.input = true;
 exports.output = 1;
 exports.version = '1.0.0';
