@@ -23,10 +23,14 @@ When a request comes in bellow object is available at \`flowdata.data\`:
 	query: { msg: 'Hello' }, // parsed query string, e.g. /test/1?msg=Hello
 	body: { test: 'OK' },    // object if json requests otherwise string
 	headers: {},             // headers data
-	session: {},			 // session data
-	user: {},				 // user,
-	files: []				 // files,
-	url: '/users/',          // Relative URL address
+	session: {},             // session data
+	user: {},                // user data
+	files: [],               // uploaded files
+	url: '/users/',          // a relative URL address
+	referrer: '/',           // referrer
+	mobile: false,           // determines mobile device
+	robot: false,            // determines search robots/crawlsers
+	language: 'en'           // determines language
 }
 \`\`\`
 
@@ -184,7 +188,11 @@ exports.install = function(instance) {
 					files: self.files,
 					headers: self.req.headers,
 					url: self.url,
-					params: self.params
+					params: self.params,
+					mobile: self.mobile,
+					robot: self.robot,
+					referrer: self.referrer,
+					language: self.language
 				});
 
 				data.repository.controller = self;

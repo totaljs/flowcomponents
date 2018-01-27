@@ -186,6 +186,10 @@ exports.install = function(instance) {
 				data.params = self.params;
 				data.headers = self.req.headers;
 				data.url = self.url;
+				data.mobile = self.mobile;
+				data.robot = self.robot;
+				data.referrer = self.referrer;
+				data.language = self.language;
 				var msg = instance.make(data, 1);
 				msg.repository.controller = self;
 				instance.send(1, msg);
