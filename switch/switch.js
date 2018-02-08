@@ -145,7 +145,7 @@ exports.install = function(instance) {
 		});
 
 		if (ERRORS.length) {
-			instance.status('See debug tab!!', 'red');
+			instance.status('See console tab!', 'red');
 			instance.debug(ERRORS.join('\n'));
 			config_errors = true;
 		}
