@@ -56,7 +56,7 @@ exports.install = function(instance) {
 	var fn;
 
 	instance.on('data', function(response) {
-		fn && fn(response.data, instance, response, instance.options, response.repository);
+		fn && fn(response.data, instance, response, instance.options, response.repository, require);
 	});
 
 	instance.reconfigure = function() {
@@ -64,7 +64,7 @@ exports.install = function(instance) {
 			if (instance.options.code) {
 				instance.status('');
 				var code = 'var send = function(index, value) { if (options.keepmessage) { flowdata.data = value; instance.send2(index, flowdata); } else instance.send2(index, value);};' + instance.options.code;
-				fn = new Function('value', 'instance', 'flowdata', 'options', 'repository', code);
+				fn = new Function('value', 'instance', 'flowdata', 'options', 'repository', 'require', code);
 			} else {
 				instance.status('Not configured', 'red');
 				fn = null;
