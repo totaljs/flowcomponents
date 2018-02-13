@@ -79,7 +79,6 @@ exports.install = function(instance) {
 
 		var headers = null;
 		var cookies = null;
-		flags = [];
 
 		options.headers && Object.keys(options.headers).forEach(function(key) {
 			!headers && (headers = {});
