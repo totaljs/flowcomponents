@@ -9,7 +9,7 @@ exports.author = 'Peter Širka';
 exports.icon = 'cloud-upload';
 
 exports.html = `<div class="padding">
-	<div data-jc="textbox" data-jc-path="url" class="m" data-jc-config="required:true;maxlength:500;type:url;placeholder:@(E.g. https\\://www.totaljs.com)">@(URL address)</div>
+	<div data-jc="textbox" data-jc-path="url" class="m" data-jc-config="required:true;maxlength:500;placeholder:@(E.g. https\\://www.totaljs.com)">@(URL address)</div>
 	<div class="row">
 		<div class="col-md-6 m">
 			<div data-jc="dropdown" data-jc-path="method" data-jc-config="required:true;items:,GET,POST,PUT,DELETE">@(HTTP method)</div>
