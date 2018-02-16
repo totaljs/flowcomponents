@@ -93,7 +93,7 @@ exports.install = function(instance) {
 				break;
 		}
 		F.clearSchedule(id);
-		id = F.schedule(options.start ? options.time.add(options.start) : options.time, options.repeat, () => instance.send(value));
+		id = F.schedule(options.start ? options.time.parseDate().add(options.start) : options.time, options.repeat, () => instance.send(value));
 		instance.status('');
 	};
 
