@@ -6,7 +6,7 @@ exports.output = 1;
 exports.click = true;
 exports.author = 'Peter Širka';
 exports.icon = 'calendar';
-exports.options = { time: '', repeat: '' };
+exports.options = { time: '', repeat: '', noweeks: false, start: '' };
 
 exports.html = `<div class="padding">
 	<div class="row">
@@ -19,10 +19,11 @@ exports.html = `<div class="padding">
 			<div class="help">@(Set to '1 week' for the scheduler to run every week)</div>
 		</div>
 		<div class="col-md-3 m">
-			<div data-jc="textbox" data-jc-path="start" data-jc-config="placeholder:2 days;required:true">@(Start)</div>
+			<div data-jc="textbox" data-jc-path="start" data-jc-config="placeholder:2 days">@(Start)</div>
 			<div class="help">@(When to start this scheduler. e.g. for tommorow set to '1 day')</div>
 		</div>
 	</div>
+	<div data-jc="checkbox" data-jc-path="noweeks" class="m">@(No weeks)</div>
 	<section>
 		<label><i class="fa fa-random"></i>@(Output data)</label>
 		<div class="padding">
@@ -93,7 +94,17 @@ exports.install = function(instance) {
 				break;
 		}
 		F.clearSchedule(id);
-		id = F.schedule(options.start ? options.time.parseDate().add(options.start) : options.time, options.repeat, () => instance.send(value));
+
+		id = F.schedule(options.start ? options.time.parseDate().add(options.start) : options.time, options.repeat, function() {
+			if (instance.options.noweeks) {
+				F.datetime = new Date();
+				var day = F.datetime.getDate();
+				if (day === 0 || day === 6)
+					return;
+			}
+			instance.send(value);
+		});
+
 		instance.status('');
 	};
 
