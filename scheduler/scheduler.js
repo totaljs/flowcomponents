@@ -9,21 +9,21 @@ exports.icon = 'calendar';
 exports.options = { time: '', repeat: '', noweeks: false, start: '' };
 
 exports.html = `<div class="padding">
+	<div data-jc="checkbox" data-jc-path="noweeks" class="m">@(No weeks)</div>
 	<div class="row">
-		<div class="col-md-3 m">
-			<div data-jc="textbox" data-jc-path="time" data-jc-config="placeholder:12:00;required:true">@(Time)</div>
+		<div class="col-sm-3 col-md-2 m">
+			<div data-jc="textbox" data-jc-path="time" data-jc-config="placeholder:12:00;required:true;text-align:center">@(Time)</div>
 			<div class="help">@(Time of the day the flow will be triggered.)</div>
 		</div>
-		<div class="col-md-3 m">
-			<div data-jc="textbox" data-jc-path="repeat" data-jc-config="placeholder:1 week;required:true">@(Frequency)</div>
+		<div class="col-sm-3 col-md-2 m">
+			<div data-jc="textbox" data-jc-path="repeat" data-jc-config="placeholder:1 week;required:true;text-align:center">@(Frequency)</div>
 			<div class="help">@(Set to '1 week' for the scheduler to run every week)</div>
 		</div>
-		<div class="col-md-3 m">
-			<div data-jc="textbox" data-jc-path="start" data-jc-config="placeholder:2 days">@(Start)</div>
+		<div class="col-sm-3 col-md-2 m">
+			<div data-jc="textbox" data-jc-path="start" data-jc-config="placeholder:2 days;text-align:center">@(Start)</div>
 			<div class="help">@(When to start this scheduler. e.g. for tommorow set to '1 day')</div>
 		</div>
 	</div>
-	<div data-jc="checkbox" data-jc-path="noweeks" class="m">@(No weeks)</div>
 	<section>
 		<label><i class="fa fa-random"></i>@(Output data)</label>
 		<div class="padding">
@@ -108,7 +108,7 @@ exports.install = function(instance) {
 		instance.status('');
 	};
 
-	instance.on('close', () => clearSchedule(id));
+	instance.on('close', () => F.clearSchedule(id));
 	instance.on('options', instance.reconfigure);
 	instance.reconfigure();
 };
