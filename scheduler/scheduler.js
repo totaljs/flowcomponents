@@ -95,8 +95,8 @@ exports.install = function(instance) {
 				}
 				break;
 		}
-		F.clearSchedule(id);
 
+		F.clearSchedule(id);
 		id = F.schedule(options.start ? options.time.parseDate().add(options.start) : options.time, options.repeat, function() {
 			if (instance.options.noweeks) {
 				F.datetime = new Date();
