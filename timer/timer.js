@@ -11,7 +11,7 @@ exports.options = { interval: 0 };
 exports.html = `<div class="padding">
 	<div class="row">
 		<div class="col-md-3 m">
-			<div data-jc="textbox" data-jc-path="interval" data-jc-config="placeholder:1000;increment:true;type:number;required:true">@(Interval in milliseconds)</div>
+			<div data-jc="textbox" data-jc-path="interval" data-jc-config="placeholder:1000;increment:true;type:number;required:true;align:center">@(Interval in milliseconds)</div>
 		</div>
 	</div>
 	<section>
