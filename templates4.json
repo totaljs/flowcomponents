@@ -20,7 +20,8 @@
 			"https://rawgit.com/totaljs/flowcomponents/master/repository/repository.js",
 			"https://rawgit.com/totaljs/flowcomponents/master/schema/schema.js",
 			"https://rawgit.com/totaljs/flowcomponents/master/virtualwirein/virtualwirein.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/virtualwireout/virtualwireout.js"
+			"https://rawgit.com/totaljs/flowcomponents/master/virtualwireout/virtualwireout.js",
+			"https://rawgit.com/totaljs/flowcomponents/v3components/split/split.js"
 		]
 	},
 	{
