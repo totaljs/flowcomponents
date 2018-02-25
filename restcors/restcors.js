@@ -2,8 +2,9 @@ exports.id = 'restcors';
 exports.title = 'CORS';
 exports.group = 'REST';
 exports.color = '#6B9CE6';
-exports.input = 0;
-exports.output = 1;
+exports.input = false;
+exports.output = false;
+exports.traffic = false;
 exports.author = 'Peter Širka';
 exports.icon = 'globe';
 exports.version = '1.0.0';
@@ -33,7 +34,9 @@ exports.install = function(instance) {
 		var options = instance.options;
 		old && UNINSTALL('cors', 'id:' + instance.id);
 		old = true;
-		CORS(options.url, options.methods, true);
+		var flags = options.slice(0);
+		flags.push('id:' + instance.id);
+		CORS(options.url, flags, true);
 	};
 
 	instance.on('options', instance.reconfigure);
