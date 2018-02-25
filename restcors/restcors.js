@@ -34,7 +34,7 @@ exports.install = function(instance) {
 		var options = instance.options;
 		old && UNINSTALL('cors', 'id:' + instance.id);
 		old = true;
-		var flags = options.slice(0);
+		var flags = options.methods.slice(0);
 		flags.push('id:' + instance.id);
 		CORS(options.url, flags, true);
 	};
