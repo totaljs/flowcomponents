@@ -58,7 +58,7 @@ exports.install = function(instance) {
 	cache.datetime = F.datetime;
 	cache.count = 0;
 	cache.avg = { count: 0, sum: 0 };
-	cache.number = 0;
+	cache.number = null;
 	cache.raw = 0;
 	cache.median = [];
 
