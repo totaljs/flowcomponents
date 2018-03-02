@@ -30,13 +30,30 @@ This components sends to Dashboard two types of data:
 
 exports.html = `<div class="padding">
 	<div data-jc="dropdown" data-jc-path="type" class="m" data-jc-config="items:,@(Hourly - Sum values)|sum,@(Hourly - A maximum value)|max,@(Hourly - A minimum value)|min,@(Hourly - An average value)|avg,@(Hourly - An average (median) value)|median,@(Daily - Sum values)|Dsum,@(Daily - A maximum value)|Dmax,@(Daily - A minimum value)|Dmin,@(Daily - An average value)|Davg,@(Daily - An average (median) value)|Dmedian;required:true">@(Type)</div>
-	<div data-jc="codemirror" data-jc-path="fn" data-jc-config="type:javascript" class="m">@(Analyzator)</div>
+	<div data-jc="codemirror" data-jc-path="fn" data-jc-config="type:javascript;required:true" class="m">@(Analyzator)</div>
 	<div class="row">
-		<div class="col-md-3 m">
-			<div data-jc="textbox" data-jc-path="format" data-jc-config="placeholder:@(e.g. {0} °C);maxlength:10;align:center">@(Format)</div>
+		<div class="col-md-2 m">
+			<div data-jc="textbox" data-jc-path="format" data-jc-config="placeholder:@(e.g. {0} °C);maxlength:10;align:center;required:true">@(Format)</div>
 		</div>
-		<div class="col-md-3 m">
+		<div class="col-md-2 m">
 			<div data-jc="textbox" data-jc-path="decimals" data-jc-config="maxlength:10;align:center;increment:true;type:number">@(Decimals)</div>
+		</div>
+	</div>
+</div>
+<div class="padding bg-yellow">
+	<h3><i class="fa fa-bar-chart mr5"></i>@(Reading statistics)</h3>
+	<div class="row">
+		<div class="col-md-2 col-sm-3 m">
+			<div data-jc="textbox" data-jc-path="statshours" data-jc-config="maxlength:6;align:center;increment:true;type:number;required:true">@(Count hours)</div>
+		</div>
+		<div class="col-md-2 col-sm-3 m">
+			<div data-jc="textbox" data-jc-path="statsdays" data-jc-config="maxlength:6;align:center;increment:true;type:number;required:true">@(Count days)</div>
+		</div>
+		<div class="col-md-2 col-sm-3 m">
+			<div data-jc="textbox" data-jc-path="statsmonths" data-jc-config="maxlength:6;align:center;increment:true;type:number;required:true">@(Count months)</div>
+		</div>
+		<div class="col-md-2 col-sm-3 m">
+			<div data-jc="textbox" data-jc-path="statsyears" data-jc-config="maxlength:6;align:center;increment:true;type:number;required:true">@(Count years)</div>
 		</div>
 	</div>
 </div>`;
@@ -58,7 +75,7 @@ exports.install = function(instance) {
 	cache.datetime = F.datetime;
 	cache.count = 0;
 	cache.avg = { count: 0, sum: 0 };
-	cache.number = 0;
+	cache.number = null;
 	cache.raw = 0;
 	cache.median = [];
 
@@ -159,11 +176,11 @@ exports.install = function(instance) {
 				return;
 		}
 
-		DOC.id = +cache.datetime.format('yyyyMMddHH');
-		DOC.year = cache.datetime.getFullYear();
-		DOC.month = cache.datetime.getMonth() + 1;
-		DOC.day = cache.datetime.getDate();
-		DOC.hour = cache.datetime.getHours();
+		DOC.id = +cache.datetime.toUTC().format('yyyyMMddHH');
+		DOC.year = cache.datetime.getUTCFullYear();
+		DOC.month = cache.datetime.getUTCMonth() + 1;
+		DOC.day = cache.datetime.getUTCDate();
+		DOC.hour = cache.datetime.getUTCHours();
 		DOC.week = +cache.datetime.format('w');
 		DOC.count = cache.count;
 		DOC.value = cache.number;
