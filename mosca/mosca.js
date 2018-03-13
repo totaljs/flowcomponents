@@ -50,13 +50,10 @@ exports.install = function(instance) {
 	instance.custom.start_server = function(){
 		var options = instance.options;
 
-		var settings = { 
+		var settings = {
 			host: options.host,
-			port: options.port || 1883, 
-			interfaces: [{
-					type: 'mqtt',
-					port: options.port || 1883
-				}]
+			port: options.port || 1883,
+			interfaces: [{ type: 'mqtt', port: options.port || 1883 }]
 		};
 
 		if (options.ws)
