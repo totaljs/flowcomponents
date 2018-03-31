@@ -19,9 +19,9 @@
 			"https://rawgit.com/totaljs/flowcomponents/master/pass/pass.js",
 			"https://rawgit.com/totaljs/flowcomponents/master/repository/repository.js",
 			"https://rawgit.com/totaljs/flowcomponents/master/schema/schema.js",
+			"https://rawgit.com/totaljs/flowcomponents/master/split/split.js",
 			"https://rawgit.com/totaljs/flowcomponents/master/virtualwirein/virtualwirein.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/virtualwireout/virtualwireout.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/split/split.js"
+			"https://rawgit.com/totaljs/flowcomponents/master/virtualwireout/virtualwireout.js"
 		]
 	},
 	{
@@ -57,11 +57,24 @@
 	{
 		"name": "Dashboard",
 		"items": [
-			"https://rawgit.com/totaljs/flowcomponents/master/dashboardaction/dashboardaction.js",
 			"https://rawgit.com/totaljs/flowcomponents/master/dashboardanalytics/dashboardanalytics.js",
 			"https://rawgit.com/totaljs/flowcomponents/master/dashboardbutton/dashboardbutton.js",
 			"https://rawgit.com/totaljs/flowcomponents/master/dashboardgroupanalytics/dashboardgroupanalytics.js",
 			"https://rawgit.com/totaljs/flowcomponents/master/dashboardoutput/dashboardoutput.js"
+		]
+	},
+	{
+		"name": "Dashboard/Flowboard",
+		"items": [
+			"https://rawgit.com/totaljs/flowcomponents/master/dashboardflowboardbutton/dashboardflowboardbutton.js"
+		]
+	},
+	{
+		"name": "Devices",
+		"items": [
+			"https://rawgit.com/totaljs/flowcomponents/master/device_light/device_light.js",
+			"https://rawgit.com/totaljs/flowcomponents/master/device_outlet/device_outlet.js",
+			"https://rawgit.com/totaljs/flowcomponents/master/device_thermostat/device_thermostat.js"
 		]
 	},
 	{
@@ -77,7 +90,6 @@
 		"items": [
 			"https://rawgit.com/totaljs/flowcomponents/master/flowboardlight/flowboardlight.js",
 			"https://rawgit.com/totaljs/flowcomponents/master/flowboardoutput/flowboardoutput.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/flowboardsimplethermostat/flowboardsimplethermostat.js",
 			"https://rawgit.com/totaljs/flowcomponents/master/flowboardsocket/flowboardsocket.js"
 		]
 	},
