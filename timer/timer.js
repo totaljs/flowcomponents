@@ -6,7 +6,7 @@ exports.output = 1;
 exports.click = true;
 exports.author = 'Peter Širka';
 exports.icon = 'clock-o';
-exports.options = { interval: 0 };
+exports.options = { interval: 1000 };
 
 exports.html = `<div class="padding">
 	<div class="row">
