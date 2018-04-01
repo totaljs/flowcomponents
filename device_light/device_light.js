@@ -9,7 +9,7 @@ exports.color = '#5CB36D';
 exports.input = 1;
 exports.output = 1;
 exports.click = true;;
-exports.options = { default: true };
+exports.options = { default: false };
 exports.readme = `# Device - Light
 ### input
 Bellow data will toggle on and anything else off
@@ -35,7 +35,7 @@ exports.html = `<div class="padding">
 	<p>The label you specify above will apear in DashBoard component's settings form.</p>
 	<div class="row">
 		<div class="col-md-4">
-			<div data-jc="dropdown" data-jc-path="default" data-jc-config="items:On - will send 1|1,Off - will send 0|0">Default value</div>
+			<div data-jc="dropdown" data-jc-path="default" data-jc-config="items:On|true,Off|false">Default value</div>
 		</div>
 	</div>
 </div>`;
@@ -48,7 +48,7 @@ exports.install = function(instance) {
 		name: 'Light',
 		id: '',
 		type: 'LIGHT',
-		on: true,
+		on: false,
 		// brightness: 0,
 		// color_spectrum: 0,
 		// color_temperature: 0
