@@ -1,6 +1,5 @@
 exports.id = 'debug';
 exports.title = 'Debug';
-exports.version = '1.0.0';
 exports.author = 'Peter Širka';
 exports.color = '#967ADC';
 exports.click = true;
