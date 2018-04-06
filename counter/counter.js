@@ -44,7 +44,7 @@ exports.install = function(instance) {
 
 	instance.custom.status = function() {
 		setTimeout2(instance.id, function() {
-			instance.status(count + 'x');
+			instance.status(count.format(0));
 			instance.send2(count);
 		}, 100);
 	};

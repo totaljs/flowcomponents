@@ -45,7 +45,7 @@ exports.install = function(instance) {
 	var tproc = null;
 	var Exec = require('child_process').exec;
 	var reg_empty = /\s{2,}/g;
-	var reg_appdisksize = /^[\d\.\,]+/;
+	var reg_appdisksize = /^[\d.,]+/;
 
 	instance.custom.run = function() {
 
@@ -60,7 +60,9 @@ exports.install = function(instance) {
 		instance.options.monitorconsumption && arr.push(function(next) {
 			Exec('ps -p {0} -o %cpu,rss,etime'.format(process.pid), function(err, response) {
 
-				if (!err) {
+				if (err) {
+					instance.throw(err);
+				} else {
 					var line = response.split('\n')[1];
 					line = line.trim().replace(reg_empty, ' ').split(' ');
 					var cpu = line[0].parseFloat();
@@ -76,7 +78,10 @@ exports.install = function(instance) {
 		// Get count of open files
 		instance.options.monitorfiles && arr.push(function(next) {
 			Exec('lsof -a -p {0} | wc -l'.format(process.pid), function(err, response) {
-				!err && (current.files = response.trim().parseInt2());
+				if (err)
+					instance.throw(err);
+				else
+					current.files = response.trim().parseInt2();
 				next();
 			});
 		});
@@ -84,7 +89,9 @@ exports.install = function(instance) {
 		// Get count of opened network connections
 		instance.options.monitorconnections && arr.push(function(next) {
 			Exec('netstat -an | grep :{0} | wc -l'.format(F.port), function(err, response) {
-				if (!err) {
+				if (err) {
+					instance.throw(err);
+				} else {
 					current.connections = response.trim().parseInt2() - 1;
 					if (current.connections < 0)
 						current.connections = 0;
@@ -96,7 +103,9 @@ exports.install = function(instance) {
 		// Get directory size
 		instance.options.monitorsize && current.counter % 5 !== 0 && arr.push(function(next) {
 			Exec('du -hsb ' + process.cwd(), function(err, response) {
-				if (!err) {
+				if (err) {
+					instance.throw(err);
+				} else {
 					var match = response.trim().match(reg_appdisksize);
 					match && (current.size = match.toString().trim().parseInt2());
 				}

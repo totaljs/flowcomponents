@@ -39,9 +39,15 @@ exports.install = function(instance) {
 		U.queue(instance.id, 1, function(next) {
 			var line = data instanceof Buffer ? data : typeof(data) === 'string' ? data + delimiter : JSON.stringify(data) + delimiter;
 			if (instance.options.append)
-				Fs.appendFile(filename, line, next);
+				Fs.appendFile(filename, line, function(err) {
+					err && instance.throw(err);
+					next();
+				});
 			else
-				Fs.writeFile(filename, line, next);
+				Fs.writeFile(filename, line, function(err) {
+					err && instance.throw(err);
+					next();
+				});
 			F.touch('/' + instance.options.filename);
 		});
 	};

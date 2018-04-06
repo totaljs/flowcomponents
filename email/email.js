@@ -1,14 +1,14 @@
 exports.id = 'email';
+exports.version = '1.3.0';
 exports.title = 'Email';
 exports.group = 'Notifications';
 exports.color = '#8CC152';
 exports.input = true;
 exports.author = 'Peter Širka';
-exports.version = '1.2.0';
-exports.output = ['green', 'red'];
+exports.output = 1;
 exports.icon = 'envelope-o';
-exports.dateupdated = '2018-01-19T11:57:00.000Z';
-exports.options = { errors: true, type: 'smtp' };
+exports.dateupdated = '2018-04-06T09:50:00.000Z';
+exports.options = { type: 'smtp' };
 
 exports.html = `<div class="padding">
 	<div data-jc="dropdown" data-jc-path="type" data-jc-config="required:true;items:@(Internal SMTP)|internal,@(Custom defined SMTP)|smtp" data-jc-value="'smtp'" class="m">@(Sender)</div>
@@ -33,7 +33,6 @@ exports.html = `<div class="padding">
 			</div>
 		</div>
 	</section>
-	<div data-jc="checkbox" data-jc-path="errors">@(Enable internal error handling)</div>
 	<br />
 	<section>
 		<label><i class="fa fa-envelope"></i>@(Mail message settings)</label>
@@ -65,7 +64,6 @@ exports.html = `<div class="padding">
 		builder.push('');
 		builder.push('- SMTP: __' + (options.type === 'smtp' ? options.smtp : '@(Internal email)') + '__');
 		builder.push('- @(authorization): __' + (options.user && options.password ? '@(yes)' : '@(no)') + '__');
-		builder.push('- @(internal error handling): __' + (options.errors ? '@(yes)' : '@(no)') + '__');
 		builder.push('---');
 		builder.push('- @(from): __' + options.from + '__');
 		builder.push('- @(to): __' + options.target + '__');
@@ -80,10 +78,6 @@ exports.html = `<div class="padding">
 exports.readme = `# Email sender
 
 You need to configure this component.
-
-__Outputs__:
-- \`green\` message has been sent successfully
-- \`red\` an error while sending
 
 __Dynamic arguments__:
 Are performed via FlowData repository and can be used for subject, from/to addresses or attachments. Use \`repository\` component for creating of dynamic arguments. Examples:
@@ -151,9 +145,8 @@ exports.install = function(instance) {
 
 		message.callback(function(err) {
 			if (err) {
-				options.errors && instance.error(err);
 				msg.data = err;
-				instance.send2(1, msg);
+				instance.throw(msg);
 			} else
 				instance.send2(0, msg);
 		});
