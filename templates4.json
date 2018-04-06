@@ -2,193 +2,193 @@
 	{
 		"name": "Common",
 		"items": [
-			"https://rawgit.com/totaljs/flowcomponents/master/code/code.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/comment/comment.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/condition/condition.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/counter/counter.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/debug/debug.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/fi/fi.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/filewriter/filewriter.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/fo/fo.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/function/function.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/lastdata/lastdata.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/lastusage/lastusage.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/merge/merge.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/mergetoobject/mergetoobject.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/modified/modified.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/pass/pass.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/repository/repository.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/schema/schema.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/split/split.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/virtualwirein/virtualwirein.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/virtualwireout/virtualwireout.js"
+			"https://rawgit.com/totaljs/flowcomponents/v4components/code/code.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/comment/comment.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/condition/condition.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/counter/counter.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/debug/debug.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/fi/fi.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/filewriter/filewriter.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/fo/fo.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/function/function.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/lastdata/lastdata.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/lastusage/lastusage.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/merge/merge.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/mergetoobject/mergetoobject.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/modified/modified.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/pass/pass.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/repository/repository.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/schema/schema.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/split/split.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/virtualwirein/virtualwirein.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/virtualwireout/virtualwireout.js"
 		]
 	},
 	{
 		"name": "Commander",
 		"items": [
-			"https://rawgit.com/totaljs/flowcomponents/master/commandercommands/commandercommands.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/commanderdependencies/commanderdependencies.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/commanderoutput/commanderoutput.js"
+			"https://rawgit.com/totaljs/flowcomponents/v4components/commandercommands/commandercommands.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/commanderdependencies/commanderdependencies.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/commanderoutput/commanderoutput.js"
 		]
 	},
 	{
 		"name": "Inputs",
 		"items": [
-			"https://rawgit.com/totaljs/flowcomponents/master/console/console.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/event/event.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/trigger/trigger.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/triggertoggle/triggertoggle.js"
+			"https://rawgit.com/totaljs/flowcomponents/v4components/console/console.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/event/event.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/trigger/trigger.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/triggertoggle/triggertoggle.js"
 		]
 	},
 	{
 		"name": "Time",
 		"items": [
-			"https://rawgit.com/totaljs/flowcomponents/master/cron/cron.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/delay/delay.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/duration/duration.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/feedtodelay/feedtodelay.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/megatimer/megatimer.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/scheduler/scheduler.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/timer/timer.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/uniqueinterval/uniqueinterval.js"
+			"https://rawgit.com/totaljs/flowcomponents/v4components/cron/cron.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/delay/delay.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/duration/duration.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/feedtodelay/feedtodelay.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/megatimer/megatimer.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/scheduler/scheduler.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/timer/timer.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/uniqueinterval/uniqueinterval.js"
 		]
 	},
 	{
 		"name": "Dashboard",
 		"items": [
-			"https://rawgit.com/totaljs/flowcomponents/master/dashboardanalytics/dashboardanalytics.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/dashboardbutton/dashboardbutton.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/dashboardgroupanalytics/dashboardgroupanalytics.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/dashboardoutput/dashboardoutput.js"
+			"https://rawgit.com/totaljs/flowcomponents/v4components/dashboardanalytics/dashboardanalytics.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/dashboardbutton/dashboardbutton.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/dashboardgroupanalytics/dashboardgroupanalytics.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/dashboardoutput/dashboardoutput.js"
 		]
 	},
 	{
 		"name": "Dashboard/Flowboard",
 		"items": [
-			"https://rawgit.com/totaljs/flowcomponents/master/dashboardflowboardbutton/dashboardflowboardbutton.js"
+			"https://rawgit.com/totaljs/flowcomponents/v4components/dashboardflowboardbutton/dashboardflowboardbutton.js"
 		]
 	},
 	{
 		"name": "Devices",
 		"items": [
-			"https://rawgit.com/totaljs/flowcomponents/master/device_light/device_light.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/device_outlet/device_outlet.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/device_thermostat/device_thermostat.js"
+			"https://rawgit.com/totaljs/flowcomponents/v4components/device_light/device_light.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/device_outlet/device_outlet.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/device_thermostat/device_thermostat.js"
 		]
 	},
 	{
 		"name": "Notifications",
 		"items": [
-			"https://rawgit.com/totaljs/flowcomponents/master/email/email.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/sms/sms.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/twilio/twilio.js"
+			"https://rawgit.com/totaljs/flowcomponents/v4components/email/email.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/sms/sms.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/twilio/twilio.js"
 		]
 	},
 	{
 		"name": "Flowbard",
 		"items": [
-			"https://rawgit.com/totaljs/flowcomponents/master/flowboardlight/flowboardlight.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/flowboardoutput/flowboardoutput.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/flowboardsocket/flowboardsocket.js"
+			"https://rawgit.com/totaljs/flowcomponents/v4components/flowboardlight/flowboardlight.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/flowboardoutput/flowboardoutput.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/flowboardsocket/flowboardsocket.js"
 		]
 	},
 	{
 		"name": "HTTP",
 		"items": [
-			"https://rawgit.com/totaljs/flowcomponents/master/httpdownloader/httpdownloader.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/httpgeoip/httpgeoip.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/httplistener/httplistener.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/httpreceiver/httpreceiver.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/httpredirect/httpredirect.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/httprequest/httprequest.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/httpresponse/httpresponse.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/httproute/httproute.js"
+			"https://rawgit.com/totaljs/flowcomponents/v4components/httpdownloader/httpdownloader.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/httpgeoip/httpgeoip.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/httplistener/httplistener.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/httpreceiver/httpreceiver.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/httpredirect/httpredirect.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/httprequest/httprequest.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/httpresponse/httpresponse.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/httproute/httproute.js"
 		]
 	},
 	{
 		"name": "IFTTT",
 		"items": [
-			"https://rawgit.com/totaljs/flowcomponents/master/ifttthookrequest/ifttthookrequest.js"
+			"https://rawgit.com/totaljs/flowcomponents/v4components/ifttthookrequest/ifttthookrequest.js"
 		]
 	},
 	{
 		"name": "Databases",
 		"items": [
-			"https://rawgit.com/totaljs/flowcomponents/master/logtodb/logtodb.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/nosql/nosql.js"
+			"https://rawgit.com/totaljs/flowcomponents/v4components/logtodb/logtodb.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/nosql/nosql.js"
 		]
 	},
 	{
 		"name": "Total.js Messenger",
 		"items": [
-			"https://rawgit.com/totaljs/flowcomponents/master/messengermessage/messengermessage.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/messengerrawdata/messengerrawdata.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/messengersender/messengersender.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/messengerusers/messengerusers.js"
+			"https://rawgit.com/totaljs/flowcomponents/v4components/messengermessage/messengermessage.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/messengerrawdata/messengerrawdata.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/messengersender/messengersender.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/messengerusers/messengerusers.js"
 		]
 	},
 	{
 		"name": "Monitoring",
 		"items": [
-			"https://rawgit.com/totaljs/flowcomponents/master/monitorconsumption/monitorconsumption.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/monitorcpu/monitorcpu.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/monitordisk/monitordisk.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/monitormemory/monitormemory.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/monitornetwork/monitornetwork.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/monitorprocess/monitorprocess.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/monitorsuperadmin/monitorsuperadmin.js"
+			"https://rawgit.com/totaljs/flowcomponents/v4components/monitorconsumption/monitorconsumption.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/monitorcpu/monitorcpu.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/monitordisk/monitordisk.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/monitormemory/monitormemory.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/monitornetwork/monitornetwork.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/monitorprocess/monitorprocess.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/monitorsuperadmin/monitorsuperadmin.js"
 		]
 	},
 	{
 		"name": "MQTT",
 		"items": [
-			"https://rawgit.com/totaljs/flowcomponents/master/mosca/mosca.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/mqtt/mqtt.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/mqttpublish/mqttpublish.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/mqttsubscribe/mqttsubscribe.js"
+			"https://rawgit.com/totaljs/flowcomponents/v4components/mosca/mosca.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/mqtt/mqtt.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/mqttpublish/mqttpublish.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/mqttsubscribe/mqttsubscribe.js"
 		]
 	},
 	{
 		"name": "Services",
 		"items": [
-			"https://rawgit.com/totaljs/flowcomponents/master/netatmo/netatmo.js"
+			"https://rawgit.com/totaljs/flowcomponents/v4components/netatmo/netatmo.js"
 		]
 	},
 	{
 		"name": "Website",
 		"items": [
-			"https://rawgit.com/totaljs/flowcomponents/master/pagerenderer/pagerenderer.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/pagetemplate/pagetemplate.js"
+			"https://rawgit.com/totaljs/flowcomponents/v4components/pagerenderer/pagerenderer.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/pagetemplate/pagetemplate.js"
 		]
 	},
 	{
 		"name": "Parsers",
 		"items": [
-			"https://rawgit.com/totaljs/flowcomponents/master/parser/parser.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/template/template.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/transform/transform.js"
+			"https://rawgit.com/totaljs/flowcomponents/v4components/parser/parser.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/template/template.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/transform/transform.js"
 		]
 	},
 	{
 		"name": "Logic",
 		"items": [
-			"https://rawgit.com/totaljs/flowcomponents/master/range/range.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/switch/switch.js"
+			"https://rawgit.com/totaljs/flowcomponents/v4components/range/range.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/switch/switch.js"
 		]
 	},
 	{
 		"name": "REST",
 		"items": [
-			"https://rawgit.com/totaljs/flowcomponents/master/restcors/restcors.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/restexecoperation/restexecoperation.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/restinterpreter/restinterpreter.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/restmiddleware/restmiddleware.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/restoperation/restoperation.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/restproxy/restproxy.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/restresponse/restresponse.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/restroute/restroute.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/restschema/restschema.js"
+			"https://rawgit.com/totaljs/flowcomponents/v4components/restcors/restcors.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/restexecoperation/restexecoperation.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/restinterpreter/restinterpreter.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/restmiddleware/restmiddleware.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/restoperation/restoperation.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/restproxy/restproxy.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/restresponse/restresponse.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/restroute/restroute.js",
+			"https://rawgit.com/totaljs/flowcomponents/v4components/restschema/restschema.js"
 		]
 	}
 ]
