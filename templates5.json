@@ -3,6 +3,7 @@
 		"name": "Common",
 		"items": [
 			"https://rawgit.com/totaljs/flowcomponents/master/code/code.js",
+			"https://rawgit.com/totaljs/flowcomponents/master/eval/eval.js",
 			"https://rawgit.com/totaljs/flowcomponents/master/comment/comment.js",
 			"https://rawgit.com/totaljs/flowcomponents/master/condition/condition.js",
 			"https://rawgit.com/totaljs/flowcomponents/master/counter/counter.js",
