@@ -1,8 +1,8 @@
 exports.id = 'mqttserver';
-exports.title = 'MQTT server (Mosca)';
+exports.title = 'MQTT server(Mosca)';
 exports.group = 'MQTT';
 exports.color = '#888600';
-exports.version = '1.0.0';
+exports.version = '1.1.0';
 exports.icon = 'clock-o';
 exports.input = false;
 exports.output = ['green', 'red', 'white'];
@@ -30,7 +30,37 @@ exports.html = `<div class="padding">
 			<div data-jc="textbox" data-jc-path="portws" data-jc-config="placeholder:1884" class="m">Websocket port (1884 by default)</div>
 		</div>
 	</div>
-</div>`;
+	<div class="row">
+		<!--<div class="col-md-4">
+			<div data-jc="textbox" data-jc-path="secureport" data-jc-config="placeholder:1883" class="m">Secure port (8443 by default)</div>
+		</div>-->
+		<div class="col-md-4">
+			<div data-jc="textbox" data-jc-path="username" data-jc-config="" class="m">Username</div>
+		</div>
+		<div class="col-md-4">
+			<div data-jc="textbox" data-jc-path="password" data-jc-config="type:password" class="m">Password</div>
+		</div>
+	</div>
+</div>
+<script>
+	ON('save.mqttserver', function(component, options) {
+		!component.name && (component.name = options.host);
+
+		var builder = [];
+		builder.push('### @(Configuration)');
+		builder.push('');
+		builder.push('- @(Host): ' + options.host);
+		builder.push('- @(Port): ' + options.port);
+		builder.push('- @(Enable WebSockets): ' + options.ws);
+		builder.push('- @(WebSockets port): ' + options.portws);		
+		builder.push('');
+		builder.push('**Authorization**');
+		builder.push('- @(Username): ' + options.username);
+		builder.push('- @(Password): -------');
+		component.notes = builder.join('\\n');
+		console.log('NOTES', component.notes);
+	});
+</script>`;
 
 exports.readme = `
 # MQTT Broker
@@ -52,7 +82,6 @@ exports.install = function(instance) {
 
 		var settings = {
 			host: options.host,
-			port: options.port || 1883,
 			interfaces: [{ type: 'mqtt', port: options.port || 1883 }]
 		};
 
@@ -62,12 +91,33 @@ exports.install = function(instance) {
 				port: options.portws || 1884
 			});
 
-		var server = new mosca.Server(settings);
+		// 	settings.secure = {
+		// 		port: options.secureport,
+		// 		keyPath: 'key.pem',
+		// 		certPath: 'cert.pem',
+		// 	};
+
+		var authenticate = function(client, username, password, callback) {
+			var authorized = (options.username === username && options.password === password.toString());
+			if (authorized) client.user = username;
+			callback(null, authorized);
+		}
+
+		server = new mosca.Server(settings, function(err){
+			if (err)
+				instance.throw(err);
+		});
 
 		server.on('ready', function() {
-			var status = 'mgtt {0}:{1}'.format(options.host, options.port);
+			var auth = 'no';
+			if (options.username && options.password) {
+				server.authenticate = authenticate;
+				auth = 'yes';
+			}
+			
+			var status = 'auth:{0} | mgtt:{1}'.format(auth, options.port);
 			if (options.ws)
-				status += ' | ws port {0}'.format(options.portws);
+				status += ' | ws:{0}'.format(options.portws);
 			instance.status(status);
 		});
 
@@ -99,10 +149,10 @@ exports.install = function(instance) {
 
 	instance.custom.reconfigure = function(options, old_options) {
 
-		if (server && options !== old_options)
-			server.close(() => setTimeout(instance.custom.start_server, 100));
-		else
-			instance.custom.start_server();
+		if (server)
+			server.close();
+		
+		setTimeout(instance.custom.start_server, 100);
 	};
 
 	instance.on('close', function(){
