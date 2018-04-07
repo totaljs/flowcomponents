@@ -3,10 +3,10 @@
 		"name": "Common",
 		"items": [
 			"https://rawgit.com/totaljs/flowcomponents/master/code/code.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/eval/eval.js",
 			"https://rawgit.com/totaljs/flowcomponents/master/comment/comment.js",
 			"https://rawgit.com/totaljs/flowcomponents/master/counter/counter.js",
 			"https://rawgit.com/totaljs/flowcomponents/master/debug/debug.js",
+			"https://rawgit.com/totaljs/flowcomponents/master/eval/eval.js",
 			"https://rawgit.com/totaljs/flowcomponents/master/fi/fi.js",
 			"https://rawgit.com/totaljs/flowcomponents/master/filewriter/filewriter.js",
 			"https://rawgit.com/totaljs/flowcomponents/master/fo/fo.js",
@@ -58,15 +58,8 @@
 		"name": "Dashboard",
 		"items": [
 			"https://rawgit.com/totaljs/flowcomponents/master/dashboardanalytics/dashboardanalytics.js",
-			"https://rawgit.com/totaljs/flowcomponents/master/dashboardbutton/dashboardbutton.js",
 			"https://rawgit.com/totaljs/flowcomponents/master/dashboardgroupanalytics/dashboardgroupanalytics.js",
 			"https://rawgit.com/totaljs/flowcomponents/master/dashboardoutput/dashboardoutput.js"
-		]
-	},
-	{
-		"name": "Dashboard/Flowboard",
-		"items": [
-			"https://rawgit.com/totaljs/flowcomponents/master/dashboardflowboardbutton/dashboardflowboardbutton.js"
 		]
 	},
 	{
@@ -74,6 +67,7 @@
 		"items": [
 			"https://rawgit.com/totaljs/flowcomponents/master/device_light/device_light.js",
 			"https://rawgit.com/totaljs/flowcomponents/master/device_outlet/device_outlet.js",
+			"https://rawgit.com/totaljs/flowcomponents/master/device_switch/device_switch.js",
 			"https://rawgit.com/totaljs/flowcomponents/master/device_thermostat/device_thermostat.js"
 		]
 	},
