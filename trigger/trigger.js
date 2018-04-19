@@ -28,7 +28,7 @@ exports.install = function(instance) {
 		value = null;
 		switch (options.datatype) {
 			case 'string':
-				value = '' + options.data;
+				value = '' + (options.data || '');
 				break;
 			case 'integer':
 				value = options.data.parseInt2('error');
