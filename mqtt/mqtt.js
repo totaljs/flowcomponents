@@ -325,7 +325,7 @@ Broker.prototype.unsubscribe = function(componentid, topic) {
 Broker.prototype.publish = function(topic, data, options) {
 	var self = this;
 
-	if (!self.connected || !data)
+	if (!self.connected)
 		return;
 
 	if (typeof(data) === 'object') {
