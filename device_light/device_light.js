@@ -1,8 +1,9 @@
 exports.id = 'device_light';
 exports.title = 'Light';
-exports.version = '1.0.0';
+exports.version = '1.1.0';
 exports.author = 'Martin Smola';
 exports.group = 'Devices';
+exports.icon = 'lightbulb-o';
 exports.dashboard = true;
 exports.flowboard = true;
 exports.color = '#5CB36D';

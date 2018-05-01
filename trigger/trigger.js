@@ -4,8 +4,9 @@ exports.group = 'Inputs';
 exports.color = '#F6BB42';
 exports.click = true;
 exports.output =  1;
-exports.version = '1.0.0';
+exports.version = '1.1.0';
 exports.author = 'Martin Smola';
+exports.icon = 'play';
 
 exports.html = `<div class="padding">
 	<div data-jc="dropdown" data-jc-path="datatype" data-jc-config="items:,String|string,Integer|integer,Float|float,Boolean|boolean,Date|date,Object|object,Base64 as Buffer|buffer" class="m">@(Data type (String by default))</div>

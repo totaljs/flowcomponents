@@ -4,8 +4,9 @@ exports.group = 'Inputs';
 exports.color = '#F6BB42';
 exports.click = true;
 exports.output =  1;
-exports.version = '1.0.0';
+exports.version = '1.1.0';
 exports.author = 'Peter Širka';
+exports.icon = 'forward';
 
 exports.html = `<div class="padding">
 	<section class="m">

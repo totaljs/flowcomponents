@@ -1,9 +1,10 @@
 exports.id = 'dashboardgroupanalytics';
 exports.title = 'Group Analytics';
-exports.version = '1.0.0';
+exports.version = '1.1.0';
 exports.author = 'Peter Širka';
 exports.group = 'Dashboard';
 exports.color = '#5CB36D';
+exports.icon = 'area-chart';
 exports.input = true;
 exports.output = 1;
 exports.options = { fn: 'next({ value: value.count, group: value.brand });\n// or can return array:\n// next([{ value: value.count, group: value.brand }]);', format: '{0}x', decimals: 2, statshours: 24, statsdays: 14, statsmonths: 12, statsyears: 5, clearsignal: true };

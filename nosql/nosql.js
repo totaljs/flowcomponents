@@ -1,9 +1,10 @@
 exports.id = 'nosql';
 exports.title = 'NoSQL';
-exports.version = '1.0.0';
+exports.version = '1.1.0';
 exports.group = 'Databases';
 exports.author = 'Martin Smola';
 exports.color = '#D770AD';
+exports.icon = 'database';
 exports.input = true;
 exports.output = 2;
 exports.options = {};
