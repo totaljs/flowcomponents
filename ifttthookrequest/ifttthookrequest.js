@@ -3,6 +3,7 @@ exports.title = 'IFTTT hook request';
 exports.group = 'IFTTT';
 exports.version = '1.0.0';
 exports.author = 'Martin Smola';
+exports.icon = 'exchange';
 exports.color = '#3f99ff';
 exports.input = true;
 exports.output = 1;

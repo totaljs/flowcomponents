@@ -3,6 +3,7 @@ exports.title = 'Virtual wire in';
 exports.version = '1.0.0';
 exports.author = 'Martin Smola';
 exports.color = '#303E4D';
+exports.icon = 'sign-in';
 exports.input = false;
 exports.output = 1;
 exports.options = {};

@@ -3,6 +3,7 @@ exports.title = 'Virtual wire out';
 exports.version = '1.0.0';
 exports.author = 'Martin Smola';
 exports.color = '#303E4D';
+exports.icon = 'sign-out';
 exports.input = true;
 exports.options = {};
 exports.readme = `# Virtual wire out

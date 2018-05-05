@@ -5,6 +5,7 @@ exports.title = 'Counter';
 exports.version = '1.0.0';
 exports.author = 'Peter Širka';
 exports.color = '#656D78';
+exports.icon = 'dashboard';
 exports.input = true;
 exports.output = 1;
 exports.options = { enabled: true };
