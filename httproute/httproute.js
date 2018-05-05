@@ -133,6 +133,12 @@ exports.install = function(instance) {
 
 		F.route(options.url, function() {
 
+			if (instance.paused) {
+				this.status = 503;
+				this.content('Service is currently unavailable, please try again later.');
+				return;
+			}
+
 			var key;
 			var self = this;
 
