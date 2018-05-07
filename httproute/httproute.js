@@ -120,6 +120,12 @@ exports.install = function(instance) {
 			return;
 		}
 
+		var length = F.routes.web.length;
+		for (var i = 0; i < length; i++) {
+			if (F.routes.web[i].name === options.url)
+				return instance.status('URL already in use', 'red');
+		}
+
 		if (typeof(options.flags) === 'string')
 			options.flags = options.flags.split(',').trim();
 
