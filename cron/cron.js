@@ -6,7 +6,7 @@ exports.output = 1;
 exports.click = true;
 exports.author = 'Martin Smola';
 exports.icon = 'clock-o';
-exports.options = {	enabled: true, jobs: [] };
+exports.options = { jobs: [] };
 exports.npm = ['node-schedule'];
 
 exports.html = `
@@ -93,11 +93,6 @@ exports.install = function(instance) {
 	var schedule = require('node-schedule');
 
 	var jobs = [];
-
-	instance.on('click', function(){
-		instance.options.enabled = !instance.options.enabled;
-		instance.save();
-	});
 
 	instance.on('options', reconfigure);
 
