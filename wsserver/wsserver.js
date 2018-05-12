@@ -3,7 +3,7 @@ exports.title = 'WebSocket Server';
 exports.group = 'WebSocket';
 exports.color = '#97c5ff';
 exports.input = 2;
-exports.output = 2;
+exports.output = 1;
 exports.author = 'Martin Smola';
 exports.icon = 'comments';
 exports.version = '1.0.0';
@@ -27,7 +27,7 @@ exports.html = `<div class="padding">
 exports.readme = `# WebSocket Server
 ## Input
 - #1 > broadcast a message to all clients
-- #2 > send a message to a specific client by ID
+- #2 > send a message to a specific client by ID (use id or find method \`{ id: <some-id>, find: function..., data: <data-to-send> }\`)
 
 ## Output
 All recieved messages are send to the output
@@ -58,7 +58,7 @@ exports.install = function(instance) {
 		var client  = ws.find(id || find);
 
 		if (client)
-			client.send(data);
+			client.send(flowdata.data.data);
 		else
 			instance.log('Client{0} not found.'.format(' ' + id || '')).debug('Client{0} not found.'.format(' ' + id || ''));
 

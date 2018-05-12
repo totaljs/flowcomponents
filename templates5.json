@@ -184,5 +184,12 @@
 			"https://rawgit.com/totaljs/flowcomponents/master/restroute/restroute.js",
 			"https://rawgit.com/totaljs/flowcomponents/master/restschema/restschema.js"
 		]
+	},
+	{
+		"name": "WebSocket",
+		"items": [
+			"https://rawgit.com/totaljs/flowcomponents/master/wsclient/wsclient.js",
+			"https://rawgit.com/totaljs/flowcomponents/master/wsserver/wsserver.js"
+		]
 	}
 ]
