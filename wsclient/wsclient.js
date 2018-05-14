@@ -96,8 +96,14 @@ exports.install = function(instance) {
 	function connect() {
 
 		if (wsclient && wsclient.socket) {
-			wsclient.close();
-			setTimeout(connect, 1000);
+			wsclient.options.reconnect = false;
+			wsclient.close();			
+			setTimeout(function(){
+				wsclient.free();
+				wsclient.removeAllListeners();
+				wsclient = null;
+				connect();
+			}, 500);
 			return;
 		}
 
@@ -107,7 +113,7 @@ exports.install = function(instance) {
 
 			var opt = instance.options;
 			var server = (opt.secure ? 'wss://' : 'ws://') + opt.ip + ':' + opt.port + opt.url;
-
+			
 			instance.status('Connecting...');
 
 			client.connect(server);
@@ -132,16 +138,21 @@ exports.install = function(instance) {
 
 			// Default options:
 			client.options.type = opt.datatype || 'json';
+			client.options.reconnect = 3000;
 			// client.options.compress = true;
-			// client.options.reconnect = 3000;
 			// client.options.encodedecode = true;
 
 		});
 	}
 
 	instance.on('close', function() {
-		if (wsclient && wsclient.socket)
+		if (wsclient && wsclient.socket) {
 			wsclient.close();
-			wsclient.free();
+			setTimeout(function(){
+				wsclient.free();
+				wsclient.removeAllListeners();
+				wsclient = null;
+			}, 500);
+		}
 	});
 };
