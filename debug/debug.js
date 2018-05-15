@@ -4,6 +4,7 @@ exports.author = 'Peter Širka';
 exports.color = '#967ADC';
 exports.click = true;
 exports.input = true;
+exports.icon = 'bug';
 exports.version = '2.0.0';
 exports.options = { enabled: true, repository: false, type: 'data' };
 exports.readme = `# Debug

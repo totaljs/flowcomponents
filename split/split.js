@@ -1,12 +1,13 @@
 exports.id = 'split';
 exports.title = 'Split';
 exports.group = 'Common';
+exports.version = '1.1.0';
 exports.color = '#656D78';
 exports.input = true;
 exports.output = 1;
 exports.options = {};
 exports.author = 'Jiří Travěnec';
-exports.icon = 'compress';
+exports.icon = 'code-fork';
 exports.readme = `# Split
 
 This component iterates over the received data and sends every item separately.`;

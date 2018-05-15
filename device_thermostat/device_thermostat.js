@@ -4,10 +4,10 @@ exports.group = 'Devices';
 exports.dashboard = true;
 exports.flowboard = true;
 exports.color = '#ff4242';
-exports.icon = 'fa-thermometer-half';
+exports.icon = 'thermometer-2';
 exports.input = ['blue', 'green', 'grey'];
 exports.output = ['red', 'blue' , 'darkgrey', 'orange'];
-exports.version = '1.0.0';
+exports.version = '1.1.0';
 exports.author = 'Martin Smola';
 exports.options = { 
 	setpoint: {
@@ -133,7 +133,7 @@ exports.install = function(instance) {
 		device.options = instance.options = U.extend(opts, instance.options, true);
 		device.name = instance.name;
 		if (init === true) {
-			var modes = instance.get('modes');
+			var modes = U.extend({ mode: 'off', daymode: 'day', lastdaymode: 'day' }, instance.get('modes'), true);
 			device.mode = modes.mode;
 			device.daymode = modes.daymode;
 			lastdaymode = modes.lastdaymode;

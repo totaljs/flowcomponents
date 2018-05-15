@@ -2,8 +2,8 @@ exports.id = 'mqttpublish';
 exports.title = 'MQTT publish';
 exports.group = 'MQTT';
 exports.color = '#888600';
-exports.version = '1.0.0';
-exports.icon = 'clock-o';
+exports.version = '1.1.0';
+exports.icon = 'sign-out';
 exports.input = true;
 exports.output = 1;
 exports.author = 'Martin Smola';
@@ -27,12 +27,22 @@ exports.html = `<div class="padding">
 	});
 </script>`;
 
-exports.readme = `
-# MQTT publish
+exports.readme = `# MQTT publish
 
 If the topic field is left empty and the data object does not have a 'topic' property then nothing is send.
+Also if data object has a valid topic property it is assumed the object also have data property which is send as a payload;
+Example:
+\`\`\`javacsript
+{
+	topic: '/topic',
+	data: {
+		hello: 'world'
+	}
+}
+// in above case only { hello: 'world' } is published
+\`\`\`
 
-Any incoming data are passed to the output.`;
+If the topic field is not empty then the entire incomming data object is passed to the output.`;
 
 
 exports.install = function(instance) {
@@ -70,9 +80,11 @@ exports.install = function(instance) {
 			return;
 		var msg = instance.options.staticmessage || flowdata.data;
 		var topic = instance.options.topic || msg.topic;
-		if (topic)
+		if (topic) {
+			if (msg.topic)
+				msg = msg.data;
 			MQTT.publish(instance.options.broker, topic, msg, PUBLISH_OPTIONS);
-		else
+		} else
 			instance.debug('MQTT publish no topic');
 
 		instance.send(flowdata);

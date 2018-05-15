@@ -56,7 +56,14 @@ exports.install = function(instance) {
 	var fn;
 
 	instance.on('data', function(response) {
-		fn && fn(response.data, instance, response, instance.options, response.repository, require);
+		if (fn) {
+			try {
+				fn(response.data, instance, response, instance.options, response.repository, require);
+			} catch (e) {
+				response.data = e;
+				instance.throw(response);
+			}
+		}
 	});
 
 	instance.reconfigure = function() {

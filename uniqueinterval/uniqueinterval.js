@@ -4,6 +4,7 @@ exports.version = '1.0.0';
 exports.group = 'Time';
 exports.author = 'Peter Širka';
 exports.color = '#656D78';
+exports.icon = 'clock-o';
 exports.input = true;
 exports.click = true;
 exports.output = 1;

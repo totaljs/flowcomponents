@@ -3,7 +3,7 @@ exports.title = 'MQTT broker';
 exports.group = 'MQTT';
 exports.color = '#888600';
 exports.version = '1.0.0';
-exports.icon = 'clock-o';
+exports.icon = 'exchange';
 exports.input = false;
 exports.output = 0;
 exports.author = 'Martin Smola';
@@ -325,7 +325,7 @@ Broker.prototype.unsubscribe = function(componentid, topic) {
 Broker.prototype.publish = function(topic, data, options) {
 	var self = this;
 
-	if (!self.connected || !data)
+	if (!self.connected)
 		return;
 
 	if (typeof(data) === 'object') {

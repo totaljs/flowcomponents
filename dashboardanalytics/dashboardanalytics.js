@@ -1,9 +1,10 @@
 exports.id = 'dashboardanalytics';
 exports.title = 'Analytics';
-exports.version = '1.0.0';
+exports.version = '1.1.0';
 exports.author = 'Peter Širka';
 exports.group = 'Dashboard';
 exports.color = '#5CB36D';
+exports.icon = 'line-chart';
 exports.input = true;
 exports.output = 1;
 exports.options = { fn: 'next(value.temperature);', format: '{0} °C', decimals: 2, statshours: 24, statsdays: 14, statsmonths: 12, statsyears: 5  };

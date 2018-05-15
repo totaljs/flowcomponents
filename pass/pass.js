@@ -3,6 +3,7 @@ exports.title = 'Pass';
 exports.version = '1.0.0';
 exports.author = 'Martin Smola';
 exports.color = '#656D78';
+exports.icon = 'arrow-right';
 exports.input = 2;
 exports.output = 1;
 exports.options = { enabled: true, inputs: 1, passallinputs: false, values: [] };

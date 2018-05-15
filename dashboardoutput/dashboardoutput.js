@@ -4,6 +4,7 @@ exports.version = '1.0.0';
 exports.author = 'Peter Širka';
 exports.group = 'Dashboard';
 exports.color = '#5CB36D';
+exports.icon = 'font';
 exports.input = true;
 exports.output = 0;
 exports.readme = `# Dashboard Output

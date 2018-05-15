@@ -24,6 +24,7 @@ exports.install = function(instance) {
 		instance.set('state', response.data);
 		instance.flowboard && instance.flowboard('laststate', response.data);
 		instance.status(arr[response.data]);
+		instance.send2(response.data);
 	});
 
 	instance.on('options', instance.reconfigure);

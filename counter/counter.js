@@ -5,6 +5,7 @@ exports.title = 'Counter';
 exports.version = '1.0.0';
 exports.author = 'Peter Širka';
 exports.color = '#656D78';
+exports.icon = 'dashboard';
 exports.input = true;
 exports.output = 1;
 exports.options = { enabled: true };
@@ -44,7 +45,7 @@ exports.install = function(instance) {
 
 	instance.custom.status = function() {
 		setTimeout2(instance.id, function() {
-			instance.status(count + 'x');
+			instance.status(count.format(0));
 			instance.send2(count);
 		}, 100);
 	};
