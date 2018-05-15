@@ -1,4 +1,4 @@
-# Flowbard: Socket
+# Flowboard: Socket
 
 - [Flowboard website](https://www.totaljs.com/flowboard/)
 

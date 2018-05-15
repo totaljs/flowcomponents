@@ -86,7 +86,7 @@
 		]
 	},
 	{
-		"name": "Flowbard",
+		"name": "Flowboard",
 		"items": [
 			"https://rawgit.com/totaljs/flowcomponents/master/flowboardlight/flowboardlight.js",
 			"https://rawgit.com/totaljs/flowcomponents/master/flowboardoutput/flowboardoutput.js",

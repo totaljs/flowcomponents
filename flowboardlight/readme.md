@@ -1,4 +1,4 @@
-# Flowbard: Light
+# Flowboard: Light
 
 - [Flowboard website](https://www.totaljs.com/flowboard/)
 

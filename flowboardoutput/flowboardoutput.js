@@ -1,20 +1,20 @@
 exports.id = 'flowboardoutput';
 exports.title = 'Output';
-exports.group = 'Flowbard';
+exports.group = 'Flowboard';
 exports.color = '#AC92EC';
 exports.icon = 'fa-commenting';
 exports.input = true;
 exports.output = 0;
 exports.version = '1.0.0';
 exports.author = 'Peter Širka';
-exports.readme = `# Flowbard: Output
+exports.readme = `# Flowboard: Output
 
 This component shows data as they are. Output can be __HTML__ and can contain __Font-Awesome icons__, colors, etc..`;
 
 exports.install = function(instance) {
 
 	instance.reconfigure = function() {
-		instance.status(global.FLOWBOARD ? '' : 'Flowbard not found.', global.FLOWBOARD ? null : 'red');
+		instance.status(global.FLOWBOARD ? '' : 'Flowboard not found.', global.FLOWBOARD ? null : 'red');
 	};
 
 	instance.on('data', function(response) {

@@ -1,4 +1,4 @@
-# Flowbard: Output
+# Flowboard: Output
 
 - [Flowboard website](https://www.totaljs.com/flowboard/)
 
