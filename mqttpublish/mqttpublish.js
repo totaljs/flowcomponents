@@ -23,7 +23,7 @@ exports.html = `<div class="padding">
 		TRIGGER('mqtt.brokers', 'mqttconfig.brokers');
 	});
 	ON('save.mqttpublish', function(component, options) {
-		!component.name && (component.name = options.broker + ' -> ' + options.topic);
+		!component.name && (component.name = options.broker + (options.topic ? ' -> ' + options.topic : ''));
 	});
 </script>`;
 

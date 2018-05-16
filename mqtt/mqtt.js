@@ -41,7 +41,7 @@ exports.html = `<div class="padding">
 </div>
 <script>
 	ON('save.mqtt', function(component, options) {
-		!component.name && (component.name = '{0}@{1}:{2}'.format(options.username || '', options.host, options.port));
+		!component.name && (component.name = '{0} @ {1}:{2}'.format(options.username || '', options.host, options.port || '1883'));
 	});
 </script>`;
 
@@ -101,7 +101,7 @@ exports.install = function(instance) {
 		broker = new Broker(opts);
 		MQTT_BROKERS.push(broker);
 
-		instance.status('Ready', 'white');
+		instance.status('Ready');
 	};
 
 	instance.close = function(done) {
@@ -256,7 +256,8 @@ Broker.prototype.connect = function() {
 		EMIT('mqtt.brokers.message', self.id, topic, message);
 	});
 
-	self.client.on('close', function() {
+	self.client.on('close', function(err) {
+		err && console.log(err.code);
 		if (self.connected || !self.connecting) {
 			self.connected = false;
 			EMIT('mqtt.brokers.status', 'disconnected', self.id);
@@ -271,7 +272,6 @@ Broker.prototype.connect = function() {
 		if (self.connecting) {
 			self.client.end();
 			self.connecting = false;
-			EMIT('mqtt.brokers.status', 'connectionfailed', self.id);
 			EMIT('mqtt.brokers.status', 'error', self.id, err);
 		}
 	});
@@ -290,9 +290,9 @@ Broker.prototype.close = function(callback) {
 	var self = this;
 	self.closing = true;
 
-	if (self.connected || self.connecting && self.client.end)
-		self.client.end(/*cb*/);
-	//else
+	if ((self.connected || self.connecting) && self.client.end)
+		self.client.end(true, cb);
+	else
 		cb();
 
 	function cb() {
@@ -341,7 +341,7 @@ Broker.prototype.publish = function(topic, data, options) {
 	if (typeof(data) !== 'string')
 		data = JSON.stringify(data);
 
-	self.client.publish(topic, data, options);
+	self.client.publish(topic, data || '', options);
 };
 
 Broker.prototype.add = function(componentid) {
