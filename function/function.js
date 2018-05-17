@@ -74,8 +74,8 @@ exports.install = function(instance) {
 			status: instance.status.bind(instance),
 			send: function(flowdata, index, data){
 
-				if (!data){
-					if (!index)
+				if (data === undefined){
+					if (index === undefined)
 						return instance.send2(flowdata.clone());
 					data = index;
 					index = 0;
