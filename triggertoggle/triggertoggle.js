@@ -39,12 +39,14 @@ exports.install = function(instance) {
 	instance.on('click', function() {
 		toggle = !toggle;
 		instance.send2(toggle ? valueA : valueB);
+		instance.status('Next:' + (toggle ? valueB : valueA));
 	});
 
 	instance.reconfigure = function() {
 		var options = instance.options;
 		valueA = instance.custom.set(options.datatypeA, options.dataA);
 		valueB = instance.custom.set(options.datatypeB, options.dataB);
+		instance.status('Next:' + valueB);
 	};
 
 	instance.custom.set = function(type, value) {
