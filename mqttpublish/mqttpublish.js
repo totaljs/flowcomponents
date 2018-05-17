@@ -49,12 +49,10 @@ exports.install = function(instance) {
 
 	var PUBLISH_OPTIONS = {};
 
-	var added = false;
 	var ready = false;
 
 	instance.custom.reconfigure = function() {
 
-		added = false;
 		ready = false;
 
 		if (!MQTT.broker(instance.options.broker))
@@ -62,8 +60,7 @@ exports.install = function(instance) {
 
 		if (instance.options.broker) {
 
-			!added && MQTT.add(instance.options.broker, instance.id);
-			added = true;
+			MQTT.add(instance.options.broker, instance.id);
 			ready = true;
 			PUBLISH_OPTIONS.retain = instance.options.retain || false;
 			PUBLISH_OPTIONS.qos = parseInt(instance.options.qos || 0);
@@ -92,12 +89,11 @@ exports.install = function(instance) {
 
 	instance.on('close', function() {
 		MQTT.remove(instance.options.broker, instance.id);
-		OFF('mqtt.brokers.status', brokerstatus);
+		OFF('mqtt.brokers.status', instance.custom.brokerstatus);
 	});
 
-	ON('mqtt.brokers.status', brokerstatus);
 
-	function brokerstatus(status, brokerid, msg) {
+	instance.custom.brokerstatus = function(status, brokerid, msg) {
 		if (brokerid !== instance.options.broker)
 			return;
 
@@ -129,5 +125,7 @@ exports.install = function(instance) {
 		}
 	}
 
+	ON('mqtt.brokers.status', instance.custom.brokerstatus);
+	
 	instance.custom.reconfigure();
 };

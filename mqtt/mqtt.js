@@ -88,7 +88,13 @@ exports.install = function(instance) {
 		ON('mqtt.brokers.status', brokerstatus);
 
 		var o = instance.options;
-		var opts = {host: o.host, port: o.port, id: o.id};
+		var opts = {
+			host: o.host,
+			port: o.port,
+			id: o.id,
+			reconnectPeriod: 3000,
+			resubscribe: false
+		};
 
 		if (o.username) {
 			opts.username = o.username;
@@ -152,12 +158,8 @@ FLOW.trigger('mqtt.brokers', function(next) {
 MQTT.add = function(brokerid, componentid) {
 	var broker = MQTT_BROKERS.findItem('id', brokerid);
 
-	if (broker) {
+	if (broker)
 		broker.add(componentid);
-		return true;
-	}
-
-	return false;
 };
 
 MQTT.remove = function(brokerid, componentid) {
@@ -175,12 +177,21 @@ MQTT.publish = function(brokerid, topic, data, options) {
 
 MQTT.subscribe = function(brokerid, componentid, topic, qos) {
 	var broker = MQTT_BROKERS.findItem('id', brokerid);
-	broker && broker.subscribe(componentid, topic, qos);
+
+	if (!broker)
+		return;
+
+	broker.add(componentid);
+	broker.subscribe(componentid, topic, qos);
 };
 
 MQTT.unsubscribe = function(brokerid, componentid, topic, qos) {
 	var broker = MQTT_BROKERS.findItem('id', brokerid);
-	broker && broker.unsubscribe(componentid, topic);
+	if (!broker)
+		return;
+
+	broker.unsubscribe(componentid, topic);
+	broker.remove(componentid);
 };
 
 MQTT.broker = function(brokerid) {
@@ -237,12 +248,18 @@ Broker.prototype.connect = function() {
 	self.client.on('connect', function() {
 		self.connecting = false;
 		self.connected = true;
+		if (self.reconnecting) {
+			EMIT('mqtt.brokers.status', 'reconnected', self.id);
+			self.reconnecting = false;
+			self.resubscribe();
+		}
 		EMIT('mqtt.brokers.status', 'connected', self.id);
 	});
 
 	self.client.on('reconnect', function() {
 		self.connecting = true;
 		self.connected = false;
+		self.reconnecting = true;
 		EMIT('mqtt.brokers.status', 'connecting', self.id);
 	});
 
@@ -257,7 +274,12 @@ Broker.prototype.connect = function() {
 	});
 
 	self.client.on('close', function(err) {
-		err && console.log(err.code);
+		if (err && err.toString().indexOf('Error')) {
+			self.connecting = false;
+			self.connected = false;
+			EMIT('mqtt.brokers.status', 'error', self.id, err.code);
+		}
+
 		if (self.connected || !self.connecting) {
 			self.connected = false;
 			EMIT('mqtt.brokers.status', 'disconnected', self.id);
@@ -290,7 +312,7 @@ Broker.prototype.close = function(callback) {
 	var self = this;
 	self.closing = true;
 
-	if ((self.connected || self.connecting) && self.client.end)
+	if ((self.connected || self.connecting) && self.client && self.client.end)
 		self.client.end(true, cb);
 	else
 		cb();
@@ -304,21 +326,29 @@ Broker.prototype.close = function(callback) {
 	}
 };
 
-Broker.prototype.subscribe = function(componentid, topic, qos) {
+Broker.prototype.subscribe = function(componentid, topic) {
 	var self = this;
 	self.subscribtions[topic] = self.subscribtions[topic] || [];
+	EMIT('mqtt.brokers.status', 'connected', self.id);
 	if (self.subscribtions[topic].indexOf(componentid) > -1)
 		return;
-	self.client.subscribe(topic, qos || 0);
+	self.client.subscribe(topic);
 	self.subscribtions[topic].push(componentid);
+};
+
+Broker.prototype.resubscribe = function() {
+	var self = this;
+	var topics = Object.keys(self.subscribtions);
+	for (var i = 0; i < topics.length; i++)
+	    self.client.subscribe(topics[i]);
 };
 
 Broker.prototype.unsubscribe = function(componentid, topic) {
 	var self = this;
-	var subscription = self.subscribtions[topic];
-	if (subscription) {
-		subscription = subscription.remove(componentid);
-		self.client.connected && !subscription.length && self.client.unsubscribe(topic);
+	var sub = self.subscribtions[topic];
+	if (sub) {
+		self.subscribtions[topic] = sub.remove(componentid);
+		self.client.connected && !self.subscribtions[topic].length && self.client.unsubscribe(topic);
 	}
 };
 

@@ -48,33 +48,18 @@ More on wildcard topics [here](https://mosquitto.org/man/mqtt-7.html)
 
 exports.install = function(instance) {
 
-	var added = false;
-	var subscribed = false;
-
 	instance.custom.reconfigure = function(o, old_options) {
 
-		added = false;
-		subscribed = false;
-
-		if (!MQTT.broker(instance.options.broker))
+		if (!MQTT.broker(instance.options.broker)) 
 			return instance.status('No broker', 'red');
 
 		if (instance.options.broker && instance.options.topic) {
 
-
-			if (!added)
-				MQTT.add(instance.options.broker, instance.id);
-
-			if (!subscribed)
-				MQTT.subscribe(instance.options.broker, instance.id, instance.options.topic);
-
-			if (old_options && (instance.options.topic !== old_options.topic || instance.options.qos !== old_options.qos)) {
+			if (old_options)
 				MQTT.unsubscribe(instance.options.broker, instance.id, old_options.topic);
-				MQTT.subscribe(instance.options.broker, instance.id, instance.options.topic, instance.options.qos);
-			}
 
-			added = true;
-			subscribed = true;
+			MQTT.subscribe(instance.options.broker, instance.id, instance.options.topic);
+
 			return;
 		}
 
@@ -85,15 +70,11 @@ exports.install = function(instance) {
 
 	instance.on('close', function() {
 		MQTT.unsubscribe(instance.options.broker, instance.id, instance.options.topic);
-		MQTT.remove(instance.options.broker, instance.id);
-		OFF('mqtt.brokers.message', message);
-		OFF('mqtt.brokers.status', brokerstatus);
+		OFF('mqtt.brokers.message', instance.custom.message);
+		OFF('mqtt.brokers.status', instance.custom.brokerstatus);
 	});
 
-	ON('mqtt.brokers.message', message);
-	ON('mqtt.brokers.status', brokerstatus);
-
-	function brokerstatus(status, brokerid, msg) {
+	instance.custom.brokerstatus = function(status, brokerid, msg) {
 		if (brokerid !== instance.options.broker)
 			return;
 
@@ -102,8 +83,6 @@ exports.install = function(instance) {
 				instance.status('Connecting', '#a6c3ff');
 				break;
 			case 'connected':
-				// re-subscibe on reconnect
-				MQTT.subscribe(instance.options.broker, instance.id, instance.options.topic);
 				instance.status('Connected', 'green');
 				break;
 			case 'disconnected':
@@ -114,12 +93,15 @@ exports.install = function(instance) {
 				break;
 			case 'new':
 			case 'removed':
-				instance.custom.reconfigure();
+				if (brokerid === instance.options.broker)
+					instance.custom.reconfigure();
 				break;
 			case 'error':
 				instance.status(msg, 'red');
 				break;
 			case 'reconfigured':
+				if (brokerid !== instance.options.broker)
+					return;
 				instance.options.broker = msg;
 				instance.reconfig();
 				instance.custom.reconfigure();
@@ -127,7 +109,7 @@ exports.install = function(instance) {
 		}
 	}
 
-	function message(brokerid, topic, message) {
+	instance.custom.message = function(brokerid, topic, message) {
 		if (brokerid !== instance.options.broker)
 			return;
 
@@ -138,6 +120,9 @@ exports.install = function(instance) {
 			instance.send2(flowdata);
 		}
 	}
+
+	ON('mqtt.brokers.message', instance.custom.message);
+	ON('mqtt.brokers.status', instance.custom.brokerstatus);
 
 	instance.custom.reconfigure();
 };
