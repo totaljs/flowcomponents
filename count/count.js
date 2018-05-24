@@ -1,5 +1,4 @@
 const ID = 'count';
-
 exports.id = 'count';
 exports.title = 'Count';
 exports.version = '1.0.0';
@@ -34,7 +33,7 @@ __Arguments:__
 exports.install = function(instance) {
 
 	var count = 0;
-	var initialCall=true;
+	var initialCall = true;
 
 	instance.on('data', function(flowdata) {
 		var index = flowdata.index;
@@ -42,23 +41,23 @@ exports.install = function(instance) {
 
 			// If this is the first time, set the value to 'initial value'
 			if(initialCall) {
- 				initialCall=false;
-				count=instance.options.initialvalue;
+ 				initialCall = false;
+				count = instance.options.initialvalue;
  			} else {
 				count = count+instance.options.increment;
  			}
-			instance.status("Count:" + count);
+			instance.status('Count:' + count);
  			instance.send2(count);
 		} else { // Second bubble, reset counter.
- 			instance.debug("Reset Count.");
+ 			instance.debug('Reset Count.');
 			count = instance.options.initialvalue;
- 			initialCall=true;
+ 			initialCall = true;
 		}
 	});
 
 	instance.on('options', function() {
-		count=instance.options.initialvalue;
-		initialCall=true;
+		count = instance.options.initialvalue;
+		initialCall = true;
 	});
 
 };
