@@ -2,8 +2,8 @@ exports.id = 'schema';
 exports.title = 'Schema';
 exports.group = 'Common';
 exports.color = '#656D78';
-exports.input = true;
-exports.output = ['#8CC152', '#DA4453'];
+exports.input = 1;
+exports.output = 1;
 exports.author = 'Peter Širka';
 exports.icon = 'code';
 exports.options = {};
@@ -34,14 +34,14 @@ exports.install = function(instance) {
 		if (type) {
 			method(type, response.data, function(err, response) {
 				if (err)
-					instance.send2(1, err);
+					instance.throw(err);
 				else
 					instance.send2(0, response);
 			});
 		} else {
 			method(response.data, function(err, response) {
 				if (err)
-					instance.send2(1, err);
+					instance.throw(err);
 				else
 					instance.send2(0, response);
 			});
