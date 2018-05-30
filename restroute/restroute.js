@@ -109,7 +109,7 @@ This component creates a REST endpoint/route (Total.js route) for receiving data
 
 __Outputs__:
 
-- first output contains a __response__
+- first output contains a __response__ - disabling this output will cause automatic response with code "503 service unavailable"
 - second output contains received data
 - third output contains a average time of duration \`Number\``;
 
@@ -174,6 +174,13 @@ exports.install = function(instance) {
 		instance.status(options.schema.replace(/^default\//, '') + ': ' + schema.join(', '));
 
 		ROUTE(options.url, function(id) {
+
+			// is first output disabled?
+			if (instance.isDisabled('output', 0)) {
+				this.status = '503';
+				this.json();
+				return;
+			}
 
 			var self = this;
 			var key;
@@ -261,8 +268,6 @@ exports.install = function(instance) {
 				}
 			});
 		}, flags, options.size || 5);
-
-		instance.status('');
 	};
 
 	instance.custom.duration = function() {
