@@ -16,7 +16,7 @@ exports.html = `<div class="padding">
 			<div data-jc="dropdown" data-jc-path="method" data-jc-config="required:true;items:,GET,POST,PUT,DELETE">@(HTTP method)</div>
 		</div>
 		<div class="col-md-9 m">
-			<div data-jc="textbox" data-jc-path="url" data-jc-config="required:true;placeholder:/api/products/">@(URL address)</div>
+			<div data-jc="textbox" data-jc-path="url" data-jc-config="required:true;placeholder:/api/products/;error:URL already in use or no URL entered">@(URL address)</div>
 		</div>
 	</div>
 	<div class="row">
@@ -63,6 +63,7 @@ exports.html = `<div class="padding">
 
 	WATCH('restroutedata.operations', restrouterebind);
 	WATCH('settings.restroute.schema', restrouterebind, true);
+	WATCH('settings.restroute.url', restroutecheckurl);
 
 	function restrouterebind() {
 		setTimeout2('restrouterebind', function() {
@@ -72,7 +73,14 @@ exports.html = `<div class="padding">
 			});
 			SET('restroutedata.operations2', arr, true);
 		}, 1000);
-	}
+	};
+
+	function restroutecheckurl() {
+		TRIGGER('restroutecheckurl', settings.restroute.url, function(exists){
+			if (exists)
+				INVALID('settings.restroute.url');
+		});
+	};
 
 	ON('save.restroute', function(component, options) {
 		!component.name && (component.name = options.method + ' ' + options.url);
@@ -301,6 +309,18 @@ FLOW.trigger(exports.id, function(next) {
 	output.schemas.quicksort('name');
 
 	next(output);
+});
+
+// check url exists
+FLOW.trigger('restroutecheckurl', function(next, url){
+	var exists = false;
+	if (url[url.length - 1] !== '/')
+		url += '/';
+	F.routes.web.forEach(function(r){
+		if (r.urlraw === url)
+			exists = true;
+	});
+	next(exists);
 });
 
 exports.uninstall = function() {
