@@ -56,9 +56,11 @@ exports.html = `<div class="padding">
 	</div>
 </div>
 <script>
+	var restroute_currenturl = '';
 
 	ON('open.restroute', function(instance) {
 		TRIGGER('{0}', 'restroutedata');
+		httproute_currenturl = settings.restroute.url;
 	});
 
 	WATCH('restroutedata.operations', restrouterebind);
@@ -76,6 +78,8 @@ exports.html = `<div class="padding">
 	};
 
 	function restroutecheckurl() {
+		if (restroute_currenturl === settings.restroute.url)
+			return;
 		TRIGGER('restroutecheckurl', settings.restroute.url, function(exists){
 			if (exists)
 				INVALID('settings.restroute.url');
