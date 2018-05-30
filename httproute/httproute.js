@@ -15,6 +15,8 @@ __Outputs__:
 - first output: raw data (cache is empty or is disabled)
 - second output: cached data
 
+If one of the outputs is disabled then automatic responce with code "503 service unavailable" is sent.
+
 When a request comes in bellow object is available at \`flowdata.data\`:
 
 \`\`\`javascript
@@ -97,7 +99,12 @@ exports.html = `<div class="padding">
 				}
 			}).join(', ');
 		}
-		httproute_currenturl = options.url;
+		if (component.isnew) {
+			options.url = '';
+			options.name = '';
+		} else {
+			httproute_currenturl = options.url;
+		}
 	});
 
 	WATCH('settings.httproute.url', httproutecheckurl);
@@ -149,8 +156,6 @@ exports.html = `<div class="padding">
 
 exports.install = function(instance) {
 
-	var id;
-
 	instance.custom.emptyresponse = function(self) {
 		self.plain();
 	};
@@ -167,19 +172,18 @@ exports.install = function(instance) {
 		if (typeof(options.flags) === 'string')
 			options.flags = options.flags.split(',').trim();
 
-		id && UNINSTALL('route', id);
-		id = 'id:' + instance.id;
+		UNINSTALL('route', 'id:' + instance.id);
 
 		var flags = options.flags || [];
-		flags.push(id);
+		flags.push('id:' + instance.id);
 		flags.push(options.method.toLowerCase());
 		options.timeout && flags.push(options.timeout * 1000);
 
 		F.route(options.url, function() {
 
-			if (instance.paused) {
+			if (instance.paused || instance.isDisabled('output', 0) || instance.isDisabled('output', 1)) {
 				this.status = 503;
-				this.content('Service is currently unavailable, please try again later.');
+				this.json();
 				return;
 			}
 
@@ -259,7 +263,7 @@ exports.install = function(instance) {
 	instance.on('options', instance.reconfigure);
 
 	instance.on('close', function(){
-		id && UNINSTALL('route', id);
+		UNINSTALL('route', 'id:' + instance.id);
 	});
 };
 
