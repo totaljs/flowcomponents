@@ -44,7 +44,7 @@ exports.html = `<div class="padding">
 	<section>
 		<label>@(Main settings)</label>
 		<div class="padding npb">
-			<div data-jc="textbox" data-jc-path="url" class="m" data-jc-config="required:true;maxlength:500;placeholder:/api/test">@(URL address)</div>
+			<div data-jc="textbox" data-jc-path="url" class="m" data-jc-config="required:true;maxlength:500;placeholder:/api/test;error:URL already in use or no URL entered">@(URL address)</div>
 			<div data-jc="dropdown" data-jc-path="method" data-jc-config="required:true;items:,GET,POST,PUT,DELETE,OPTIONS" class="m">@(HTTP method)</div>
 
 			<div class="row">
@@ -84,6 +84,7 @@ exports.html = `<div class="padding">
 		</div>
 	</div>
 <script>
+	var httproute_currenturl = '';
 	ON('open.httproute', function(component, options) {
 		if (options.flags instanceof Array) {
 			var method = options.method.toLowerCase();
@@ -96,10 +97,53 @@ exports.html = `<div class="padding">
 				}
 			}).join(', ');
 		}
+		httproute_currenturl = options.url;
 	});
+
+	WATCH('settings.httproute.url', httproutecheckurl);
+
+	function httproutecheckurl() {
+		if (httproute_currenturl === settings.httproute.url)
+			return;
+		TRIGGER('httproutecheckurl', settings.httproute.url, function(exists){
+			if (exists)
+				INVALID('settings.httproute.url');
+		});
+	};
 
 	ON('save.httproute', function(component, options) {
 		!component.name && (component.name = options.method + ' ' + options.url);
+
+		var builder = [];
+		builder.push('### @(Configuration)');
+		builder.push('');
+		builder.push('- __' + options.method + ' ' + options.url + '__');
+		builder.push('- @(flags): ' + options.flags);
+		builder.push('- @(maximum request data length): __' + options.size + ' kB__');
+		builder.push('- @(empty response): __' + options.emptyresponse + '__');
+
+		if (options.headers) {
+			var headers = [];
+			Object.keys(options.headers).forEach(function(key){
+				headers.push(key + ': ' + options.headers[key]);
+			});
+			headers.length && builder.push('- @(headers):\\n\`\`\`' + headers.join('\\n') + '\`\`\`');
+		};
+
+		var cp =  '@(no cache)';
+		if (options.cachepolicy === 1)
+			cp = '@(URL)';
+		if (options.cachepolicy === 2)
+			cp = '@(URL + query string)';
+
+		if (options.cachepolicy === 3)
+			cp = '@(URL + query string + user instance)';		
+
+		builder.push('- @(cache policy): __' + cp + '__');	
+
+		options.cacheexpire && builder.push('- @(cache expire): __' + options.cacheexpire + '__');
+
+		component.notes = builder.join('\\n');
 	});
 </script>`;
 
@@ -118,12 +162,6 @@ exports.install = function(instance) {
 		if (!options.url) {
 			instance.status('Not configured', 'red');
 			return;
-		}
-
-		var length = F.routes.web.length;
-		for (var i = 0; i < length; i++) {
-			if (F.routes.web[i].name === options.url)
-				return instance.status('URL already in use', 'red');
 		}
 
 		if (typeof(options.flags) === 'string')
@@ -223,4 +261,20 @@ exports.install = function(instance) {
 	instance.on('close', function(){
 		id && UNINSTALL('route', id);
 	});
+};
+
+// check url exists
+FLOW.trigger('httproutecheckurl', function(next, url){
+	var exists = false;
+	if (url[url.length - 1] !== '/')
+		url += '/';
+	F.routes.web.forEach(function(r){
+		if (r.urlraw === url)
+			exists = true;
+	});
+	next(exists);
+});
+
+exports.uninstall = function() {
+	FLOW.trigger('httproutecheckurl', null);
 };
