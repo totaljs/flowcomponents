@@ -58,9 +58,9 @@ exports.html = `<div class="padding">
 <script>
 	var restroute_currenturl = '';
 
-	ON('open.restroute', function(instance) {
+	ON('open.restroute', function(instance, options) {
 		TRIGGER('{0}', 'restroutedata');
-		httproute_currenturl = settings.restroute.url;
+		httproute_currenturl = options.url;
 	});
 
 	WATCH('restroutedata.operations', restrouterebind);
