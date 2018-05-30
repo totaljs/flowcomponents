@@ -179,8 +179,8 @@ exports.install = function(instance) {
 
 		ROUTE(options.url, function(id) {
 
-			// is first output disabled?
-			if (instance.isDisabled('output', 0)) {
+			// is flow paused or first output disabled?
+			if (instance.paused || instance.isDisabled('output', 0)) {
 				this.status = '503';
 				this.json();
 				return;
