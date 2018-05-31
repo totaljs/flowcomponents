@@ -58,9 +58,9 @@ exports.html = `<div class="padding">
 <script>
 	var restroute_currenturl = '';
 
-	ON('open.restroute', function(instance, options) {
+	ON('open.restroute', function(com, options) {
 		TRIGGER('{0}', 'restroutedata');
-		if (component.isnew) {
+		if (com.isnew) {
 			options.url = '';
 			options.name = '';
 		} else {
