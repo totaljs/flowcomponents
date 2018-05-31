@@ -60,7 +60,12 @@ exports.html = `<div class="padding">
 
 	ON('open.restroute', function(instance, options) {
 		TRIGGER('{0}', 'restroutedata');
-		httproute_currenturl = options.url;
+		if (component.isnew) {
+			options.url = '';
+			options.name = '';
+		} else {
+			httproute_currenturl = options.url;
+		}
 	});
 
 	WATCH('restroutedata.operations', restrouterebind);
