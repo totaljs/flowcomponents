@@ -61,7 +61,7 @@ exports.install = function(instance) {
 
 	instance.on('data', function(flowdata) {
 
-		if (flowdata.data.buffer) {
+		if (flowdata.data && flowdata.data.buffer) {
 			instance.custom.process(null, flowdata.data.buffer);
 		} else if (instance.options.filename) {
 			Fs.readFile(F.path.root(instance.options.filename), instance.custom.process);			
