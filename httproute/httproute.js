@@ -181,7 +181,7 @@ exports.install = function(instance) {
 
 		F.route(options.url, function() {
 
-			if (instance.paused || instance.isDisabled('output', 0) || instance.isDisabled('output', 1)) {
+			if (instance.paused || (instance.isDisabled && (instance.isDisabled('output', 0) || instance.isDisabled('output', 1)))) {
 				this.status = 503;
 				this.json();
 				return;
