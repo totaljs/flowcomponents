@@ -1,13 +1,13 @@
 exports.id = 'flowboardsocket';
 exports.title = 'Socket';
-exports.group = 'Flowbard';
+exports.group = 'Flowboard';
 exports.color = '#AC92EC';
 exports.icon = 'fa-plug';
 exports.input = true;
 exports.output = 1;
 exports.version = '1.0.0';
 exports.author = 'Peter Širka';
-exports.readme = `# Flowbard: Socket
+exports.readme = `# Flowboard: Socket
 
 - input \`0 = OFF\` and \`1 = ON\`
 - output \`0 = OFF\` and \`1 = ON\``;
@@ -17,7 +17,7 @@ exports.install = function(instance) {
 	var arr = ['Off', 'On'];
 
 	instance.reconfigure = function() {
-		instance.status(global.FLOWBOARD ? arr[instance.get('state') || 0] : 'Flowbard not found.', global.FLOWBOARD ? null : 'red');
+		instance.status(global.FLOWBOARD ? arr[instance.get('state') || 0] : 'Flowboard not found.', global.FLOWBOARD ? null : 'red');
 	};
 
 	instance.on('data', function(response) {
