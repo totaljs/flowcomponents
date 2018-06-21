@@ -4,12 +4,14 @@ require('total.js');
 deleteFolder('__flow');
 Fs.mkdirSync(F.path.root('__flow'));
 
-U.ls('./', function callback(files,dirs) {
+U.ls('./', function callback(files, dirs) {
 
 	dirs.wait(function(dir, next){
 
 		if (dir.startsWith('.') || dir.startsWith('node_modules') || dir.startsWith('__flow'))
 			return next();
+
+		dir = dir.substring(0, dir.length - 1);
 
 		var source = U.join(F.path.root(dir), dir + '.js');
 		var target = U.join(F.path.root('__flow'), dir + '.js');
