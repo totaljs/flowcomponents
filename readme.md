@@ -454,7 +454,7 @@ __References:__
 
 ## Support
 
-Total.js Support is applied for components which are from developers: __Peter Širka__ and __Martin Smola__. Do you want own compnents? [Contact us](https://www.totaljs.com/contact/).
+Total.js Support is applied for components which are from developers: __Peter Širka__ and __Martin Smola__. Do you want own components? [Contact us](https://www.totaljs.com/contact/).
 
 ## Contact
 
