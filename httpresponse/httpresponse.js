@@ -16,8 +16,6 @@ exports.html = `<div class="padding">
 	<div class="help"><code>JSON</code> is by default.</div>
 </div>`;
 
-const ERRORMESSAGE = {};
-
 exports.install = function(instance) {
 
 	var dursum = 0;
@@ -29,9 +27,7 @@ exports.install = function(instance) {
 		var data = flowdata.data;
 
 		if (!ctrl) {
-			ERRORMESSAGE.error = 'No controller to use for response!';
-			ERRORMESSAGE.data = data;
-			instance.debug(ERRORMESSAGE, 'error');
+			instance.throw('No controller to use for response!');
 			return;
 		}
 
@@ -46,9 +42,9 @@ exports.install = function(instance) {
 			return ctrl.plain('');
 
 		if (datatype !== 'json' && typeof(data) !== 'string') {
-			ERRORMESSAGE.error = 'Incorect type of data, expected string, got ' + typeof(data);
-			ERRORMESSAGE.data = data;
-			instance.debug(ERRORMESSAGE, 'error');
+			instance.throw('Incorect type of data, expected string, got ' + typeof(data));
+			ctrl.plain(data == null ? '' : data.toString());
+			return;
 		}
 
 		switch(datatype) {
