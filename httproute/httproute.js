@@ -5,7 +5,7 @@ exports.color = '#5D9CEC';
 exports.icon = 'globe';
 exports.input = false;
 exports.output = ['#6CAC5A', '#37BC9B'];
-exports.version = '1.1.0';
+exports.version = '1.2.0';
 exports.author = 'Martin Smola';
 exports.cloning = false;
 exports.options = { method: 'GET', url: '', size: 5, cacheexpire: '5 minutes', cachepolicy: 0, timeout: 5 };
@@ -36,7 +36,7 @@ When a request comes in bellow object is available at \`flowdata.data\`:
 }
 \`\`\`
 
-See [documentation for flags](https://docs.totaljs.com/latest/en.html#api~HttpRouteOptionsFlags~unauthorize). These method flags are set automatically e.g. \`get, post, put or delete\`
+See [documentation for flags](https://docs.totaljs.com/latest/en.html#api~HttpRouteOptionsFlags~unauthorize). These method flags are set automatically e.g. \`get, post, put, patch or delete\`
 
 ---
 
@@ -46,9 +46,15 @@ exports.html = `<div class="padding">
 	<section>
 		<label>@(Main settings)</label>
 		<div class="padding npb">
-			<div data-jc="textbox" data-jc-path="url" class="m" data-jc-config="required:true;maxlength:500;placeholder:/api/test;error:URL already in use or no URL entered">@(URL address)</div>
-			<div data-jc="dropdown" data-jc-path="method" data-jc-config="required:true;items:,GET,POST,PUT,DELETE,OPTIONS" class="m">@(HTTP method)</div>
 
+			<div class="row">
+				<div class="col-md-3 m">
+					<div data-jc="dropdown" data-jc-path="method" data-jc-config="required:true;items:,GET,POST,PUT,DELETE,PATCH,OPTIONS">@(HTTP method)</div>
+				</div>
+				<div class="col-md-9 m">
+					<div data-jc="textbox" data-jc-path="url" data-jc-config="required:true;maxlength:500;placeholder:/api/test;error:URL already in use">@(URL address)</div>
+				</div>
+			</div>
 			<div class="row">
 				<div class="col-md-6 m">
 					<div data-jc="textbox" data-jc-path="flags" data-jc-config="placeholder:json">@(Additional flags)</div>
@@ -86,7 +92,10 @@ exports.html = `<div class="padding">
 		</div>
 	</div>
 <script>
+
 	var httproute_currenturl = '';
+	var httproute_currentmethod = 'GET';
+
 	ON('open.httproute', function(component, options) {
 		if (options.flags instanceof Array) {
 			var method = options.method.toLowerCase();
@@ -104,18 +113,19 @@ exports.html = `<div class="padding">
 			options.name = '';
 		} else {
 			httproute_currenturl = options.url;
+			httproute_currentmethod = options.method;
 		}
 	});
 
 	WATCH('settings.httproute.url', httproutecheckurl);
+	WATCH('settings.httproute.method', httproutecheckurl);
 
 	function httproutecheckurl() {
-		if (httproute_currenturl === settings.httproute.url)
-			return;
-		TRIGGER('httproutecheckurl', settings.httproute.url, function(exists){
-			if (exists)
-				INVALID('settings.httproute.url');
-		});
+		if (httproute_currenturl !== settings.httproute.url || httproute_currentmethod !== settings.httproute.method) {
+			TRIGGER('httproutecheckurl', { url: settings.httproute.url, method: settings.httproute.method }, function(e) {
+				(e ? INVALID : RESET)('settings.httproute.url');
+			});
+		}
 	};
 
 	ON('save.httproute', function(component, options) {
@@ -144,9 +154,9 @@ exports.html = `<div class="padding">
 			cp = '@(URL + query string)';
 
 		if (options.cachepolicy === 3)
-			cp = '@(URL + query string + user instance)';		
+			cp = '@(URL + query string + user instance)';
 
-		builder.push('- @(cache policy): __' + cp + '__');	
+		builder.push('- @(cache policy): __' + cp + '__');
 
 		options.cacheexpire && builder.push('- @(cache expire): __' + options.cacheexpire + '__');
 
@@ -268,15 +278,13 @@ exports.install = function(instance) {
 };
 
 // check url exists
-FLOW.trigger('httproutecheckurl', function(next, url){
-	var exists = false;
+FLOW.trigger('httproutecheckurl', function(next, data) {
+	var url = data.url;
+	var method = data.method;
 	if (url[url.length - 1] !== '/')
 		url += '/';
-	F.routes.web.forEach(function(r){
-		if (r.urlraw === url)
-			exists = true;
-	});
-	next(exists);
+	var exists = F.routes.web.findItem(r => r.urlraw === url && r.method === method);
+	next(exists != null);
 });
 
 exports.uninstall = function() {
