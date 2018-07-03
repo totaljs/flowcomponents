@@ -1,6 +1,6 @@
 exports.id = 'dashboardanalytics';
 exports.title = 'Analytics';
-exports.version = '1.1.0';
+exports.version = '1.1.1';
 exports.author = 'Peter Širka';
 exports.group = 'Dashboard';
 exports.color = '#5CB36D';
@@ -163,8 +163,12 @@ exports.install = function(instance) {
 	};
 
 	instance.custom.save_temporary = function() {
-		Fs.writeFile(temporary, JSON.stringify(cache), NOOP);
-		Fs.writeFile(temporarycurrent, JSON.stringify(current), NOOP);
+		Fs.writeFile(temporary, JSON.stringify(cache), instance.uerror);
+		current && Fs.writeFile(temporarycurrent, JSON.stringify(current), instance.uerror);
+	};
+
+	instance.uerror = function(err) {
+		err && instance.throw(err);
 	};
 
 	instance.custom.save = function() {
@@ -299,7 +303,7 @@ exports.install = function(instance) {
 
 	Fs.readFile(temporarycurrent, function(err, data) {
 		if (data)
-			current = data.toString('utf8').parseJSON(true);
+			current = data.toString('utf8').parseJSON(true) || {};
 		Fs.readFile(temporary, function(err, data) {
 			if (err)
 				return;
