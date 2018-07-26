@@ -6,7 +6,7 @@ exports.input = 1;
 exports.output = ['red', 'green', '#666D77'];
 exports.author = 'Peter Širka';
 exports.icon = 'code';
-exports.version = '1.0.0';
+exports.version = '1.0.1';
 exports.cloning = false;
 exports.options = { name: '', keepmessage: true, duration: false };
 
@@ -68,7 +68,7 @@ exports.install = function(instance) {
 					data = instance.make(response, 1);
 				instance.send(1, data);
 			}
-		}, data);
+		}, data, data.repository.controller);
 	});
 
 	instance.custom.duration = function() {
@@ -77,7 +77,7 @@ exports.install = function(instance) {
 		instance.send2(2, avg);
 	};
 
-	instance.on('service', function(counter) {
+	instance.on('service', function() {
 		dursum = 0;
 		durcount = 0;
 	});
