@@ -8,19 +8,20 @@ exports.author = 'Peter Širka';
 exports.icon = 'globe';
 exports.version = '1.1.0';
 exports.cloning = false;
+
 exports.options = {
-		method: 'GET',
-		url: '',
-		duration: false,
-		auth: false,
-		middleware: [],
-		length: 5,
-		operation: [],
-		output: '',
-		respond: false,
-		timeout: 5,
-		cacheexpire: '5 minutes',
-		cachepolicy: 0
+	method: 'GET',
+	url: '',
+	duration: false,
+	auth: false,
+	middleware: [],
+	length: 5,
+	operation: [],
+	output: '',
+	respond: false,
+	timeout: 5,
+	cacheexpire: '5 minutes',
+	cachepolicy: 0
 };
 
 exports.html = `<div class="padding">
@@ -139,231 +140,224 @@ __Outputs__:
 
 exports.install = function(instance) {
 
-		var action = null;
-		var dursum = 0;
-		var durcount = 0;
+	var action = null;
+	var dursum = 0;
+	var durcount = 0;
 
-		instance.on('close', () => UNINSTALL('route', 'id:' + instance.id));
+	instance.on('close', () => UNINSTALL('route', 'id:' + instance.id));
 
-		instance.reconfigure = function() {
+	instance.reconfigure = function() {
 
-				var options = instance.options;
+		var options = instance.options;
 
-				if (!options.url) {
-						instance.status('Not configured', 'red');
-						return;
+		if (!options.url) {
+			instance.status('Not configured', 'red');
+			return;
+		}
+
+		var builder = [];
+		var output = options.output ? options.operation.indexOf(options.output) : null;
+
+		if (output === -1)
+			output = null;
+
+		for (var i = 0; i < options.operation.length; i++) {
+			var name = options.operation[i].split('#');
+			if (name.length === 1)
+				builder.push('$' + name[0] + '()');
+			else
+				builder.push('$' + name[0] + '(\'{0}\')'.format(name[1]));
+		}
+
+		if (action)
+			UNINSTALL('route', 'id:' + instance.id);
+
+		// Timeout 5000
+		var flags = [options.timeout * 1000];
+
+		if (options.method !== 'GET')
+			flags.push(options.method.toLowerCase());
+
+		if (options.auth)
+			flags.push('authorize');
+
+		if (options.middleware) {
+			for (var i = 0; i < options.middleware.length; i++)
+				flags.push('#' + options.middleware[i]);
+		}
+
+		flags.push('*' + options.schema);
+		flags.push('id:' + instance.id);
+
+		var code = 'if (self.body.$async) { self.body.$async(next{0}).{1}; } else { $ASYNC(self.schema,next{0},self).{1}; }'.format(output == null ? ',undefined' : ',' + output, builder.join('.'));
+		action = new Function('self', 'next', code);
+
+		var schema = [];
+		for (var i = 0; i < options.operation.length; i++)
+			schema.push(options.operation[i] === options.output ? '[{0}]'.format(options.operation[i]) : options.operation[i]);
+
+		instance.status(options.schema.replace(/^default\//, '') + ': ' + schema.join(', '));
+
+		ROUTE(options.url, function(id) {
+
+			// is flow paused or first output disabled?
+			if (instance.paused || (instance.isDisabled && instance.isDisabled('output', 0))) {
+				this.status = '503';
+				this.json();
+				return;
+			}
+
+			var self = this;
+			var key;
+			var beg;
+
+			if (instance.options.duration)
+				beg = new Date();
+
+			self.id = id;
+			self.flowinstance = instance;
+
+			if (instance.hasConnection(1)) {
+				var data = {};
+				data.query = self.query;
+				data.user = self.user;
+				data.session = self.session;
+				data.body = self.body;
+				data.params = self.params;
+				data.headers = self.req.headers;
+				data.url = self.url;
+				data.mobile = self.mobile;
+				data.robot = self.robot;
+				data.referrer = self.referrer;
+				data.language = self.language;
+				var msg = instance.make(data, 1);
+				msg.repository.controller = self;
+				instance.send(1, msg);
+			}
+
+			switch (instance.options.cachepolicy) {
+
+				case 1: // URL
+					key = 'rr' + instance.id + self.url.hash();
+					break;
+				case 2: // URL + query
+				case 3: // URL + query + user
+					key = self.url;
+					var keys = Object.keys(self.query);
+					keys.sort();
+					for (var i = 0, length = keys.length; i < length; i++)
+						key += keys[i] + self.query[keys[i]] + '&';
+					if (instance.options.cachepolicy === 3 && self.user)
+						key += 'iduser' + self.user.id;
+					key = 'rr' + instance.id + key.hash();
+					break;
+			}
+
+			if (key && F.cache.get2(key)) {
+				var response = F.cache.get2(key);
+				instance.options.respond && self.json(response);
+
+				if (instance.options.duration) {
+					durcount++;
+					dursum += ((new Date() - beg) / 1000).floor(2);
+					setTimeout2(instance.id, instance.custom.duration, 500, 10);
 				}
 
-				var builder = [];
-				var output = options.output ? options.operation.indexOf(options.output) : null;
+				if (instance.hasConnection(0)) {
+					var message = instance.make(response);
+					message.repository.controller = self;
+					message.repository.cache = true;
+					instance.send(0, message);
+				}
+				return;
+			}
 
-				if (output === -1)
-						output = null;
+			action(self, function(err, response) {
 
-				for (var i = 0; i < options.operation.length; i++) {
-						var name = options.operation[i].split('#');
-						if (name.length === 1)
-								builder.push('$' + name[0] + '()');
-						else
-								builder.push('$' + name[0] + '(\'{0}\')'.format(name[1]));
+				if (instance.options.duration) {
+					durcount++;
+					dursum += ((new Date() - beg) / 1000).floor(2);
+					setTimeout2(instance.id, instance.custom.duration, 500, 10);
 				}
 
-				if (action)
-						UNINSTALL('route', 'id:' + instance.id);
-
-				// Timeout 5000
-				var flags = [options.timeout * 1000];
-
-				if (options.method !== 'GET')
-						flags.push(options.method.toLowerCase());
-
-				if (options.auth)
-						flags.push('authorize');
-
-				if (options.middleware) {
-						for (var i = 0; i < options.middleware.length; i++)
-								flags.push('#' + options.middleware[i]);
+				if (err)
+					self.invalid().push(err);
+				else {
+					key && instance.options.cacheexpire && F.cache.set(key, response, instance.options.cacheexpire);
+					instance.options.respond && self.json(response);
+					if (instance.hasConnection(0)) {
+						var message = instance.make(response);
+						message.repository.controller = self;
+						instance.send(0, message);
+					}
 				}
+			});
+		}, flags, options.size || 5);
+	};
 
-				flags.push('*' + options.schema);
-				flags.push('id:' + instance.id);
+	instance.custom.duration = function() {
+		var avg = (dursum / durcount).floor(2);
+		instance.status(avg + ' sec.');
+		instance.send2(2, avg);
+	};
 
-				var code = 'if (self.body.$async) { self.body.$async(next{0}).{1}; } else { $ASYNC(self.schema,next{0},self).{1}; }'.format(output == null ? ',undefined' : ',' + output, builder.join('.'));
-				action = new Function('self', 'next', code);
+	instance.on('service', function() {
+		dursum = 0;
+		durcount = 0;
+	});
 
-				var schema = [];
-				for (var i = 0; i < options.operation.length; i++)
-						schema.push(options.operation[i] === options.output ? '[{0}]'.format(options.operation[i]) : options.operation[i]);
-
-				instance.status(options.schema.replace(/^default\//, '') + ': ' + schema.join(', '));
-
-				ROUTE(options.url, function(id) {
-
-						// is flow paused or first output disabled?
-						if (instance.paused || (instance.isDisabled && instance.isDisabled('output', 0))) {
-								this.status = '503';
-								this.json();
-								return;
-						}
-
-						var self = this;
-						var key;
-						var beg;
-
-						if (instance.options.duration)
-								beg = new Date();
-
-						self.id = id;
-						self.flowinstance = instance;
-
-						if (instance.hasConnection(1)) {
-								var data = {};
-								data.query = self.query;
-								data.user = self.user;
-								data.session = self.session;
-								data.body = self.body;
-								data.params = self.params;
-								data.headers = self.req.headers;
-								data.url = self.url;
-								data.mobile = self.mobile;
-								data.robot = self.robot;
-								data.referrer = self.referrer;
-								data.language = self.language;
-								var msg = instance.make(data, 1);
-								msg.repository.controller = self;
-								instance.send(1, msg);
-						}
-
-						switch (instance.options.cachepolicy) {
-
-								case 1: // URL
-										key = 'rr' + instance.id + self.url.hash();
-										break;
-								case 2: // URL + query
-								case 3: // URL + query + user
-										key = self.url;
-										var keys = Object.keys(self.query);
-										keys.sort();
-										for (var i = 0, length = keys.length; i < length; i++)
-												key += keys[i] + self.query[keys[i]] + '&';
-										if (instance.options.cachepolicy === 3 && self.user)
-												key += 'iduser' + self.user.id;
-										key = 'rr' + instance.id + key.hash();
-										break;
-						}
-
-						if (key && F.cache.get2(key)) {
-								var response = F.cache.get2(key);
-								instance.options.respond && self.json(response);
-
-								if (instance.options.duration) {
-										durcount++;
-										dursum += ((new Date() - beg) / 1000).floor(2);
-										setTimeout2(instance.id, instance.custom.duration, 500, 10);
-								}
-
-								if (instance.hasConnection(0)) {
-										var message = instance.make(response);
-										message.repository.controller = self;
-										message.repository.cache = true;
-										instance.send(0, message);
-								}
-								return;
-						}
-
-						action(self, function(err, response) {
-
-								if (instance.options.duration) {
-										durcount++;
-										dursum += ((new Date() - beg) / 1000).floor(2);
-										setTimeout2(instance.id, instance.custom.duration, 500, 10);
-								}
-
-								if (err)
-										self.invalid().push(err);
-								else {
-										key && instance.options.cacheexpire && F.cache.set(key, response, instance.options.cacheexpire);
-										instance.options.respond && self.json(response);
-										if (instance.hasConnection(0)) {
-												var message = instance.make(response);
-												message.repository.controller = self;
-												instance.send(0, message);
-										}
-								}
-						});
-				}, flags, options.size || 5);
-		};
-
-		instance.custom.duration = function() {
-				var avg = (dursum / durcount).floor(2);
-				instance.status(avg + ' sec.');
-				instance.send2(2, avg);
-		};
-
-		instance.on('service', function() {
-				dursum = 0;
-				durcount = 0;
-		});
-
-		instance.on('options', instance.reconfigure);
-		instance.reconfigure();
+	instance.on('options', instance.reconfigure);
+	instance.reconfigure();
 };
 
 // Reads schemas + operations
 FLOW.trigger(exports.id, function(next) {
 
-		var output = {};
-		output.schemas = [];
-		output.operations = [];
-		output.middleware = [];
+	var output = {};
+	output.schemas = [];
+	output.operations = [];
+	output.middleware = [];
 
-		EACHSCHEMA(function(group, name, schema) {
-
-				var id = group + '/' + name;
-				output.schemas.push({
-						id: id,
-						name: group === 'default' ? name : group + '/' + name
-				});
-
-				var keys = Object.keys(schema.meta);
-				for (var i = 0, length = keys.length; i < length; i++) {
-						output.operations.push({
-								id: keys[i],
-								idschema: id,
-								name: keys[i]
-						});
-				}
-
-		});
-
-		var keys = Object.keys(F.routes.middleware);
+	EACHSCHEMA(function(group, name, schema) {
+		var id = group + '/' + name;
+		output.schemas.push({ id: id, name: group === 'default' ? name : group + '/' + name });
+		var keys = Object.keys(schema.meta);
 		for (var i = 0, length = keys.length; i < length; i++)
-				output.middleware.push(keys[i]);
+			output.operations.push({ id: keys[i], idschema: id, name: keys[i] });
+	});
 
-		output.middleware.quicksort();
-		output.operations.quicksort('name');
-		output.schemas.quicksort('name');
+	var keys = Object.keys(F.routes.middleware);
 
-		next(output);
+	for (var i = 0, length = keys.length; i < length; i++)
+		output.middleware.push(keys[i]);
+
+	output.middleware.quicksort();
+	output.operations.quicksort('name');
+	output.schemas.quicksort('name');
+
+	next(output);
 });
 
 // check url exists
 FLOW.trigger('restroutecheckurl', function(next, data) {
-		var url = data.url;
-		var method = data.method;
-		var exists = false;
+	var url = data.url;
+	var method = data.method;
+	var exists = false;
 
-		if (url[url.length - 1] !== '/')
-				url += '/';
+	if (url[url.length - 1] !== '/')
+		url += '/';
 
-		F.routes.web.forEach(function(r) {
-				if (r.urlraw === url && r.method === method)
-						exists = true;
-		});
+	for (var i = 0; i < F.routes.web.length; i++) {
+		var r = F.routes.web[i];
+		if (r.urlraw === url && r.method === method) {
+			exists = true;
+			break;
+		}
+	}
 
-		next(exists);
+	next(exists);
 });
 
 exports.uninstall = function() {
-		FLOW.trigger(exports.id, null);
+	FLOW.trigger(exports.id, null);
 };
