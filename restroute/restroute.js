@@ -6,14 +6,28 @@ exports.input = 0;
 exports.output = ['#6BAD57', '#F6BB42', '#666D77'];
 exports.author = 'Peter Širka';
 exports.icon = 'globe';
-exports.version = '1.0.0';
+exports.version = '1.1.0';
 exports.cloning = false;
-exports.options = { method: 'GET', url: '', duration: false, auth: false, middleware: [], length: 5, operation: [], output: '', respond: false, timeout: 5, cacheexpire: '5 minutes', cachepolicy: 0 };
+
+exports.options = {
+	method: 'GET',
+	url: '',
+	duration: false,
+	auth: false,
+	middleware: [],
+	length: 5,
+	operation: [],
+	output: '',
+	respond: false,
+	timeout: 5,
+	cacheexpire: '5 minutes',
+	cachepolicy: 0
+};
 
 exports.html = `<div class="padding">
 	<div class="row">
 		<div class="col-md-3 m">
-			<div data-jc="dropdown" data-jc-path="method" data-jc-config="required:true;items:,GET,POST,PUT,DELETE">@(HTTP method)</div>
+			<div data-jc="dropdown" data-jc-path="method" data-jc-config="required:true;items:,GET,POST,PUT,DELETE,PATCH">@(HTTP method)</div>
 		</div>
 		<div class="col-md-9 m">
 			<div data-jc="textbox" data-jc-path="url" data-jc-config="required:true;placeholder:/api/products/;error:URL already in use or no URL entered">@(URL address)</div>
@@ -57,6 +71,7 @@ exports.html = `<div class="padding">
 </div>
 <script>
 	var restroute_currenturl = '';
+	var restroute_currentmethod = 'GET';
 
 	ON('open.restroute', function(com, options) {
 		TRIGGER('{0}', 'restroutedata');
@@ -64,11 +79,13 @@ exports.html = `<div class="padding">
 			options.url = '';
 			options.name = '';
 		} else {
-			httproute_currenturl = options.url;
+			restroute_currenturl = options.url;
+			restroute_currentmethod = options.method;
 		}
 	});
 
 	WATCH('restroutedata.operations', restrouterebind);
+	WATCH('settings.restroute.method', restroutecheckurl);
 	WATCH('settings.restroute.schema', restrouterebind, true);
 	WATCH('settings.restroute.url', restroutecheckurl);
 
@@ -83,11 +100,10 @@ exports.html = `<div class="padding">
 	};
 
 	function restroutecheckurl() {
-		if (restroute_currenturl === settings.restroute.url)
+		if (restroute_currenturl === settings.restroute.url && restroute_currentmethod === settings.restroute.method)
 			return;
-		TRIGGER('restroutecheckurl', settings.restroute.url, function(exists){
-			if (exists)
-				INVALID('settings.restroute.url');
+		TRIGGER('restroutecheckurl', { url: settings.restroute.url, method: settings.restroute.method }, function(exists){
+			(exists ? INVALID : RESET)('settings.restroute.url');
 		});
 	};
 
@@ -303,18 +319,15 @@ FLOW.trigger(exports.id, function(next) {
 	output.middleware = [];
 
 	EACHSCHEMA(function(group, name, schema) {
-
 		var id = group + '/' + name;
 		output.schemas.push({ id: id, name: group === 'default' ? name : group + '/' + name });
-
 		var keys = Object.keys(schema.meta);
-		for (var i = 0, length = keys.length; i < length; i++) {
+		for (var i = 0, length = keys.length; i < length; i++)
 			output.operations.push({ id: keys[i], idschema: id, name: keys[i] });
-		}
-
 	});
 
 	var keys = Object.keys(F.routes.middleware);
+
 	for (var i = 0, length = keys.length; i < length; i++)
 		output.middleware.push(keys[i]);
 
@@ -326,14 +339,22 @@ FLOW.trigger(exports.id, function(next) {
 });
 
 // check url exists
-FLOW.trigger('restroutecheckurl', function(next, url){
+FLOW.trigger('restroutecheckurl', function(next, data) {
+	var url = data.url;
+	var method = data.method;
 	var exists = false;
+
 	if (url[url.length - 1] !== '/')
 		url += '/';
-	F.routes.web.forEach(function(r){
-		if (r.urlraw === url)
+
+	for (var i = 0; i < F.routes.web.length; i++) {
+		var r = F.routes.web[i];
+		if (r.urlraw === url && r.method === method) {
 			exists = true;
-	});
+			break;
+		}
+	}
+
 	next(exists);
 });
 
