@@ -28,9 +28,11 @@ exports.html = `<div class="padding">
 
 	ON('save.code', function(component, options) {
 		if (code_outputs_count !== options.outputs) {
-			component.connections = {};
+			if (flow.version < 511) {
+				component.connections = {};
+				setState(MESSAGES.apply);
+			}
 			component.output = options.outputs || 1;
-			setState(MESSAGES.apply);
 		}
 	});
 </script>`;

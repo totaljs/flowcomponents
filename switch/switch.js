@@ -65,10 +65,12 @@ exports.html = `<style>
 
 	ON('save.switch', function(component, options) {
 		var length = options.conditions.length || 0;
-		if (changed && length !==  outputs_count) {
-			component.connections = {};
+		if (changed && length !== outputs_count) {
+			if (flow.version < 511) {
+				component.connections = {};
+				setState(MESSAGES.apply);
+			}
 			component.output = length;
-			setState(MESSAGES.apply);
 		}
 	});
 
