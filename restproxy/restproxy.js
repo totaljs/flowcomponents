@@ -6,7 +6,7 @@ exports.input = 0;
 exports.output = ['#6BAD57', '#F6BB42', '#666D77'];
 exports.author = 'Peter Širka';
 exports.icon = 'globe';
-exports.version = '1.0.0';
+exports.version = '1.0.1';
 exports.cloning = false;
 exports.options = { method: 'GET', url: '', target: '', headersreq: true, headersres: false, nodns: false, auth: false, middleware: [], length: 5, respond: false, timeout: 5, cacheexpire: '5 minutes', cachepolicy: 0, duration: false };
 
@@ -137,7 +137,6 @@ exports.install = function(instance) {
 				flags.push('#' + options.middleware[i]);
 		}
 
-		flags.push('*' + options.schema);
 		flags.push('id:' + instance.id);
 
 		ROUTE(options.url, function(id) {
