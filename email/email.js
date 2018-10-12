@@ -1,5 +1,5 @@
 exports.id = 'email';
-exports.version = '1.3.0';
+exports.version = '1.4.0';
 exports.title = 'Email';
 exports.group = 'Notifications';
 exports.color = '#8CC152';
@@ -160,7 +160,8 @@ exports.install = function(instance) {
 	instance.reconfigure = function() {
 
 		var options = instance.options;
-		can = options.smtp && options.subject;
+
+		can = (options.smtp || options.type !== 'smtp') && !!options.subject;
 
 		if (!can) {
 			instance.status('Not configured', 'red');

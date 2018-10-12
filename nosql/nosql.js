@@ -1,6 +1,6 @@
 exports.id = 'nosql';
 exports.title = 'NoSQL';
-exports.version = '1.1.0';
+exports.version = '1.2.0';
 exports.group = 'Databases';
 exports.author = 'Martin Smola';
 exports.color = '#D770AD';
@@ -11,43 +11,49 @@ exports.options = {};
 exports.readme = `# NoSQL embedded
 
 ## Outputs
-First output is response from nosql engine and second is the data passed in
+
+First output is response from nosql engine and second is the data passed in.
 
 ## Collection
+
 if the collection field is left empty, then we try to look at \`flowdata.get('collection')\`, to set this value you need to use \`flowdata.set('collection', '<collection-name>')\` in previous component (currently only \`function\` can be used)
 
 ## Insert
+
 - will insert recieved data
 - expects data to be an Object
 - returns error, success, id
 
 ## Read
+
 - will read a document by id
 - expects data to be an Object with an \`id\` property
 - returns error, response
 
 ## Update
+
 - will update document by id
 - expects data to be an Object with \`id\` property and all the props to be updated
 - returns error, response
 - if response is 0 then update failed
 
 ## Remove
+
 - will remove document by id
 - expects data to be an Object with an \`id\` property
 - returns error, response
 - if response is 0 then remove failed
 
-
 ## Query
+
 - will query DB
 - expects data to be an Array as shown bellow
 - returns error, response
 
 \`\`\`javascript
 [
- ['where', 'sensor', 'temp'], // builder.where('sensor', 'temp');
- ['limit', 2]                 // builder.limit(2);
+	['where', 'sensor', 'temp'], // builder.where('sensor', 'temp');
+	['limit', 2]                 // builder.limit(2);
 ]
 \`\`\``;
 
@@ -69,7 +75,7 @@ exports.install = function(instance) {
 		var options = instance.options;
 		var collection = options.collection || flowdata.get('collection');
 		if (!collection) {
-			flowdata.data = {err: '[DB] No collection specified'};
+			flowdata.data = { err: '[DB] No collection specified' };
 			instance.send2(0, flowdata);
 			return instance.error('[DB] No collection specified');
 		}
@@ -79,7 +85,7 @@ exports.install = function(instance) {
 		if (options.method === 'read') {
 
 			if (!flowdata.data.id) {
-				flowdata.data = {err: '[DB] Cannot get record by id: `undefined`'};
+				flowdata.data = { err: '[DB] Cannot get record by id: `undefined`' };
 				instance.send2(0, flowdata);
 				return instance.error('[DB] Cannot get record by id: `undefined`');
 			}
@@ -88,10 +94,12 @@ exports.install = function(instance) {
 				builder.where('id', flowdata.data.id);
 				builder.first();
 				builder.callback(function(err, response) {
-					err && instance.error(err);
-
-					flowdata.data = {err: err, response: response};
-					instance.send2(0, flowdata);
+					if (err)
+						instance.throw(err);
+					else {
+						flowdata.data = { response: response };
+						instance.send2(0, flowdata);
+					}
 				});
 			});
 
@@ -99,9 +107,12 @@ exports.install = function(instance) {
 
 			options.addid && (flowdata.data.id = UID());
 			nosql.insert(flowdata.data).callback(function(err) {
-				err && instance.error(err);
-				flowdata.data = { err: err, success: err ? false : true, id: flowdata.data.id };
-				instance.send2(0, flowdata);
+				if (err)
+					instance.throw(err);
+				else {
+					flowdata.data = { success: err ? false : true, id: flowdata.data.id };
+					instance.send2(0, flowdata);
+				}
 			});
 
 		} else if (options.method === 'query') {
@@ -116,16 +127,19 @@ exports.install = function(instance) {
 					}
 				});
 				builder.callback(function(err, response) {
-					err && instance.error(err);
-					flowdata.data = {err: err, response: response || []};
-					instance.send2(0, flowdata);
+					if (err)
+						instance.throw(err);
+					else {
+						flowdata.data = { response: response || [] };
+						instance.send2(0, flowdata);
+					}
 				});
 			});
 
 		} else if (options.method === 'update') {
 
 			if (!flowdata.data.id) {
-				flowdata.data = {err: '[DB] Cannot update record by id: `undefined`'};
+				flowdata.data = { err: '[DB] Cannot update record by id: `undefined`' };
 				instance.send2(0, flowdata);
 				return instance.error('[DB] Cannot update record by id: `undefined`');
 			}
@@ -133,16 +147,19 @@ exports.install = function(instance) {
 			nosql.modify(flowdata.data).make(function(builder) {
 				builder.where('id', flowdata.data.id);
 				builder.callback(function(err, count) {
-					err && instance.error(err);
-					flowdata.data = { err: err, response: count || 0 };
-					instance.send2(0, flowdata);
+					if (err)
+						instance.throw(err);
+					else {
+						flowdata.data = { response: count || 0 };
+						instance.send2(0, flowdata);
+					}
 				});
 			});
 
 		} else if (options.method === 'remove') {
 
 			if (!flowdata.data.id) {
-				flowdata.data = {err: '[DB] Cannot remove record by id: `undefined`'};
+				flowdata.data = { err: '[DB] Cannot remove record by id: `undefined`' };
 				instance.send2(0, flowdata);
 				return instance.error('[DB] Cannot remove record by id: `undefined`');
 			}
@@ -150,9 +167,12 @@ exports.install = function(instance) {
 			nosql.remove().make(function(builder) {
 				builder.where('id', flowdata.data.id);
 				builder.callback(function(err, count) {
-					err && instance.error(err);
-					flowdata.data = { err: err, response: count || 0 };
-					instance.send2(0, flowdata);
+					if (err)
+						instance.throw(err);
+					else {
+						flowdata.data = { response: count || 0 };
+						instance.send2(0, flowdata);
+					}
 				});
 			});
 		}
