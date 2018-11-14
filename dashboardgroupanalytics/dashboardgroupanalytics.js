@@ -1,6 +1,6 @@
 exports.id = 'dashboardgroupanalytics';
 exports.title = 'Group Analytics';
-exports.version = '1.1.0';
+exports.version = '1.1.1';
 exports.author = 'Peter Širka';
 exports.group = 'Dashboard';
 exports.color = '#5CB36D';
@@ -350,8 +350,7 @@ exports.install = function(instance) {
 		output.decimals = instance.options.decimals;
 
 		var comparer = output.type === 'min' ? Math.min : Math.max;
-
-		NOSQL(dbname).find().prepare(function(doc) {
+		var preprocessor = function(doc) {
 
 			g[doc.group] = true;
 
@@ -379,8 +378,9 @@ exports.install = function(instance) {
 			group = output.years[doc.group];
 			!group && (group = output.years[doc.group] = []);
 			quantitator(output.yearslength, group, 'id', tmp, comparer);
+		};
 
-		}).callback(function() {
+		NOSQL(dbname).find().stream(preprocessor).callback(function() {
 			output.groups = Object.keys(g);
 			if (callback)
 				callback(null, output);
