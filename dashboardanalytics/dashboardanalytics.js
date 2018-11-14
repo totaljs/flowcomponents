@@ -1,6 +1,6 @@
 exports.id = 'dashboardanalytics';
 exports.title = 'Analytics';
-exports.version = '1.1.1';
+exports.version = '1.2.1';
 exports.author = 'Peter Širka';
 exports.group = 'Dashboard';
 exports.color = '#5CB36D';
@@ -194,10 +194,7 @@ exports.install = function(instance) {
 		DOC.format = cache.format;
 		DOC.datecreated = F.datetime;
 
-		NOSQL(dbname).update(DOC, DOC).where('id', DOC.id).callback(function() {
-			// Sends stats
-			instance.stats();
-		});
+		NOSQL(dbname).update(DOC, DOC).where('id', DOC.id).callback(instance.stats);
 
 		cache.count = 0;
 		cache.number = null;
@@ -251,6 +248,9 @@ exports.install = function(instance) {
 	// This method sends stats to Dashboard
 	instance.stats = function(callback) {
 
+		if (callback && typeof(callback) !== 'function')
+			callback = null;
+
 		if (!global.DASHBOARD || !global.DASHBOARD.online()) {
 			callback && callback();
 			return;
@@ -271,8 +271,7 @@ exports.install = function(instance) {
 		output.decimals = instance.options.decimals;
 
 		var comparer = output.type === 'min' ? Math.min : Math.max;
-
-		NOSQL(dbname).find().prepare(function(doc) {
+		var preprocessor = function(doc) {
 
 			var tmp = { year: doc.year, month: doc.month, day: doc.day, hour: doc.hour, count: doc.count, value: doc.value, datecreated: doc.datecreated };
 			tmp.id = doc.id;
@@ -290,8 +289,24 @@ exports.install = function(instance) {
 			tmp.id = doc.year;
 			output.yearslength = instance.options.statsyears || 5;
 			quantitator(output.yearslength, output.years, 'id', tmp, comparer);
+		};
 
-		}).callback(function() {
+		DOC.id = +cache.datetime.toUTC().format('yyyyMMddHH');
+		DOC.year = cache.datetime.getUTCFullYear();
+		DOC.month = cache.datetime.getUTCMonth() + 1;
+		DOC.day = cache.datetime.getUTCDate();
+		DOC.hour = cache.datetime.getUTCHours();
+		DOC.week = +cache.datetime.format('w');
+		DOC.count = cache.count;
+		DOC.value = cache.number;
+		DOC.type = cache.type[0] === 'D' ? cache.type.substring(1) : cache.type;
+		DOC.period = cache.type[0] === 'D' ? 'daily' : 'hourly';
+		DOC.format = cache.format;
+		DOC.datecreated = F.datetime;
+
+		preprocessor(DOC);
+
+		NOSQL(dbname).stream(preprocessor, function() {
 			if (callback)
 				callback(null, output);
 			else if (instance.dashboard)
@@ -339,19 +354,18 @@ function quantitator(max, results, identity, obj, comparer, group) {
 			arr.push(U.clone(obj));
 			arr.quicksort(identity, false);
 		}
-		return;
-	}
-
-	for (var i = 0; i < length; i++) {
-		item = arr[i];
-		if (obj[identity] > item[identity]) {
-			for (var j = length - 1; j > i; j--)
-				arr[j] = arr[j - 1];
-			arr[i] = U.clone(obj);
-			return;
-		} else if (obj[identity] === item[identity]) {
-			item.value = comparer(item.value, obj.value);
-			return;
+	} else {
+		for (var i = 0; i < length; i++) {
+			item = arr[i];
+			if (obj[identity] > item[identity]) {
+				for (var j = length - 1; j > i; j--)
+					arr[j] = arr[j - 1];
+				arr[i] = U.clone(obj);
+				return;
+			} else if (obj[identity] === item[identity]) {
+				item.value = comparer(item.value, obj.value);
+				return;
+			}
 		}
 	}
 }
