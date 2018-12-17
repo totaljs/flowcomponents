@@ -2,7 +2,7 @@ exports.id = 'switch';
 exports.title = 'Switch';
 exports.group = 'Logic';
 exports.color = '#ffa824';
-exports.version = '1.1.0';
+exports.version = '1.1.1';
 exports.icon = 'code-fork';
 exports.input = true;
 exports.output = 1;
@@ -40,7 +40,7 @@ exports.html = `<style>
 						<div class="cond-col2 pr10"><div data-jc="dropdown" data-jc-path="conditions[$index].operator" data-jc-config="items:,>|>,<|<,>=|>=,<=|<=,==|==,!==|!==,startsWith (for strings only)|startsWith,endsWith (for strings only)|endsWith,indexOf|indexOf,Regex (for strings only)|Regex" class="m"></div></div>
 						<div class="cond-col3 pr10"><div data-jc="dropdown" data-jc-path="conditions[$index].datatype" data-jc-config="items:,Number,String,Boolean"></div></div>
 						<div class="cond-col4 pr10"><div data-jc="textbox" data-jc-path="conditions[$index].value" data-jc-config="placeholder:@(enter value)"></div></div>
-						<div class="cond-col5"><button class="exec button button-small cond-remove" data-exec="#switchcomponent_remove_condition" data-index="$index"><i class="fa fa-trash"></i></button></div>
+						<div class="cond-col5"><button class="exec button button-small cond-remove" data-exec="FUNC.switchcomponent_remove_condition" data-index="$index"><i class="fa fa-trash"></i></button></div>
 					</div>
 				</div>
 				</script>
@@ -48,7 +48,7 @@ exports.html = `<style>
 			<div class="row">
 				<div class="col-md-2 m">
 					<br>
-					<button class="exec button button-small" data-exec="#switchcomponent_add_condition"><i class="fa fa-plus mr5"></i>ADD</button>
+					<button class="exec button button-small" data-exec="FUNC.switchcomponent_add_condition"><i class="fa fa-plus mr5"></i>ADD</button>
 				</div>
 			</div>
 		</div>
@@ -74,12 +74,12 @@ exports.html = `<style>
 		}
 	});
 
-	OPERATION('switchcomponent_add_condition', function(){
+	FUNC.switchcomponent_add_condition = function() {
 		PUSH('settings.switch.conditions', {operator: '', datatype: '', value: ''});
 		changed = true;
-	});
+	};
 
-	OPERATION('switchcomponent_remove_condition', function(button){
+	FUNC.switchcomponent_remove_condition = function(button) {
 		var index = button.attr('data-index');
 		var conditions = settings.switch.conditions;
 		conditions = conditions.remove('index', parseInt(index));

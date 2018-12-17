@@ -5,10 +5,10 @@ exports.color = '#AAAAFF';
 exports.icon = 'globe';
 exports.input = 1;
 exports.output = 1;
-exports.version = '1.1.0';
+exports.version = '1.1.1';
 exports.author = 'John Graves';
 exports.cloning = false;
-exports.options = { conditions: [{ type: 'LaunchRequest', name: "", index: 0 }], helpintentsmml: '<speak>\n\n</speak>', cancelintentsmml: '<speak>\n\n</speak>', stopintentsmml: '<speak>\n\n</speak>', nointentsmml: '<speak>\n\n</speak>' }
+exports.options = { conditions: [{ type: 'LaunchRequest', name: '', index: 0 }], helpintentsmml: '<speak>\n\n</speak>', cancelintentsmml: '<speak>\n\n</speak>', stopintentsmml: '<speak>\n\n</speak>', nointentsmml: '<speak>\n\n</speak>' };
 exports.readme = `# Alexa router
 
 This component takes mssages from a HTTP Route node and parses various Alexa intents.
@@ -22,9 +22,8 @@ __Outputs__:
 - AMAZON.StopIntent (Optional)
 - AMAZON.NoIntent (Optional)
 - AMAZON.FallbackIntent (Optional)
-- SessionEndedRequest
+- SessionEndedRequest`;
 
-`
 exports.html = `
 <style>
 	.cond-col1 { width:20px; float:left; }
@@ -111,27 +110,22 @@ exports.html = `
 		setState(MESSAGES.apply);
 	});
 
-	OPERATION('alexaroutercomponent_add_condition', function(){
+	FUNC.alexaroutercomponent_add_condition = function() {
 		PUSH('settings.alexarouter.conditions', {type: 'IntentRequest', name: ''});
 		changed = true;
-	});
+	};
 
-	OPERATION('alexaroutercomponent_remove_condition', function(button){
+	FUNC.alexaroutercomponent_remove_condition = function(button){
 		var index = button.attr('data-index');
 		var conditions = settings.alexarouter.conditions;
 		conditions = conditions.remove('index', parseInt(index));
 		SET('settings.alexarouter.conditions', conditions);
 		changed = true;
-	});
+	};
 
-</script>
-
-`;
+</script>`;
 
 exports.install = function(instance) {
-
-	var id;
-
 	instance.on('data', function(flowdata) {
 		var ctrl = flowdata.repository.controller;
 		switch(flowdata.data.body.request.type) {
@@ -148,56 +142,56 @@ exports.install = function(instance) {
 							instance.sendReply(ctrl,instance.options.helpintentsmml,'<speak>Hello?</speak>',false);
 						} else {
 							instance.sendReply(ctrl,'<speak>I\'m sorry, there is no help for this module.</speak>','<speak>Hello? Anyone there?</speak>',true);
-						};
+						}
 						break;
 					case 'AMAZON.CancelIntent':
 						if(instance.options.cancelintentoverride) {
 							instance.sendReply(ctrl,instance.options.cancelintentsmml,'<speak>Hello?</speak>',false);
 						} else {
 							instance.sendReply(ctrl,'<speak>Goodbye</speak>','<speak>Hello? Anyone there?</speak>',true);
-						};
+						}
 						break;
 					case 'AMAZON.StopIntent':
 						if(instance.options.stopintentoverride) {
 							instance.sendReply(ctrl,instance.options.stopintentsmml,'<speak>Hello?</speak>',false);
 						} else {
 							instance.sendReply(ctrl,'<speak>Goodbye</speak>','<speak>Hello? Anyone there?</speak>',true);
-						};
+						}
 						break;
 					case 'AMAZON.NoIntent':
 						if(instance.options.nointentoverride) {
 							instance.sendReply(ctrl,instance.options.nointentsmml,'<speak>Hello?</speak>',true);
 						} else {
 							instance.sendReply(ctrl,'<speak>Goodbye</speak>','<speak>Hello? Anyone there?</speak>',true);
-						};
+						}
 						break;
 					case 'AMAZON.FallbackIntent':
 						// Send to fallback.
 						instance.send2(instance.options.conditions.length+1, flowdata);
 						break;
-						default:
+					default:
 						//Custom intent.
 						var found=false;
 						for(var i=0;i<instance.options.conditions.length;i++) {
 							if(flowdata.data.body.request.intent.name === instance.options.conditions[i].name) {
 								instance.send2(i+1, flowdata);
 								found=true;
-							};
-						};
+							}
+						}
 						if(!found) {
 							instance.sendReply(ctrl,'<speak>I don\'t know how to handle intent '+flowdata.data.body.request.intent.name+'</speak>','<speak>Hello? Anyone there?</speak>',false);
-						};
+						}
 						break;
-				};
+				}
 				break;
 			case 'SessionEndedRequest':
 				instance.status('Session End Request Received.', 'green');
 				instance.send2(instance.options.conditions.length+2, flowdata);
-		};
+		}
 	});
 
 	instance.sendReply = function(ctrl,say,repropmt,endsession) {
-		data = {
+		var data = {
 			'version': '1.0',
 			'response': {
 				'outputSpeech': {
@@ -215,7 +209,6 @@ exports.install = function(instance) {
 			'sessionAttributes': {},
 			'userAgent': 'alexa-flow/1.0.0 Node/v8.10.0'
 		};
-
 		ctrl.json(data);
 	};
 };
