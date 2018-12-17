@@ -85,7 +85,7 @@ exports.html = `<style>
 		conditions = conditions.remove('index', parseInt(index));
 		SET('settings.switch.conditions', conditions);
 		changed = true;
-	});
+	};
 
 </script>`;
 
