@@ -75,7 +75,7 @@ exports.html = `<style>
 	});
 
 	FUNC.switchcomponent_add_condition = function() {
-		PUSH('settings.switch.conditions', {operator: '', datatype: '', value: ''});
+		PUSH('settings.switch.conditions', { operator: '', datatype: '', value: '' });
 		changed = true;
 	};
 
