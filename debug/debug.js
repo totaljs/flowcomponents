@@ -46,7 +46,7 @@ exports.install = function(instance) {
 					if (val instanceof Error)
 						instance.debug({ error: val.message, stack: val.stack }, undefined, opt.group);
 					else
-						instance.debug(safeparse(opt.property ? U.get(val, opt.property) : response), undefined, opt.group);
+						instance.debug(safeparse(opt.property ? U.get(val, opt.property) : val), undefined, opt.group);
 					break;
 			}
 		}
