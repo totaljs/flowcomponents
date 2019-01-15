@@ -1,4 +1,5 @@
 exports.id = 'event';
+exports.version = '1.0.0';
 exports.title = 'Event';
 exports.group = 'Inputs';
 exports.color = '#F6BB42';
@@ -8,16 +9,18 @@ exports.author = 'Peter Širka';
 exports.icon = 'bullhorn';
 exports.options = { fn: `function(a, b) {
 	// your code
+	// this === component instance
+	// this.send(data);
 }` };
 
 exports.html = `<div class="padding">
-	<div data-jc="textbox" data-jc-path="name" data-jc-config="required:true;maxlength:50" class="m">@(Event name)</div>
-	<div data-jc="codemirror" data-jc-path="fn" data-jc-config="type:javascript;required:true;height:300">@(Event function)</div>
+	<div data-jc="textbox__name__required:true;maxlength:50" class="m">@(Event name)</div>
+	<div data-jc="codemirror__fn__type:javascript;required:true;height:300">@(Event function)</div>
 </div>`;
 
 exports.readme = `# Event capturing
 
-The component needs to be configured.`;
+This component can capture Total.js framework event.`;
 
 exports.install = function(instance) {
 
@@ -27,7 +30,7 @@ exports.install = function(instance) {
 
 		var options = instance.options;
 
-		e.name && OFF(e.name, e.fn);
+		e.name && OFF(e.name, e.process);
 
 		if (options.name && options.fn) {
 			e.name = options.name;
@@ -38,11 +41,17 @@ exports.install = function(instance) {
 			}
 		} else {
 			e.fn = null;
+			e.process = null;
 			e.name = '';
 		}
 
 		if (e.fn) {
-			ON(e.name, e.fn);
+
+			e.process = function(a, b, c, d) {
+				e.fn.call(instance, a, b, c, d);
+			};
+
+			ON(e.name, e.process);
 			instance.status('');
 		}
 		else
