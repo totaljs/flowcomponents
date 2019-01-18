@@ -1,3 +1,3 @@
-# Email sender
+# Event capturing
 
-The component has to be configured.
+This component can capture Total.js framework event.
