@@ -1,7 +1,7 @@
 exports.id = 'split';
 exports.title = 'Split';
 exports.group = 'Common';
-exports.version = '1.1.0';
+exports.version = '1.1.1';
 exports.color = '#656D78';
 exports.input = true;
 exports.output = 1;
@@ -17,8 +17,12 @@ exports.install = function(instance) {
 		var data = response.data;
 		if (data instanceof Array) {
 			for (var i = 0; i < data.length; i++) {
-				if (data[i] != null)
-					instance.send2(data[i]);
+				if (data[i] != null) {
+					var msg = instance.make(data[i], 0);
+					msg.repository = response.repository;
+					msg.data = data[i];
+					instance.send2(msg);
+				}
 			}
 		}
 	});
