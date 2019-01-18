@@ -20,7 +20,6 @@ exports.install = function(instance) {
 				if (data[i] != null) {
 					var msg = instance.make(data[i], 0);
 					msg.repository = response.repository;
-					msg.data = data[i];
 					instance.send2(msg);
 				}
 			}
