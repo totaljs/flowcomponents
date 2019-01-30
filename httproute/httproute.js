@@ -5,7 +5,7 @@ exports.color = '#5D9CEC';
 exports.icon = 'globe';
 exports.input = false;
 exports.output = ['#6CAC5A', '#37BC9B'];
-exports.version = '1.2.0';
+exports.version = '1.2.1';
 exports.author = 'Martin Smola';
 exports.cloning = false;
 exports.options = { method: 'GET', url: '', size: 5, cacheexpire: '5 minutes', cachepolicy: 0, timeout: 5 };
@@ -123,7 +123,14 @@ exports.html = `<div class="padding">
 	function httproutecheckurl() {
 		if (httproute_currenturl !== settings.httproute.url || httproute_currentmethod !== settings.httproute.method) {
 			TRIGGER('httproutecheckurl', { url: settings.httproute.url, method: settings.httproute.method }, function(e) {
-				(e ? INVALID : RESET)('settings.httproute.url');
+				var p = 'settings.httproute.url';
+				if (e) {
+					// invalid
+					INVALID(p);
+				} else {
+					if (!CAN(p))
+						RESET(p);
+				}
 			});
 		}
 	};
