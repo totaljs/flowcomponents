@@ -1,0 +1,187 @@
+[
+	{
+		"name": "Common",
+		"items": [
+			{ "url": "https://cdn.totaljs.com/flow/code.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/comment.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/counter.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/debug.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/eval.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/fi.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/filewriter.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/fo.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/function.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/lastdata.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/lastusage.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/merge.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/mergetoobject.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/modified.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/pass.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/repository.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/schema.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/split.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/virtualwirein.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/virtualwireout.js", "version": "" }
+		]
+	},
+	{
+		"name": "Inputs",
+		"items": [
+			{ "url": "https://cdn.totaljs.com/flow/console.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/event.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/trigger.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/triggertoggle.js", "version":"" }
+		]
+	},
+	{
+		"name": "Time",
+		"items": [
+			{ "url": "https://cdn.totaljs.com/flow/cron.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/delay.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/duration.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/feedtodelay.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/megatimer.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/scheduler.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/timer.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/uniqueinterval.js", "versio": "" }
+		]
+	},
+	{
+		"name": "Dashboard",
+		"items": [
+			{ "url": "https://cdn.totaljs.com/flow/dashboardanalytics.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/dashboardgroupanalytics.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/dashboardoutput.js", "version": "" }
+		]
+	},
+	{
+		"name": "Devices",
+		"items": [
+			{ "url": "https://cdn.totaljs.com/flow/device_light.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/device_outlet.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/device_switch.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/device_thermostat.js", "version": "" }
+		]
+	},
+	{
+		"name": "Notifications",
+		"items": [
+			{ "url": "https://cdn.totaljs.com/flow/email.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/sms.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/twilio.js", "version": "" }
+		]
+	},
+	{
+		"name": "Flowbard",
+		"items": [
+			{ "url": "https://cdn.totaljs.com/flow/flowboardlight.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/flowboardoutput.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/flowboardsocket.js", "version": "" }
+		]
+	},
+	{
+		"name": "HTTP",
+		"items": [
+			{ "url": "https://cdn.totaljs.com/flow/httpdownloader.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/httpgeoip.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/httplistener.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/httpreceiver.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/httpredirect.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/httprequest.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/httpresponse.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/httproute.js", "version": "" }
+		]
+	},
+	{
+		"name": "IFTTT",
+		"items": [
+			{ "url": "https://cdn.totaljs.com/flow/ifttthookrequest.js", "version": "" }
+		]
+	},
+	{
+		"name": "Databases",
+		"items": [
+			{ "url": "https://cdn.totaljs.com/flow/logtodb.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/nosql.js", "version": "" }
+		]
+	},
+	{
+		"name": "Total.js Messenger",
+		"items": [
+			{ "url": "https://cdn.totaljs.com/flow/messengermessage.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/messengerrawdata.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/messengersender.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/messengerusers.js", "version": "" }
+		]
+	},
+	{
+		"name": "Monitoring",
+		"items": [
+			{ "url": "https://cdn.totaljs.com/flow/monitorconsumption.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/monitorcpu.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/monitordisk.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/monitormemory.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/monitornetwork.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/monitorprocess.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/monitorsuperadmin.js", "version": ""}
+		]
+	},
+	{
+		"name": "MQTT",
+		"items": [
+			{ "url": "https://cdn.totaljs.com/flow/mosca.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/mqtt.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/mqttpublish.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/mqttsubscribe.js", "version": "" }
+		]
+	},
+	{
+		"name": "Services",
+		"items": [
+			{ "url": "https://cdn.totaljs.com/flow/netatmo.js", "version": "" }
+		]
+	},
+	{
+		"name": "Website",
+		"items": [
+			{ "url": "https://cdn.totaljs.com/flow/pagerenderer.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/pagetemplate.js", "version": "" }
+		]
+	},
+	{
+		"name": "Parsers",
+		"items": [
+			{ "url": "https://cdn.totaljs.com/flow/parser.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/template.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/transform.js", "version": "" }
+		]
+	},
+	{
+		"name": "Logic",
+		"items": [
+			{ "url": "https://cdn.totaljs.com/flow/range.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/switch.js", "version": "" }
+		]
+	},
+	{
+		"name": "REST",
+		"items": [
+			{ "url": "https://cdn.totaljs.com/flow/restcors.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/restexecoperation.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/restinterpreter.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/restmiddleware.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/restoperation.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/restproxy.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/restresponse.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/restroute.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/restschema.js", "version": "" }
+		]
+	},
+	{
+		"name": "WebSocket",
+		"items": [
+			{ "url": "https://cdn.totaljs.com/flow/wsclient.js", "version": "" },
+			{ "url": "https://cdn.totaljs.com/flow/wsserver.js", "version": "" }
+		]
+	}
+]
