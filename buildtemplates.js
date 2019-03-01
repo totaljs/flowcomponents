@@ -6,7 +6,6 @@ const Fs = require('fs');
 require('total.js');
 
 var templates = {};
-var reg = /exports\.group\s?=\s?['"](.*)['"];/g;
 var giturl = 'https://rawgit.com/totaljs/flowcomponents/{0}/{1}/{1}.js';
 
 var count = 0;
@@ -32,8 +31,8 @@ U.ls('./', function callback(files,dirs) {
 		var groupname;
 		var index = file.indexOf('exports.group');
 		if (index > -1) {
-			index = file.indexOf('\'', index) || file.indexOf('\"', index);
-			var i2 = file.indexOf('\';', index) || file.indexOf('\"', index);
+			index = file.indexOf('\'', index) || file.indexOf('"', index);
+			var i2 = file.indexOf('\';', index) || file.indexOf('"', index);
 			groupname = file.substring(index + 1, i2);
 		}
 
