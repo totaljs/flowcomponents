@@ -15,7 +15,7 @@ exports.html = `<div class="padding">
 
 exports.readme = `# Eval
 
-This component executes custom JavaScript code as it is when you change a code or after Flow is restarted.`
+This component executes custom JavaScript code as it is when you change a code or after Flow is restarted.`;
 
 exports.install = function(instance) {
 	instance.reconfigure = function() {

@@ -21,12 +21,12 @@ exports.html = `<div class="padding">
 		<div class="col-md-3">
 			<div data-jc="textbox" data-jc-path="url" data-jc-config="placeholder:/">@(URL) (@(optional), @(default is /))</div>
 		</div>
-	</div>	
+	</div>
 	<div class="row m">
 		<div class="col-md-3">
 			<div data-jc="checkbox" data-jc-path="secure">@(Secure (will use wss://))</div>
 		</div>
-	</div>	
+	</div>
 	<div class="row">
 		<div class="col-md-3">
 			<div data-jc="dropdown" data-jc-path="datatype" data-jc-config="items:,JSON|json,Plain text|text" class="m">@(Data type)</div>
@@ -44,8 +44,7 @@ https://docs.totaljs.com/latest/en.html#api~WebSocketClient
 Input is used to send message to the server
 
 ## Output
-All recieved messages are send to the output
-`;
+All recieved messages are send to the output`;
 
 exports.install = function(instance) {
 
@@ -97,7 +96,7 @@ exports.install = function(instance) {
 
 		if (wsclient && wsclient.socket) {
 			wsclient.options.reconnect = false;
-			wsclient.close();			
+			wsclient.close();
 			setTimeout(function(){
 				wsclient.free();
 				wsclient.removeAllListeners();
@@ -113,7 +112,7 @@ exports.install = function(instance) {
 
 			var opt = instance.options;
 			var server = (opt.secure ? 'wss://' : 'ws://') + opt.ip + ':' + opt.port + opt.url;
-			
+
 			instance.status('Connecting...');
 
 			client.connect(server);

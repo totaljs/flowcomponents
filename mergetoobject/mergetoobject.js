@@ -2,6 +2,7 @@ exports.id = 'mergetoobject';
 exports.title = 'Merge to object';
 exports.group = 'Common';
 exports.color = '#656D78';
+exports.version = '1.0.0';
 exports.input = 2;
 exports.click = true;
 exports.output = 1;

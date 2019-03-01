@@ -2,6 +2,7 @@ exports.id = 'modified';
 exports.title = 'Modified';
 exports.group = 'Common';
 exports.color = '#656D78';
+exports.version = '1.0.0';
 exports.input = true;
 exports.output = 1;
 exports.author = 'Peter Širka';

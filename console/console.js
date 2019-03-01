@@ -6,6 +6,7 @@ exports.output = ['#3BAFDA', '#F6BB42', '#DA4453'];
 exports.click = true;
 exports.author = 'Peter Širka';
 exports.icon = 'terminal';
+exports.version = '1.0.0';
 
 exports.readme = `# Console
 

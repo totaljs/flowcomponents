@@ -43,7 +43,7 @@ __Data Example__:
 exports.html = `<div class="padding">
 	<div class="row">
 		<div class="col-md-6 m">
-			<div data-jc="textbox" data-jc-path="url" data-jc-config="required:true;placeholder:https\://superadmin.totaljs.com;maxlength:200">@(URL address)</div>
+			<div data-jc="textbox" data-jc-path="url" data-jc-config="required:true;placeholder:https\\://superadmin.totaljs.com;maxlength:200">@(URL address)</div>
 		</div>
 		<div class="col-md-6 m">
 			<div data-jc="textbox" data-jc-path="token" data-jc-config="required:true;maxlength:50">@(Token)</div>

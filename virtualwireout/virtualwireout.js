@@ -25,7 +25,7 @@ exports.html = `<div class="padding">
 
 exports.install = function(instance) {
 
-	instance.custom.reconfigure = function(options){
+	instance.custom.reconfigure = function(){
 		if (instance.options.wirename) {
 			instance.status(instance.options.wirename);
 		} else

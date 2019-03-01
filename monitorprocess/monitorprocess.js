@@ -43,7 +43,7 @@ exports.install = function(instance) {
 	var counter = 0;
 	var Exec = require('child_process').exec;
 	var reg_empty = /\s{2,}/g;
-	var reg_clean = /\:\-/g;
+	var reg_clean = /:-/g;
 
 	instance.custom.reload = function() {
 		if (tproc) {

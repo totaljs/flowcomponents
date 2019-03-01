@@ -2,6 +2,7 @@ exports.id = 'transform';
 exports.title = 'Data Transformation';
 exports.group = 'Parsers';
 exports.color = '#37BC9B';
+exports.version = '1.0.0';
 exports.input = true;
 exports.output = 1;
 exports.author = 'Peter Širka';

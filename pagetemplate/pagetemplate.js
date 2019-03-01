@@ -4,6 +4,7 @@ exports.group = 'Website';
 exports.color = '#4a7d2c';
 exports.input = false;
 exports.output = false;
+exports.version = '1.0.0';
 exports.author = 'Martin Smola';
 exports.icon = 'code';
 exports.traffic = false;

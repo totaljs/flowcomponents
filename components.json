@@ -2,186 +2,186 @@
 	{
 		"name": "Common",
 		"items": [
-			{ "url": "https://cdn.totaljs.com/flow/code.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/comment.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/counter.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/debug.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/eval.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/fi.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/filewriter.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/fo.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/function.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/lastdata.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/lastusage.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/merge.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/mergetoobject.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/modified.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/pass.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/repository.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/schema.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/split.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/virtualwirein.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/virtualwireout.js", "version": "" }
+			{ "url": "https://cdn.totaljs.com/flow/code.js", "version": "1.1.0" },
+			{ "url": "https://cdn.totaljs.com/flow/comment.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/counter.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/debug.js", "version": "2.0.2" },
+			{ "url": "https://cdn.totaljs.com/flow/eval.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/fi.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/filewriter.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/fo.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/function.js", "version": "1.1.0" },
+			{ "url": "https://cdn.totaljs.com/flow/lastdata.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/lastusage.js", "version": "1.1.0" },
+			{ "url": "https://cdn.totaljs.com/flow/merge.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/mergetoobject.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/modified.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/pass.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/repository.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/schema.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/split.js", "version": "1.1.1" },
+			{ "url": "https://cdn.totaljs.com/flow/virtualwirein.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/virtualwireout.js", "version": "1.0.0" }
 		]
 	},
 	{
 		"name": "Inputs",
 		"items": [
-			{ "url": "https://cdn.totaljs.com/flow/console.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/event.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/trigger.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/triggertoggle.js", "version":"" }
+			{ "url": "https://cdn.totaljs.com/flow/console.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/event.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/trigger.js", "version": "1.1.0" },
+			{ "url": "https://cdn.totaljs.com/flow/triggertoggle.js", "version": "1.1.0" }
 		]
 	},
 	{
 		"name": "Time",
 		"items": [
-			{ "url": "https://cdn.totaljs.com/flow/cron.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/delay.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/duration.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/feedtodelay.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/megatimer.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/scheduler.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/timer.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/uniqueinterval.js", "versio": "" }
+			{ "url": "https://cdn.totaljs.com/flow/cron.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/delay.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/duration.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/feedtodelay.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/megatimer.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/scheduler.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/timer.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/uniqueinterval.js", "version": "1.0.0" }
 		]
 	},
 	{
 		"name": "Dashboard",
 		"items": [
-			{ "url": "https://cdn.totaljs.com/flow/dashboardanalytics.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/dashboardgroupanalytics.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/dashboardoutput.js", "version": "" }
+			{ "url": "https://cdn.totaljs.com/flow/dashboardanalytics.js", "version": "1.2.1" },
+			{ "url": "https://cdn.totaljs.com/flow/dashboardgroupanalytics.js", "version": "1.1.1" },
+			{ "url": "https://cdn.totaljs.com/flow/dashboardoutput.js", "version": "1.0.0" }
 		]
 	},
 	{
 		"name": "Devices",
 		"items": [
-			{ "url": "https://cdn.totaljs.com/flow/device_light.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/device_outlet.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/device_switch.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/device_thermostat.js", "version": "" }
+			{ "url": "https://cdn.totaljs.com/flow/device_light.js", "version": "1.1.0" },
+			{ "url": "https://cdn.totaljs.com/flow/device_outlet.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/device_switch.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/device_thermostat.js", "version": "1.1.0" }
 		]
 	},
 	{
 		"name": "Notifications",
 		"items": [
-			{ "url": "https://cdn.totaljs.com/flow/email.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/sms.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/twilio.js", "version": "" }
+			{ "url": "https://cdn.totaljs.com/flow/email.js", "version": "1.4.0" },
+			{ "url": "https://cdn.totaljs.com/flow/sms.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/twilio.js", "version": "1.0.0" }
 		]
 	},
 	{
 		"name": "Flowbard",
 		"items": [
-			{ "url": "https://cdn.totaljs.com/flow/flowboardlight.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/flowboardoutput.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/flowboardsocket.js", "version": "" }
+			{ "url": "https://cdn.totaljs.com/flow/flowboardlight.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/flowboardoutput.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/flowboardsocket.js", "version": "1.0.0" }
 		]
 	},
 	{
 		"name": "HTTP",
 		"items": [
-			{ "url": "https://cdn.totaljs.com/flow/httpdownloader.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/httpgeoip.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/httplistener.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/httpreceiver.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/httpredirect.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/httprequest.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/httpresponse.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/httproute.js", "version": "" }
+			{ "url": "https://cdn.totaljs.com/flow/httpdownloader.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/httpgeoip.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/httplistener.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/httpreceiver.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/httpredirect.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/httprequest.js", "version": "2.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/httpresponse.js", "version": "2.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/httproute.js", "version": "1.2.1" }
 		]
 	},
 	{
 		"name": "IFTTT",
 		"items": [
-			{ "url": "https://cdn.totaljs.com/flow/ifttthookrequest.js", "version": "" }
+			{ "url": "https://cdn.totaljs.com/flow/ifttthookrequest.js", "version": "1.0.0" }
 		]
 	},
 	{
 		"name": "Databases",
 		"items": [
-			{ "url": "https://cdn.totaljs.com/flow/logtodb.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/nosql.js", "version": "" }
+			{ "url": "https://cdn.totaljs.com/flow/logtodb.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/nosql.js", "version": "1.2.0" }
 		]
 	},
 	{
 		"name": "Total.js Messenger",
 		"items": [
-			{ "url": "https://cdn.totaljs.com/flow/messengermessage.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/messengerrawdata.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/messengersender.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/messengerusers.js", "version": "" }
+			{ "url": "https://cdn.totaljs.com/flow/messengermessage.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/messengerrawdata.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/messengersender.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/messengerusers.js", "version": "1.0.0" }
 		]
 	},
 	{
 		"name": "Monitoring",
 		"items": [
-			{ "url": "https://cdn.totaljs.com/flow/monitorconsumption.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/monitorcpu.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/monitordisk.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/monitormemory.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/monitornetwork.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/monitorprocess.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/monitorsuperadmin.js", "version": ""}
+			{ "url": "https://cdn.totaljs.com/flow/monitorconsumption.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/monitorcpu.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/monitordisk.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/monitormemory.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/monitornetwork.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/monitorprocess.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/monitorsuperadmin.js", "version": "1.0.0"}
 		]
 	},
 	{
 		"name": "MQTT",
 		"items": [
-			{ "url": "https://cdn.totaljs.com/flow/mosca.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/mqtt.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/mqttpublish.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/mqttsubscribe.js", "version": "" }
+			{ "url": "https://cdn.totaljs.com/flow/mosca.js", "version": "1.1.0" },
+			{ "url": "https://cdn.totaljs.com/flow/mqtt.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/mqttpublish.js", "version": "1.1.0" },
+			{ "url": "https://cdn.totaljs.com/flow/mqttsubscribe.js", "version": "1.1.0" }
 		]
 	},
 	{
 		"name": "Services",
 		"items": [
-			{ "url": "https://cdn.totaljs.com/flow/netatmo.js", "version": "" }
+			{ "url": "https://cdn.totaljs.com/flow/netatmo.js", "version": "1.0.0" }
 		]
 	},
 	{
 		"name": "Website",
 		"items": [
-			{ "url": "https://cdn.totaljs.com/flow/pagerenderer.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/pagetemplate.js", "version": "" }
+			{ "url": "https://cdn.totaljs.com/flow/pagerenderer.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/pagetemplate.js", "version": "1.0.0" }
 		]
 	},
 	{
 		"name": "Parsers",
 		"items": [
-			{ "url": "https://cdn.totaljs.com/flow/parser.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/template.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/transform.js", "version": "" }
+			{ "url": "https://cdn.totaljs.com/flow/parser.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/template.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/transform.js", "version": "1.0.0" }
 		]
 	},
 	{
 		"name": "Logic",
 		"items": [
-			{ "url": "https://cdn.totaljs.com/flow/range.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/switch.js", "version": "" }
+			{ "url": "https://cdn.totaljs.com/flow/range.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/switch.js", "version": "1.1.1" }
 		]
 	},
 	{
 		"name": "REST",
 		"items": [
-			{ "url": "https://cdn.totaljs.com/flow/restcors.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/restexecoperation.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/restinterpreter.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/restmiddleware.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/restoperation.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/restproxy.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/restresponse.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/restroute.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/restschema.js", "version": "" }
+			{ "url": "https://cdn.totaljs.com/flow/restcors.js", "version": "1.1.0" },
+			{ "url": "https://cdn.totaljs.com/flow/restexecoperation.js", "version": "1.0.1" },
+			{ "url": "https://cdn.totaljs.com/flow/restinterpreter.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/restmiddleware.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/restoperation.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/restproxy.js", "version": "1.0.1" },
+			{ "url": "https://cdn.totaljs.com/flow/restresponse.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/restroute.js", "version": "1.1.0" },
+			{ "url": "https://cdn.totaljs.com/flow/restschema.js", "version": "1.0.0" }
 		]
 	},
 	{
 		"name": "WebSocket",
 		"items": [
-			{ "url": "https://cdn.totaljs.com/flow/wsclient.js", "version": "" },
-			{ "url": "https://cdn.totaljs.com/flow/wsserver.js", "version": "" }
+			{ "url": "https://cdn.totaljs.com/flow/wsclient.js", "version": "1.0.0" },
+			{ "url": "https://cdn.totaljs.com/flow/wsserver.js", "version": "1.0.0" }
 		]
 	}
 ]

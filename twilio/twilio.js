@@ -3,6 +3,7 @@ exports.title = 'Twilio';
 exports.group = 'Notifications';
 exports.color = '#8CC152';
 exports.input = true;
+exports.version = '1.0.0';
 exports.author = 'Gyula Décsi';
 exports.icon = 'commenting-o';
 

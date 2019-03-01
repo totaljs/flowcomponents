@@ -60,24 +60,12 @@ exports.install = function(instance) {
 	instance.on('data', function(response) {
 		if (typeof(response.data) !== 'object')
 			return;
-
 		fn && fn(response.data, function(err, data) {
-			if (err)
-				return;
-
-			post(data);
+			!err && post(data);
 		}, response);
 	});
 
-	function callback(err, data) {
-		if (err)
-			return;
-
-		post(data);
-	};
-
 	instance.custom.reconfigure = function() {
-
 		if (instance.options.parser)
 			fn = SCRIPT(instance.options.parser);
 		else
@@ -88,24 +76,23 @@ exports.install = function(instance) {
 	instance.custom.reconfigure();
 
 	function post(data) {
+
 		var event = instance.options.event;
 		var key = instance.options.key;
+		var d;
 
 		if (data.event && data.key && data.body) {
 			d = data.body;
 			event = data.event;
 			key = data.key;
-		}
-		else 
+		} else
 			d = data;
 
 		if (!event || ! key)
 			return instance.status('No config to use', 'red');
 
-		var u = url.format(event, key);
-
-		U.request(u, ['post', 'json'], d || {}, function(err,data,status,headers,host){
+		U.request(url.format(event, key), ['post', 'json'], d || EMPTYOBJECT, function(err, data, status) {
 			instance.send2(status);
 		});
-	};
+	}
 };

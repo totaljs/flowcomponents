@@ -52,7 +52,7 @@ exports.html = `<div class="padding">
 		builder.push('- @(Host): ' + options.host);
 		builder.push('- @(Port): ' + options.port);
 		builder.push('- @(Enable WebSockets): ' + options.ws);
-		builder.push('- @(WebSockets port): ' + options.portws);		
+		builder.push('- @(WebSockets port): ' + options.portws);
 		builder.push('');
 		builder.push('**Authorization**');
 		builder.push('- @(Username): ' + options.username);
@@ -101,7 +101,7 @@ exports.install = function(instance) {
 			var authorized = (options.username === username && options.password === password.toString());
 			if (authorized) client.user = username;
 			callback(null, authorized);
-		}
+		};
 
 		server = new mosca.Server(settings, function(err){
 			if (err)
@@ -114,7 +114,7 @@ exports.install = function(instance) {
 				server.authenticate = authenticate;
 				auth = 'yes';
 			}
-			
+
 			var status = 'auth:{0} | mgtt:{1}'.format(auth, options.port);
 			if (options.ws)
 				status += ' | ws:{0}'.format(options.portws);
@@ -147,11 +147,8 @@ exports.install = function(instance) {
 		});
 	};
 
-	instance.custom.reconfigure = function(options, old_options) {
-
-		if (server)
-			server.close();
-		
+	instance.custom.reconfigure = function() {
+		server && server.close();
 		setTimeout(instance.custom.start_server, 100);
 	};
 
@@ -160,6 +157,5 @@ exports.install = function(instance) {
 	});
 
 	instance.on('options', instance.custom.reconfigure);
-
 	instance.custom.reconfigure();
 };

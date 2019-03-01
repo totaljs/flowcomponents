@@ -5,6 +5,7 @@ exports.color = '#656D78';
 exports.input = true;
 exports.click = true;
 exports.output = 1;
+exports.version = '1.0.0';
 exports.options = { count: 5, id: false, timeout: 0 };
 exports.author = 'Peter Širka';
 exports.icon = 'compress';

@@ -4,6 +4,7 @@ exports.group = 'Databases';
 exports.color = '#B0C4DE';
 exports.author = 'Martin Smola';
 exports.icon = 'database';
+exports.version = '1.0.0';
 exports.input = true;
 exports.output = true;
 exports.options = { dbname: '', template: ''};
@@ -39,33 +40,26 @@ Data:
 }
 \`\`\`
 Template:
-\`A process "@{model.propname}" executed "@{model.exec}" \` 
+\`A process "@{model.propname}" executed "@{model.exec}" \`
 Output:
-*A process "some process" executed "restart"*
-`;
+*A process "some process" executed "restart"*`;
 
 exports.install = function(instance) {
 
 	instance.custom.reconfigure = function() {
 		if (!instance.options.dbname || !instance.options.template)
 			return instance.status('Not configured', 'red');
-
 		instance.status('');
 	};
 
 	instance.on('data', function(flowdata) {
-		instance.send(flowdata);	
-
+		instance.send(flowdata);
 		if (!instance.options.dbname || !instance.options.template)
 			return;
-
 		var str = F.viewCompile(instance.options.template, flowdata.data, '', { time: new Date().getTime() });
-
 		NOSQL(instance.options.dbname).insert({ dt: new Date().getTime(), body: str });
-
 	});
 
 	instance.on('options', instance.custom.reconfigure);
-
 	instance.custom.reconfigure();
 };

@@ -191,8 +191,8 @@ exports.install = function(instance) {
 	instance.on('options', instance.custom.reconfigure);
 };
 
-F.route('/$netatmo/{id}/', netatmo, ['id:netatmo']);
-F.route('/$netatmo/', netatmo_process, ['id:netatmo']);
+ROUTE('/$netatmo/{id}/', netatmo, ['id:netatmo']);
+ROUTE('/$netatmo/', netatmo_process, ['id:netatmo']);
 
 exports.uninstall = function() {
 	UNINSTALL('web', 'id:netatmo');

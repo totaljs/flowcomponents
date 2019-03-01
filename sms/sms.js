@@ -4,6 +4,7 @@ exports.group = 'Notifications';
 exports.color = '#8CC152';
 exports.input = true;
 exports.author = 'Peter Širka';
+exports.version = '1.0.0';
 exports.icon = 'commenting-o';
 
 exports.html = `<div class="padding">

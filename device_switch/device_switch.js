@@ -9,7 +9,7 @@ exports.flowboard = true;
 exports.color = '#5CB36D';
 exports.input = 1;
 exports.output = 1;
-exports.click = true;;
+exports.click = true;
 exports.options = { default: false, type: 'toggle' };
 exports.readme = `# Switch for Dashboard and Flowboard
 ### input
@@ -46,9 +46,7 @@ exports.html = `<div class="padding">
 
 exports.install = function(instance) {
 
-	var onoff = ['Off', 'On'];
 	var onVals = [true, 1, 'on'];
-
 	var device = {
 		name: 'Switch',
 		id: '',
@@ -61,7 +59,7 @@ exports.install = function(instance) {
 		device.on = device.subtype === 'toggle' ? !device.on : true;
 		instance.send2(device);
 		status();
-	};
+	}
 
 	function reconfigure(init) {
 		if (init === true)
@@ -70,9 +68,9 @@ exports.install = function(instance) {
 		device.subtype = instance.options.type;
 		device.name = instance.name;
 		device.id = instance.id;
-		
+
 		status();
-	};
+	}
 
 	instance.on('dashboard', dashboardflowboard);
 
@@ -82,13 +80,13 @@ exports.install = function(instance) {
 
 		if (type === 'status')
 			status();
-	};
+	}
 
 	function status() {
 		instance.status(device.subtype === 'toggle' ? 'Toggle switch:' + (device.on ? 'on' : 'off') : 'Push button');
 		instance.dashboard('status', device);
 		instance.flowboard('status', device);
-	};
+	}
 
 	instance.on('data', function(flowdata) {
 		var d = flowdata.data;
@@ -98,8 +96,6 @@ exports.install = function(instance) {
 	});
 
 	instance.on('click', toggle);
-
 	instance.on('options', reconfigure);
-
 	reconfigure(true);
 };

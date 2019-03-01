@@ -9,7 +9,7 @@ exports.flowboard = true;
 exports.color = '#5CB36D';
 exports.input = 1;
 exports.output = 1;
-exports.click = true;;
+exports.click = true;
 exports.options = { default: false };
 exports.readme = `# Device - Outlet
 ### input
@@ -53,10 +53,9 @@ exports.install = function(instance) {
 		instance.status('Outlet is: ' + (device.on ? 'On' : 'Off'));
 		instance.dashboard('status', device);
 		instance.flowboard('status', device);
-	}
+	};
 
-
-	function toggle() {		
+	function toggle() {
 		device.on = !device.on;
 		send();
 	}

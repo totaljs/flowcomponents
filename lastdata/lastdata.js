@@ -2,6 +2,7 @@ exports.id = 'lastdata';
 exports.title = 'Last Data';
 exports.group = 'Common';
 exports.color = '#656D78';
+exports.version = '1.0.0';
 exports.input = true;
 exports.click = true;
 exports.output = 1;

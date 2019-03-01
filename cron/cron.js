@@ -2,6 +2,7 @@ exports.id = 'cron';
 exports.title = 'Cron';
 exports.group = 'Time';
 exports.color = '#F6BB42';
+exports.version = '1.0.0';
 exports.output = 1;
 exports.click = true;
 exports.author = 'Martin Smola';
@@ -46,7 +47,7 @@ exports.html = `
 					Examples<br>
 					0 16 * * * -> fire every day at 16:00<br>
 					* 0 16 * * * -> start firing at 16:00 every day and it will keep firing every second until 16:01<br>
-					19 * * * -> every day at 19 o'clock					
+					19 * * * -> every day at 19 o'clock
 					</p>
 				</div>
 			</div>
@@ -69,22 +70,21 @@ day of month (1 - 31)
 month (1 - 12)
 day of week (0 - 7) (0 or 7 is Sun)
 
-or 
+or
 
 @startup to run once at the start or restart of an app (after 5 seconds)
 
 Examples of cron string:
 0 16 * * *      -> trigger every day at 16:00
 * 0 16 * * *    -> trigger at 16:00 every day and it will keep triggering every second until 16:01
-20,40 19 * * *  -> every day at 19:20 and 19:40	
+20,40 19 * * *  -> every day at 19:20 and 19:40
 */5 * * * *     -> trigger every 5 seconds
 0 20 * * 1      -> every monday at 20:00
 @startup        -> runs once at startup
 
 Full example:
 * 0 16 * * * | hello data | this is hello comment
-@startup | start
-`;
+@startup | start`;
 
 exports.install = function(instance) {
 
@@ -98,7 +98,7 @@ exports.install = function(instance) {
 
 	reconfigure();
 
-	function reconfigure(o, old_options) {
+	function reconfigure() {
 		var options = instance.options;
 		startJobs(options.jobs);
 	}
@@ -127,8 +127,8 @@ exports.install = function(instance) {
 
 			jobs.push(j);
 		});
-		
+
 		startup = false;
-	};
+	}
 };
 

@@ -9,7 +9,7 @@ exports.input = ['blue', 'green', 'grey'];
 exports.output = ['red', 'blue' , 'darkgrey', 'orange'];
 exports.version = '1.1.0';
 exports.author = 'Martin Smola';
-exports.options = { 
+exports.options = {
 	setpoint: {
 		day: 21,
 		night: 21,
@@ -48,7 +48,7 @@ exports.html = `<div class="padding">
 		<div class="col-md-6 m">
 			<div data-jc="textbox" data-jc-path="property" data-jc-config="placeholder:path.to.value" class="m">Property (path to a temperature value in object)</div>
 		</div>
-	</div>	
+	</div>
 	<div class="row">
 		<div class="col-md-4 m">
 			<div data-jc="textbox" data-jc-path="setpoint.day" data-jc-config="placeholder:22;type:number;increment:true" class="m">Heating: day temperature &#8451;</div>
@@ -59,31 +59,31 @@ exports.html = `<div class="padding">
 		<div class="col-md-4 m">
 			<div data-jc="textbox" data-jc-path="setpoint.away" data-jc-config="placeholder:20;type:number;increment:true" class="m">Heating: away temperature &#8451;</div>
 		</div>
-	</div>	
+	</div>
 	<div class="row">
 		<div class="col-md-4 m">
 			<div class="ui-label" style="width:100%;">Day starts at X o'clock:</div>
 			<div style="width:62px;float:left" data-jc="dropdown" data-jc-path="time.day.hours" data-jc-config="items:00,01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22,23"></div>
-			<div style="width:6px;float:left;font-size: 21px;margin: 0 3px;">:</div><div style="width:62px;float:left" data-jc="dropdown" data-jc-path="time.day.minutes" data-jc-config="items:00,05,10,15,20,25,30,35,40,45,50,55"></div>	
+			<div style="width:6px;float:left;font-size: 21px;margin: 0 3px;">:</div><div style="width:62px;float:left" data-jc="dropdown" data-jc-path="time.day.minutes" data-jc-config="items:00,05,10,15,20,25,30,35,40,45,50,55"></div>
 		</div>
 		<div class="col-md-4 m">
 			<div class="ui-label" style="width:100%;">Night starts at X o'clock:</div>
 			<div style="width:62px;float:left" data-jc="dropdown" data-jc-path="time.night.hours" data-jc-config="items:00,01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22,23"></div>
-			<div style="width:6px;float:left;font-size: 21px;margin: 0 3px;">:</div><div style="width:62px;float:left" data-jc="dropdown" data-jc-path="time.night.minutes" data-jc-config="items:00,05,10,15,20,25,30,35,40,45,50,55"></div>	
+			<div style="width:6px;float:left;font-size: 21px;margin: 0 3px;">:</div><div style="width:62px;float:left" data-jc="dropdown" data-jc-path="time.night.minutes" data-jc-config="items:00,05,10,15,20,25,30,35,40,45,50,55"></div>
 		</div>
-	</div>	
+	</div>
 	<div class="row">
-		<div class="col-md-6 m">	
+		<div class="col-md-6 m">
 			<div data-jc="textbox" data-jc-path="hysteresis" data-jc-config="placeholder:0.5;type:number">Hysteresis &#8451;</div>
 			<div class="help m">@(If desired temperature is 21&#8451; and hysteresis 0.5&#8451; then heatings starts at 20.5&#8451; and stops at 21.5&#8451;)</div>
 		</div>
-	</div>	
+	</div>
 	<div class="row">
-		<div class="col-md-6 m">	
+		<div class="col-md-6 m">
 			<div data-jc="textbox" data-jc-path="timeout" data-jc-config="placeholder:0;type:number">Timeout (in minutes, default 0 = disabled)</div>
 			<div class="help m">@(Timeout for reporting error if no temperature data is coming in.)</div>
 		</div>
-	</div>	
+	</div>
 </div>`;
 
 exports.install = function(instance) {
@@ -120,7 +120,7 @@ exports.install = function(instance) {
 		saveModes();
 	}
 
-	function saveModes() {		
+	function saveModes() {
 		instance.set('modes', {
 			mode: device.mode,
 			daymode: device.daymode,
@@ -129,7 +129,7 @@ exports.install = function(instance) {
 	}
 
 	instance.custom.reconfigure = function(init) {
-		var opts = { setpoint: { day: 21, night: 21, away: 21 }, hysteresis: 0.5 }
+		var opts = { setpoint: { day: 21, night: 21, away: 21 }, hysteresis: 0.5 };
 		device.options = instance.options = U.extend(opts, instance.options, true);
 		device.name = instance.name;
 		if (init === true) {
@@ -142,7 +142,7 @@ exports.install = function(instance) {
 	};
 
 	instance.custom.status = function() {
-		var options = instance.options;	
+		var options = instance.options;
 		instance.status('C:{0} | S:{1} | +-{2} | {3} | M:{4}'.format(device.temperature, options.setpoint[device.daymode] || '??', options.hysteresis, device.daymode, device.mode));
 		instance.dashboard('status', device);
 		instance.flowboard('status', device);
@@ -160,8 +160,8 @@ exports.install = function(instance) {
 			val = val.parseFloat();
 			if (isNaN(val))
 				return instance.error('Error, input value is not a number: ' + val);
-		}	
-		
+		}
+
 		device.temperature = Math.floor(val * 10) / 10;
 
 		send();
@@ -188,9 +188,9 @@ exports.install = function(instance) {
 	});
 
 	function send() {
-		if (!device.temperature) 
+		if (!device.temperature)
 			return;
-		
+
 		var options = instance.options;
 
 		if (device.mode === 'off') {
@@ -211,7 +211,7 @@ exports.install = function(instance) {
 		}
 
 		instance.custom.status();
-	};
+	}
 
 	function getVal(obj, path) {
 		if (path) {
@@ -222,7 +222,7 @@ exports.install = function(instance) {
 		}
 
 		return obj;
-	};
+	}
 
 	instance.on('options', instance.custom.reconfigure);
 	setTimeout(() => instance.custom.reconfigure(true), 3000);
@@ -234,7 +234,7 @@ exports.install = function(instance) {
 		switch (type) {
 			case 'setpoint':
 				instance.options.setpoint = data;
-				instance.custom.reconfigure();				
+				instance.custom.reconfigure();
 				instance.reconfig(); // send options to designer
 				break;
 
@@ -242,14 +242,14 @@ exports.install = function(instance) {
 				instance.custom.status();
 				break;
 		}
-	};
+	}
 
 	instance.on('click', function() {
-		
+
 		send();
 	});
 
-	instance.on('service', function(counter) {
+	instance.on('service', function() {
 
 		var options = instance.options;
 		var dt = new Date();
@@ -286,9 +286,9 @@ exports.install = function(instance) {
 			clearTimeout(timeout);
 		else
 			waiting = true;
-		
+
 		timeout = setTimeout(function(){
-			instance.send2(3, { 
+			instance.send2(3, {
 				error: 'No temperature data recieved for {0} minutes.'.format(instance.options.timeout),
 				device: device
 			});

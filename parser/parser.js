@@ -4,6 +4,7 @@ exports.group = 'Parsers';
 exports.color = '#37BC9B';
 exports.input = true;
 exports.output = 1;
+exports.version = '1.0.0';
 exports.author = 'Peter Širka';
 exports.icon = 'code';
 

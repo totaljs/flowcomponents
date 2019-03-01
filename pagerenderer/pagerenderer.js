@@ -1,6 +1,7 @@
 exports.id = 'pagerenderer';
 exports.title = 'Page renderer';
 exports.group = 'Website';
+exports.version = '1.0.0';
 exports.color = '#67B13D';
 exports.input = 1;
 exports.output = 1;
