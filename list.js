@@ -1,15 +1,25 @@
-var version = parseInt(process.argv[2]);
+var version = parseInt(process.argv[2] || '6');
 if (!version)
-	return console.log('Please specify version using `node buildtemplate.js 4`');
+	version = 6;
 
 const Fs = require('fs');
 require('total.js');
 
 var templates = {};
-var giturl = 'https://rawgit.com/totaljs/flowcomponents/{0}/{1}/{1}.js';
+var giturl = 'https://cdn.totaljs.com/flow/{1}.js';
 
 var count = 0;
 var countgroup = 0;
+
+function parseValue(name, file) {
+	var index = file.indexOf('exports.' + name);
+	if (index > -1) {
+		index = file.indexOf('\'', index) || file.indexOf('"', index);
+		var i2 = file.indexOf('\';', index) || file.indexOf('"', index);
+		return file.substring(index + 1, i2);
+	}
+	return '';
+}
 
 U.ls('./', function callback(files,dirs) {
 
@@ -27,14 +37,10 @@ U.ls('./', function callback(files,dirs) {
 		var url = giturl.format('master', dir);
 
 		var file = Fs.readFileSync(filename, 'utf8');
+		var groupname = parseValue('group', file);
 
-		var groupname;
-		var index = file.indexOf('exports.group');
-		if (index > -1) {
-			index = file.indexOf('\'', index) || file.indexOf('"', index);
-			var i2 = file.indexOf('\';', index) || file.indexOf('"', index);
-			groupname = file.substring(index + 1, i2);
-		}
+		if (version >= 6)
+			url = { url: url, version: parseValue('version', file) };
 
 		getGroup(groupname || 'Common').items.push(url);
 
@@ -43,8 +49,7 @@ U.ls('./', function callback(files,dirs) {
 
 		var arr = [];
 		Object.keys(templates).forEach(i => arr.push(templates[i]));
-
-		Fs.writeFileSync('./templates' + version + '.json', JSON.stringify(arr, null, '\t'));
+		Fs.writeFileSync((version === 6 ? './list' : ('./templates' + version)) + '.json', JSON.stringify(arr, null, '\t'));
 
 		console.log('\nCount of components:' + count);
 		console.log('Count of groups:' + countgroup++);
