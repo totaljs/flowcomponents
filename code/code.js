@@ -6,7 +6,7 @@ exports.input = true;
 exports.output = 1;
 exports.author = 'Peter Širka';
 exports.icon = 'code';
-exports.version = '1.1.0';
+exports.version = '1.2.0';
 exports.options = { outputs: 1, code: 'send(0, value);', keepmessage: true };
 
 exports.html = `<div class="padding">
@@ -44,6 +44,7 @@ This component executes custom JavaScript code as it is and it doesn't contain a
 \`\`\`javascript
 // value {Object} contains received data
 // send(outputIndex, newValue) sends a new value
+// error(value) sends an error
 // instance {Object} a current component instance
 // flowdata {Object} a current flowdata
 // repository {Object} a current repository of flowdata
@@ -72,7 +73,7 @@ exports.install = function(instance) {
 		try {
 			if (instance.options.code) {
 				instance.status('');
-				var code = 'var send = function(index, value) { if (options.keepmessage) { flowdata.data = value; instance.send2(index, flowdata); } else instance.send2(index, value);};' + instance.options.code;
+				var code = 'var send = function(index, value) { if (options.keepmessage) { flowdata.data = value; instance.send2(index, flowdata); } else instance.send2(index, value);}; var error = function(err) { instance.throw(err); }; ' + instance.options.code;
 				fn = new Function('value', 'instance', 'flowdata', 'options', 'repository', 'require', code);
 			} else {
 				instance.status('Not configured', 'red');
