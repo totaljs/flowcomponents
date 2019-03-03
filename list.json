@@ -257,7 +257,7 @@
 		"items": [
 			{
 				"url": "https://cdn.totaljs.com/flow/ftpupload.js",
-				"version": "1.0.0"
+				"version": "1.0.1"
 			}
 		]
 	},
@@ -434,7 +434,7 @@
 			},
 			{
 				"url": "https://cdn.totaljs.com/flow/xlstojson.js",
-				"version": ""
+				"version": "1.0.1"
 			}
 		]
 	},
