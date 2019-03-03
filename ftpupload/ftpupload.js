@@ -1,5 +1,5 @@
 exports.id = 'ftpupload';
-exports.version = '1.0.0';
+exports.version = '1.0.1';
 exports.title = 'FTP Upload';
 exports.group = 'FTP';
 exports.color = '#1f74d0';
@@ -41,8 +41,8 @@ __OUTPUT__:
 
 
 exports.html = `<div class="padding">
-	<div data-jc="textbox__url__maxlength:500;placeholder:@(E.g. ftp\\://user\\:password@hostname)" class="m">@(FTP address)</div>`;
-
+	<div data-jc="textbox__url__maxlength:500;placeholder:@(E.g. ftp\\://user\\:password@hostname)" class="m">@(FTP address)</div>
+</div>`;
 
 exports.install = function(instance) {
 
