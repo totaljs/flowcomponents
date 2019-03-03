@@ -4,6 +4,7 @@ exports.group = 'Parsers';
 exports.color = '#37BC9B';
 exports.input = true;
 exports.output = 1;
+exports.version = '1.0.1';
 exports.author = 'Martin Smola';
 exports.icon = 'random';
 exports.options = {  };
@@ -31,18 +32,17 @@ exports.html = `<div class="padding">
 
 exports.readme = `# XLS to JSON
 
-This component tries to transform \`Excell spreadsheet\` to \`json\`.
+This component tries to transform \`Excell spreadsheet\` to \`json\`. If there's a buffer property in an incomming data then filename option is ignored.
 
-If there's a buffer property in an incomming data then filename option is ignored.
+## Options
 
-## options
 - filename relative to the application root`;
 
-const XLSX = require('xlsx');
-const Fs = require('fs');
-
 exports.install = function(instance) {
-	
+
+	const XLSX = require('xlsx');
+	const Fs = require('fs');
+
 	instance.custom.process = function(err, buf) {
 
 		var wb = XLSX.read(buf, {type:'buffer'});
@@ -64,7 +64,7 @@ exports.install = function(instance) {
 		if (flowdata.data && flowdata.data.buffer) {
 			instance.custom.process(null, flowdata.data.buffer);
 		} else if (instance.options.filename) {
-			Fs.readFile(F.path.root(instance.options.filename), instance.custom.process);			
+			Fs.readFile(F.path.root(instance.options.filename), instance.custom.process);
 		}
 
 	});
