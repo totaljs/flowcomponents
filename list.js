@@ -38,9 +38,15 @@ U.ls('./', function callback(files,dirs) {
 
 		var file = Fs.readFileSync(filename, 'utf8');
 		var groupname = parseValue('group', file);
+		var ver = parseValue('version', file);
+
+		if (!ver) {
+			console.log('WARNING: "' + file + '" doesn\'t contain version.');
+			return next();
+		}
 
 		if (version >= 6)
-			url = { url: url, version: parseValue('version', file) };
+			url = { url: url, version: ver };
 
 		getGroup(groupname || 'Common').items.push(url);
 
