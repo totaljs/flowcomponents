@@ -28,6 +28,9 @@ __Requirements__:
 - __IMPORTANT__: `exports.id` can contain `a-z` `0-9` chars only.
 
 ```javascript
+// {String}, IMPORTANT a component version
+exports.version = '0.0.1';
+
 // {String}, IMPORTANT (lower case without diacritics)
 exports.id = 'component';
 
@@ -409,7 +412,7 @@ ON('save.componentname', function(component, options) {
 });
 ```
 
-### Components: jComponent +v11.0.0
+### Components: jComponent +v17.0.0
 
 Bellow jComponents can be used in `Settings form`:
 
@@ -422,27 +425,33 @@ Bellow jComponents can be used in `Settings form`:
 - colorpicker (declared in `body`)
 - confirm (declared in `body`)
 - contextmenu (declared in `body`)
+- datepicker (declared in `body`)
+- directory
+- dragdropfiles
 - dropdown
 - dropdowncheckbox
 - error
 - exec (declared in `body`)
+- filereader
 - form
 - importer
+- input
 - keyvalue
 - loading
+- menu (declared in `body`)
+- timepicker (declared in `body`)
 - message (declared in `body`)
+- multioptions
 - nosqlcounter
 - repeater
 - repeater-group
+- shorcuts (declared in `body`)
 - search
 - selectbox
 - textbox
 - textboxlist
 - validation
 - visible
-- multioptions
-- dragdropfiles
-- filereader
 
 __References:__
 
