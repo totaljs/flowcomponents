@@ -35,6 +35,9 @@ exports.html = `<div class="padding">
 				<div class="col-md-6">
 					<div data-jc="textbox" data-jc-path="clientid" class="m">Client id</div>
 				</div>
+				<div class="col-md-6">
+					<div data-jc="checkbox" data-jc-path="secure" data-jc-config="maxlength:50">Secure</div>
+				</div>
 			</div>
 		</div>
 	</section>
@@ -92,6 +95,8 @@ exports.install = function(instance) {
 			host: o.host,
 			port: o.port,
 			id: o.id,
+			secure: o.secure,
+			rejectUnauthorized: false,
 			reconnectPeriod: 3000,
 			resubscribe: false
 		};
