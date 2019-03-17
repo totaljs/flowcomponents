@@ -5,7 +5,7 @@ exports.color = '#5D9CEC';
 exports.icon = 'globe';
 exports.input = false;
 exports.output = ['#6CAC5A', '#37BC9B'];
-exports.version = '1.2.1';
+exports.version = '1.2.2';
 exports.author = 'Martin Smola';
 exports.cloning = false;
 exports.options = { method: 'GET', url: '', size: 5, cacheexpire: '5 minutes', cachepolicy: 0, timeout: 5 };
@@ -195,6 +195,9 @@ exports.install = function(instance) {
 		flags.push('id:' + instance.id);
 		flags.push(options.method.toLowerCase());
 		options.timeout && flags.push(options.timeout * 1000);
+
+		// Make unique values
+		flags = flags.filter((v, i, a) => a.indexOf(v) === i);
 
 		F.route(options.url, function() {
 

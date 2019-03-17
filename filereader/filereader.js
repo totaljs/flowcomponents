@@ -1,10 +1,10 @@
 exports.id = 'filereader';
 exports.title = 'File Reader';
 exports.color = '#656D78';
-exports.icon = 'fa-file-text-o';
+exports.icon = 'file-text-o';
 exports.input = 1;
 exports.output = 1;
-exports.version = '1.0.0';
+exports.version = '1.0.1';
 exports.author = 'Martin Smola';
 exports.options = { filename: '', append: true, delimiter: '\\n' };
 
@@ -87,6 +87,6 @@ exports.install = function(instance) {
 					instance.throw(err);
 				else
 					instance.send2({ data: data });
-			});		
+			});
 	});
 };

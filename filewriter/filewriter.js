@@ -3,9 +3,9 @@ const Fs = require('fs');
 exports.id = 'filewriter';
 exports.title = 'File Writer';
 exports.color = '#656D78';
-exports.icon = 'fa-file-text-o';
+exports.icon = 'file-text-o';
 exports.input = true;
-exports.version = '1.0.0';
+exports.version = '1.0.1';
 exports.author = 'Peter Širka';
 exports.options = { filename: '', append: true, delimiter: '\\n' };
 

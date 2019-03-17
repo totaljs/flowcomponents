@@ -45,11 +45,11 @@
 			},
 			{
 				"url": "https://cdn.totaljs.com/flow/filereader.js",
-				"version": "1.0.0"
+				"version": "1.0.1"
 			},
 			{
 				"url": "https://cdn.totaljs.com/flow/filewriter.js",
-				"version": "1.0.0"
+				"version": "1.0.1"
 			},
 			{
 				"url": "https://cdn.totaljs.com/flow/fo.js",
@@ -294,7 +294,7 @@
 			},
 			{
 				"url": "https://cdn.totaljs.com/flow/httproute.js",
-				"version": "1.2.1"
+				"version": "1.2.2"
 			}
 		]
 	},
@@ -383,7 +383,7 @@
 			},
 			{
 				"url": "https://cdn.totaljs.com/flow/mqtt.js",
-				"version": "1.0.0"
+				"version": "1.0.1"
 			},
 			{
 				"url": "https://cdn.totaljs.com/flow/mqttpublish.js",
