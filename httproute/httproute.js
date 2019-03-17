@@ -198,6 +198,7 @@ exports.install = function(instance) {
 
 		// Make unique values
 		flags = flags.filter((v, i, a) => a.indexOf(v) === i);
+		options.flags = flags;
 
 		F.route(options.url, function() {
 
