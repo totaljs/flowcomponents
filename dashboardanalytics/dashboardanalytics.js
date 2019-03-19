@@ -1,6 +1,6 @@
 exports.id = 'dashboardanalytics';
 exports.title = 'Analytics';
-exports.version = '1.2.1';
+exports.version = '1.2.2';
 exports.author = 'Peter Širka';
 exports.group = 'Dashboard';
 exports.color = '#5CB36D';
@@ -147,10 +147,12 @@ exports.install = function(instance) {
 		});
 	});
 
-	instance.on('service', function() {
+	instance.on('service', function(counter) {
 		if (fn) {
 			instance.custom.save();
 			instance.custom.save_temporary();
+			if (counter % 5 === 0)
+				setTimeout(instance.stats, (Math.random() * 10000) >> 0);
 		}
 	});
 
