@@ -4,17 +4,17 @@ exports.group = 'Website';
 exports.color = '#4a7d2c';
 exports.input = false;
 exports.output = false;
-exports.version = '1.0.0';
+exports.version = '1.0.1';
 exports.author = 'Martin Smola';
 exports.icon = 'code';
 exports.traffic = false;
 exports.options = { template: '<h1>Hello @{model.firstname}</h1>', layout: false };
 
 exports.html = `<div class="padding">
-	<div data-jc="textbox" data-jc-path="name" data-jc-config="placeholder:@(Post template);required:true" class="m">@(Template name)</div>
-	<div data-jc="checkbox" data-jc-path="layout">@(Is this template a layout?)</div>
+	<div data-jc="textbox__name__placeholder:@(Post template);required:true" class="m">@(Template name)</div>
+	<div data-jc="checkbox__layout">@(Is this template a layout?)</div>
 	<div class="help m">@(Layout should contain html, head and body tags and any other templates will be injected into this layout.)</div>
-	<div data-jc="codemirror" data-jc-path="template" data-jc-config="required:true">@(Template)</div>
+	<div data-jc="codemirror__template__required:true">@(Template)</div>
 </div>`;
 
 exports.readme = `# Template
@@ -55,7 +55,7 @@ exports.install = function(instance) {
 var templates = exports.templates = [];
 
 FLOW.trigger('pagetemplates', function(next) {
-	var tmps = [''];
+	var tmps = [];
 	templates.forEach(t => tmps.push({id: t.id, name: t.name}));
 	next(tmps);
 });

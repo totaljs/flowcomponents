@@ -1,7 +1,7 @@
 exports.id = 'pagerenderer';
 exports.title = 'Page renderer';
 exports.group = 'Website';
-exports.version = '1.0.0';
+exports.version = '1.0.1';
 exports.color = '#67B13D';
 exports.input = 1;
 exports.output = 1;
@@ -10,8 +10,8 @@ exports.icon = 'code';
 exports.options = { layout: '', template: '' };
 
 exports.html = `<div class="padding">
-	<div data-jc="dropdown" data-jc-path="layout" data-jc-config="datasource:pagerenderer.templates" class="m">@(Layout)</div>
-	<div data-jc="dropdown" data-jc-path="template" data-jc-config="datasource:pagerenderer.templates;required:true">@(Template)</div>
+	<div data-jc="dropdown__layout__datasource:pagerenderer.templates;empty:" class="m">@(Layout)</div>
+	<div data-jc="dropdown__template__datasource:pagerenderer.templates;required:true;empty:" class="m">@(Template)</div>
 </div>
 <script>
 	ON('open.pagerenderer', function(component, options) {
@@ -21,8 +21,6 @@ exports.html = `<div class="padding">
 		if (!component.name) {
 			var layout = pagerenderer.templates.findItem('id', options.layout);
 			var template = pagerenderer.templates.findItem('id', options.template);
-			console.log(layout);
-			console.log(template);
 			var name = '';
 			if (layout)
 				name = layout.name + ' -> ';
