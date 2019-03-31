@@ -9,8 +9,7 @@ exports.version = '1.0.0';
 exports.author = 'Peter Širka';
 exports.readme = `# A content downloader
 
-- it expects \`Object\` in the form \`{ url: 'https://www.w3schools.com/Xml/cd_catalog.xml' }\`
-- or \`String\` with a valid URL \`https://www.w3schools.com/Xml/cd_catalog.xml\``;
+This component downloads a buffer in chunks. Input of this component expects object in the form \`{ url: 'URL address' }\` or \`String\` as URL address.`;
 
 exports.install = function(instance) {
 	const FLAGS = ['get'];
