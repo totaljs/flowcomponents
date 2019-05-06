@@ -25,18 +25,17 @@ __Data Example__:
 exports.html = `<div class="padding">
 	<div class="row">
 		<div class="col-md-3 m">
-			<div data-jc="textbox" data-jc-path="interval" data-jc-config="placeholder:10000;increment:true;type:number;required:true;maxlength:10;align:center">@(Interval in milliseconds)</div>
+			<div data---="textbox__interval__placeholder:10000;increment:true;type:number;required:true;maxlength:10;align:center">@(Interval in milliseconds)</div>
 		</div>
 		<div class="col-md-3 m">
-			<div data-jc="textbox" data-jc-path="path" data-jc-config="placeholder:/;required:true">@(Path)</div>
+			<div data---="textbox__path__placeholder:/;required:true">@(Path)</div>
 		</div>
 	</div>
 </div>`;
 
 exports.install = function(instance) {
 
-	var fields = ['1B-blocks', 'Used', 'Available'];
-	var current = { total: 0, used: 0, free: 0 };
+	var current = { total: 0, used: 0, free: 0, path: '', type: '', percentUsed: 0 };
 	var tproc = null;
 
 	instance.custom.run = function() {
@@ -58,10 +57,15 @@ exports.install = function(instance) {
 				return;
 			}
 
-			response.parseTerminal(fields, function(line) {
-				current.total = line[0].parseInt();
-				current.free = line[2].parseInt();
-				current.used = line[1].parseInt();
+			response.parseTerminal(function(line) {
+				if (line[0][0] !== '/')
+					return;
+				current.total = line[2].parseInt();
+				current.free = line[4].parseInt();
+				current.used = line[3].parseInt();
+				current.path = instance.options.path || '/';
+				current.type = line[1];
+				current.percentUsed = line[5];
 				instance.custom.status();
 				instance.send2(current);
 			});

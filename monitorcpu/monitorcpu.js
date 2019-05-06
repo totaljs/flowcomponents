@@ -22,6 +22,14 @@ __Data Example__:
 }
 \`\`\``;
 
+exports.html = `<div class="padding">
+	<div class="row">
+		<div class="col-md-3 m">
+			<div data---="textbox__interval__placeholder:10000;increment:true;type:number;required:true;maxlength:10;align:center">@(Interval in milliseconds)</div>
+		</div>
+	</div>
+</div>`;
+
 exports.install = function(instance) {
 
 	var fields = ['CPU', '%idle'];
@@ -49,7 +57,7 @@ exports.install = function(instance) {
 		proc.stdout.on('error', function(e) {
 			instance.error(e);
 			instance.custom.kill();
-			tproc = setTimeout(instance.custom.run, 5000);
+			tproc = setTimeout(instance.custom.run, instance.options.interval || 5000);
 		});
 	};
 
