@@ -1,34 +1,29 @@
-exports.version = '0.0.1';				//the component version
-exports.dateupdated = '2019-05-12';		//the version date (format: 'yyyy-MM-dd HH:mm')
-exports.id = 'smsgatewayme_status';		//the component id
-exports.title = 'SMS Status';			//the human readable block
-exports.color = '#1ba58b';				//the color of the block
-exports.click = true;					//
-exports.input = ['green'];				//color of inputs		//will be 2 inputs
-exports.output = ['green'];				//color of outputs		//will have 1 output
-exports.group = 'SMSGatewayME';			//The group name
-exports.author = 'Thecoolpeople';		//The author
-exports.icon = 'commenting-o';					//The visible icon
-exports.status = '';					//the status text
-exports.npm = [];						//npm dependencies
+exports.version = '0.0.1';				// the component version
+exports.dateupdated = '2019-05-12';		// the version date (format: 'yyyy-MM-dd HH:mm')
+exports.id = 'smsgatewaymesmstatus';	// the component id
+exports.title = 'SMS Status';			// the human readable block
+exports.color = '#1ba58b';				// the color of the block
+exports.click = true;
+exports.input = ['green'];				// color of inputs, will be 2 inputs
+exports.output = ['green'];				// color of outputs, will have 1 output
+exports.group = 'SMSGatewayME';			// The group name
+exports.author = 'Thecoolpeople';		// The author
+exports.icon = 'commenting-o';			// The visible icon
+exports.status = '';					// the status text
+exports.npm = [];						// npm dependencies
 
-exports.cloning = false;				//Disables data cloning
-exports.traffic = false;				//hides stats under component box in designer UI
-exports.options = {  };					//pre defined options
+exports.cloning = false;				// Disables data cloning
+exports.traffic = false;				// hides stats under component box in designer UI
+exports.options = {};					// pre defined options
 
 exports.install = function(component) {
-	
-	var error = function(err) {
-		component.throw(err);
-	};
-	
 	component.on('data', function(response) {
 		var apikey = component.options.apikey;
 		var phoneid = component.options.phoneid;
-		
+
 		if(response.index == 0 && apikey && phoneid){
 			var messageid = response.data;
-			
+
 			//request status of phone
 			var https = require('https');
 			var options = {
@@ -47,21 +42,7 @@ exports.install = function(component) {
 			req.end();
 		}
 	});
-
-	component.on('signal', function(data, parent) {
-		// optional
-		// Captured signal
-		// @data {Object} - optional, can be "null", or "undefined"
-		// @parent {Component} - a component which created this signal
-		component.send2(0, "Hello");
-	});
-
-	component.on('service', function(counter) {
-		// optional
-		// Service called each 1 minute
-	});
-	
-}
+};
 
 exports.html = `
 <div class="padding">
