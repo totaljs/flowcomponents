@@ -69,6 +69,8 @@ exports.install = function(instance) {
 	instance.custom.status();
 
 	function safeparse(o) {
+		if (!o)
+			return;
 		var cache = [];
 		var str = JSON.stringify(o, function(key, value) {
 			if (typeof value === 'object' && value !== null) {
