@@ -77,7 +77,7 @@ exports.install = function(instance) {
 		if (!ready)
 			return;
 		var msg = instance.options.staticmessage ? instance.arg(instance.options.staticmessage) : flowdata.data;
-		var topic = instance.options.topic ? instance.arg(instance.options.topic) : msg.topic;
+		var topic = instance.arg(instance.options.topic || msg.topic);
 		if (topic) {
 			if (msg.topic)
 				msg = msg.data;
@@ -112,6 +112,8 @@ exports.install = function(instance) {
 				instance.status('Connection failed', 'red');
 				break;
 			case 'new':
+				!ready && instance.custom.reconfigure();
+				break;
 			case 'removed':
 				instance.custom.reconfigure();
 				break;

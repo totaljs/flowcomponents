@@ -51,8 +51,12 @@ More on wildcard topics [here](https://mosquitto.org/man/mqtt-7.html)
 exports.install = function(instance) {
 
 	var old_topic;
+	var ready = false;
 
 	instance.custom.reconfigure = function(o, old_options) {
+
+
+		ready = false;
 
 		if (!MQTT.broker(instance.options.broker)) 
 			return instance.status('No broker', 'red');
@@ -64,7 +68,7 @@ exports.install = function(instance) {
 
 			old_topic = instance.arg(instance.options.topic);
 			MQTT.subscribe(instance.options.broker, instance.id, old_topic);
-
+			ready = true;
 			return;
 		}
 
@@ -97,16 +101,15 @@ exports.install = function(instance) {
 				instance.status('Connection failed', 'red');
 				break;
 			case 'new':
+				!ready && instance.custom.reconfigure();
+				break;
 			case 'removed':
-				if (brokerid === instance.options.broker)
-					instance.custom.reconfigure();
+				instance.custom.reconfigure();
 				break;
 			case 'error':
 				instance.status(msg, 'red');
 				break;
 			case 'reconfigured':
-				if (brokerid !== instance.options.broker)
-					return;
 				instance.options.broker = msg;
 				instance.reconfig();
 				instance.custom.reconfigure();
@@ -118,7 +121,7 @@ exports.install = function(instance) {
 		if (brokerid !== instance.options.broker)
 			return;
 
-		var match = mqttWildcard(topic, instance.options.topic);
+		var match = mqttWildcard(topic, old_topic);
 		if (match) {
 			var flowdata = instance.make({ topic: topic, data: message })
 			flowdata.set('mqtt_wildcard', match);

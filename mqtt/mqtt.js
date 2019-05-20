@@ -358,7 +358,6 @@ Broker.prototype.close = function(callback) {
 Broker.prototype.subscribe = function(componentid, topic) {
 	var self = this;
 	self.subscribtions[topic] = self.subscribtions[topic] || [];
-	EMIT('mqtt.brokers.status', 'connected', self.id);
 	if (self.subscribtions[topic].indexOf(componentid) > -1)
 		return;
 	self.client.subscribe(topic);
@@ -383,7 +382,6 @@ Broker.prototype.unsubscribe = function(componentid, topic) {
 
 Broker.prototype.publish = function(topic, data, options) {
 	var self = this;
-
 	if (!self.connected)
 		return;
 
