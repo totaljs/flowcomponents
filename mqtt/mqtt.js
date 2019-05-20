@@ -12,35 +12,51 @@ exports.traffic = false;
 exports.npm = ['mqtt'];
 
 exports.html = `<div class="padding">
-	<section>
-		<label><i class="fa fa-exchange"></i>@(Broker)</label>
-		<div class="padding npb">
-			<div class="row">
-				<div class="col-md-6">
-					<div data-jc="textbox" data-jc-path="host" data-jc-config="placeholder:test.mosquitto.org;required:true" class="m">Hostname or IP address</div>
-				</div>
-				<div class="col-md-6">
-					<div data-jc="textbox" data-jc-path="port" data-jc-config="placeholder:1883;required:true" class="m">Port</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-6">
-					<div data-jc="textbox" data-jc-path="username" class="m">Username</div>
-				</div>
-				<div class="col-md-6">
-					<div data-jc="textbox" data-jc-path="password" data-jc-config="type:password" class="m">Password</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-6">
-					<div data-jc="textbox" data-jc-path="clientid" class="m">Client id</div>
-				</div>
-				<div class="col-md-6">
-					<div data-jc="checkbox" data-jc-path="secure" data-jc-config="maxlength:50">Secure</div>
-				</div>
-			</div>
+	<div class="row">
+		<div class="col-md-6">
+			<div data-jc="textbox" data-jc-path="host" data-jc-config="placeholder:test.mosquitto.org;required:true" class="m">Hostname or IP address</div>
 		</div>
-	</section>
+		<div class="col-md-6">
+			<div data-jc="textbox" data-jc-path="port" data-jc-config="placeholder:1883;required:true" class="m">Port</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6">
+			<div data-jc="textbox" data-jc-path="clientid">@(Client id)</div>
+			<div class="help m">@(Supports variables, example: \`client_{device-id}\`)</div>
+			<div data-jc="checkbox" data-jc-path="secure" class="m">@(Secure (ssl))</div>
+		</div>
+	</div>
+	<hr/>
+	<div class="row">
+		<div class="col-md-6">		
+			<div data-jc="checkbox" data-jc-path="auth" class="m">@(Require Authorization)</div>
+		</div>
+	</div>
+	<div class="row" data-bind="?.auth__show:value">
+		<div class="col-md-6">
+			<div data-jc="textbox" data-jc-path="username" class="m">@(Username)</div>		
+		</div>
+		<div class="col-md-6">
+			<div data-jc="textbox" data-jc-path="password" data-jc-config="type:password" class="m">@(Password)</div>			
+		</div>
+	</div>
+	<hr/>
+	<div class="row">
+		<div class="col-md-6">
+			<div data-jc="checkbox" data-jc-path="lwt" class="m">@(LWT)</div>
+		</div>
+	</div>
+	<div class="row" data-bind="?.lwt__show:value">
+		<div class="col-md-6">
+			<div data-jc="textbox" data-jc-path="lwttopic">@(Last will topic)</div>
+			<div class="help m">@(Supports variables, example: \`lwt/{device-id}\`)</div>
+		</div>
+		<div class="col-md-6">
+			<div data-jc="textbox" data-jc-path="lwtmessage">@(Last will message)</div>
+			<div class="help m">@(Supports variables, example: \`{device-id} is offline\`)</div>
+		</div>
+	</div>
 </div>
 <script>
 	ON('save.mqtt', function(component, options) {
@@ -101,13 +117,22 @@ exports.install = function(instance) {
 			resubscribe: false
 		};
 
-		if (o.username) {
+		if (o.auth) {
 			opts.username = o.username;
 			opts.password = o.password;
 		}
 
+		if (o.lwt) {
+			opts.will = {
+				topic: instance.arg(o.lwttopic),
+				payload: instance.arg(o.lwtmessage)
+			}
+		}
+
 		if (o.clientid)
-			opts.clientId = o.clientid;
+			opts.clientId = instance.arg(o.clientid);
+
+		console.log(opts);
 
 		broker = new Broker(opts);
 		MQTT_BROKERS.push(broker);

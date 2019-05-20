@@ -10,7 +10,8 @@ exports.options = {};
 
 exports.html = `<div class="padding">
 	<div data-jc="dropdown" data-jc-path="broker" data-jc-config="datasource:mqttconfig.brokers;required:true" class="m">@(Select a broker)</div>
-	<div data-jc="textbox" data-jc-path="topic" data-jc-config="placeholder:hello/world;required:true" class="m">Topic</div>
+	<div data-jc="textbox" data-jc-path="topic" data-jc-config="placeholder:hello/world;required:true">Topic</div>
+	<div class="help m">@(Supports variables, example: \`device/{device-id}\`)</div>
 	<div data-jc="dropdown" data-jc-path="qos" data-jc-config="items:,0,1,2" class="m">@(QoS)</div>
 </div>
 <script>
@@ -48,6 +49,8 @@ More on wildcard topics [here](https://mosquitto.org/man/mqtt-7.html)
 
 exports.install = function(instance) {
 
+	var old_topic;
+
 	instance.custom.reconfigure = function(o, old_options) {
 
 		if (!MQTT.broker(instance.options.broker)) 
@@ -55,10 +58,11 @@ exports.install = function(instance) {
 
 		if (instance.options.broker && instance.options.topic) {
 
-			if (old_options)
-				MQTT.unsubscribe(instance.options.broker, instance.id, old_options.topic);
+			if (old_topic)
+				MQTT.unsubscribe(instance.options.broker, instance.id, old_topic);
 
-			MQTT.subscribe(instance.options.broker, instance.id, instance.options.topic);
+			old_topic = instance.arg(instance.options.topic);
+			MQTT.subscribe(instance.options.broker, instance.id, old_topic);
 
 			return;
 		}
