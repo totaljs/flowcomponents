@@ -7,6 +7,7 @@ exports.icon = 'exchange';
 exports.input = false;
 exports.output = 0;
 exports.author = 'Martin Smola';
+exports.variables = true;
 exports.options = { host: '127.0.0.1', port: 1883 };
 exports.traffic = false;
 exports.npm = ['mqtt'];

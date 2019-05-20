@@ -5,6 +5,7 @@ exports.color = '#888600';
 exports.version = '1.1.0';
 exports.icon = 'sign-in';
 exports.output = 1;
+exports.variables = true;
 exports.author = 'Martin Smola';
 exports.options = {};
 
