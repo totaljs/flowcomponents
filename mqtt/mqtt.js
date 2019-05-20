@@ -132,8 +132,6 @@ exports.install = function(instance) {
 		if (o.clientid)
 			opts.clientId = instance.arg(o.clientid);
 
-		console.log(opts);
-
 		broker = new Broker(opts);
 		MQTT_BROKERS.push(broker);
 
