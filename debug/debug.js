@@ -5,7 +5,7 @@ exports.color = '#967ADC';
 exports.click = true;
 exports.input = true;
 exports.icon = 'bug';
-exports.version = '2.0.2';
+exports.version = '2.0.3';
 exports.options = { enabled: true, repository: false, type: 'data' };
 exports.readme = `# Debug
 
@@ -30,23 +30,24 @@ exports.install = function(instance) {
 			var opt = instance.options;
 			var rep = response.repository;
 			var val = response.data;
+			var id = response.id;
 
 			switch (instance.options.type){
 				case 'both':
 					var data = {};
 					data.repository = rep;
 					data.data = val instanceof Error ? { error: val.message, stack: val.stack } : val;
-					instance.debug(safeparse(opt.property ? U.get(data, opt.property) : data), undefined, opt.group);
+					instance.debug(safeparse(opt.property ? U.get(data, opt.property) : data), undefined, opt.group, id);
 					break;
 				case 'repository':
-					instance.debug(safeparse(opt.property ? U.get(rep, opt.property) : rep), undefined, opt.group);
+					instance.debug(safeparse(opt.property ? U.get(rep, opt.property) : rep), undefined, opt.group, id);
 					break;
 				case 'data':
 				default:
 					if (val instanceof Error)
-						instance.debug({ error: val.message, stack: val.stack }, undefined, opt.group);
+						instance.debug({ error: val.message, stack: val.stack }, undefined, opt.group, id);
 					else
-						instance.debug(safeparse(opt.property ? U.get(val, opt.property) : val), undefined, opt.group);
+						instance.debug(safeparse(opt.property ? U.get(val, opt.property) : val), undefined, opt.group, id);
 					break;
 			}
 		}
@@ -69,8 +70,6 @@ exports.install = function(instance) {
 	instance.custom.status();
 
 	function safeparse(o) {
-		if (!o)
-			return;
 		var cache = [];
 		var str = JSON.stringify(o, function(key, value) {
 			if (typeof value === 'object' && value !== null) {
@@ -86,6 +85,6 @@ exports.install = function(instance) {
 			return value;
 		});
 		cache = null;
-		return JSON.parse(str);		
-	};
+		return JSON.parse(str);
+	}
 };
