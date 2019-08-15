@@ -1,5 +1,5 @@
 exports.id = 'ftpupload';
-exports.version = '1.0.1';
+exports.version = '1.0.0';
 exports.title = 'FTP Upload';
 exports.group = 'FTP';
 exports.color = '#1f74d0';
@@ -41,8 +41,8 @@ __OUTPUT__:
 
 
 exports.html = `<div class="padding">
-	<div data-jc="textbox__url__maxlength:500;placeholder:@(E.g. ftp\\://user\\:password@hostname)" class="m">@(FTP address)</div>
-</div>`;
+	<div data-jc="textbox__url__maxlength:500;placeholder:@(E.g. ftp\\://user\\:password@hostname)" class="m">@(FTP address)</div>`;
+
 
 exports.install = function(instance) {
 
@@ -75,12 +75,17 @@ exports.install = function(instance) {
 		builder.push('EOF');
 
 		Exec(builder.join('\n'), function(err, response) {
-			if (err)
-				instance.throw(err);
-			else if (response && response.indexOf('226') === -1)
-				instance.throw(response);
-			else
-				instance.send(SUCCESS(true));
+
+			if (err) {
+				data.data = err;
+				instance.throw(data);
+			} else if (response && response.indexOf('226') === -1) {
+				data.data = response;
+				instance.throw(data);
+			} else {
+				data.data = SUCCESS(true);
+				instance.send(data);
+			}
 		});
 
 	});
