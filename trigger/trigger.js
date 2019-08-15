@@ -28,9 +28,6 @@ exports.install = function(instance) {
 		var options = instance.options;
 		value = null;
 		switch (options.datatype) {
-			case 'string':
-				value = '' + (options.data || '');
-				break;
 			case 'integer':
 				value = options.data.parseInt2('error');
 				value = value === 'error' ? NaN : value;
@@ -62,6 +59,10 @@ exports.install = function(instance) {
 				} catch (e) {
 					instance.error(e);
 				}
+				break;
+			case 'string':
+			default:
+				value = '' + (options.data || '');
 				break;
 		}
 	};
