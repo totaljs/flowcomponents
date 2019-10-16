@@ -64,6 +64,10 @@ exports.html = `
 	<div data-jc="visible" data-jc-path="method" data-jc-config="if:value === 'insert'">
 		<div data-jc="checkbox" data-jc-path="addid">Add unique ID to data before insert</div>
 	</div>
+	<div data-jc="visible" data-jc-path="method" data-jc-config="if:value === 'update'">
+		<div data-jc="checkbox" data-jc-path="upsert">Insert document if it doesn't exist</div>
+		<div data-jc="checkbox" data-jc-path="upsertid">Add unique ID to data before insert (only if it doesn't exist)</div>
+	</div>
 </div>`;
 
 exports.install = function(instance) {
@@ -138,13 +142,16 @@ exports.install = function(instance) {
 
 		} else if (options.method === 'update') {
 
-			if (!flowdata.data.id) {
+			if (!options.upsert && !flowdata.data.id) {
 				flowdata.data = { err: '[DB] Cannot update record by id: `undefined`' };
 				instance.send2(0, flowdata);
 				return instance.error('[DB] Cannot update record by id: `undefined`');
 			}
 
-			nosql.modify(flowdata.data).make(function(builder) {
+			if (options.upsert && (options.upsertid && !flowdata.data.id))
+				flowdata.data.id = UID();
+
+			nosql.modify(flowdata.data, options.upsert).make(function(builder) {
 				builder.where('id', flowdata.data.id);
 				builder.callback(function(err, count) {
 					if (err)
