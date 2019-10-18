@@ -72,7 +72,7 @@ exports.html = `
 
 exports.install = function(instance) {
 
-	instance.on('data', function(flowdata) {
+	instance.on('data', function(flowdata, next) {
 
 		instance.send2(1, flowdata.clone());
 
@@ -80,7 +80,7 @@ exports.install = function(instance) {
 		var collection = options.collection || flowdata.get('collection');
 		if (!collection) {
 			flowdata.data = { err: '[DB] No collection specified' };
-			instance.send2(0, flowdata);
+			next(0, flowdata);
 			return instance.error('[DB] No collection specified');
 		}
 
@@ -90,7 +90,7 @@ exports.install = function(instance) {
 
 			if (!flowdata.data.id) {
 				flowdata.data = { err: '[DB] Cannot get record by id: `undefined`' };
-				instance.send2(0, flowdata);
+				next(0, flowdata);
 				return instance.error('[DB] Cannot get record by id: `undefined`');
 			}
 
@@ -102,7 +102,7 @@ exports.install = function(instance) {
 						instance.throw(err);
 					else {
 						flowdata.data = { response: response };
-						instance.send2(0, flowdata);
+						next(0, flowdata);
 					}
 				});
 			});
@@ -115,7 +115,7 @@ exports.install = function(instance) {
 					instance.throw(err);
 				else {
 					flowdata.data = { success: err ? false : true, id: flowdata.data.id };
-					instance.send2(0, flowdata);
+					next(0, flowdata);
 				}
 			});
 
@@ -135,7 +135,7 @@ exports.install = function(instance) {
 						instance.throw(err);
 					else {
 						flowdata.data = { response: response || [] };
-						instance.send2(0, flowdata);
+						next(0, flowdata);
 					}
 				});
 			});
@@ -144,7 +144,7 @@ exports.install = function(instance) {
 
 			if (!options.upsert && !flowdata.data.id) {
 				flowdata.data = { err: '[DB] Cannot update record by id: `undefined`' };
-				instance.send2(0, flowdata);
+				next(0, flowdata);
 				return instance.error('[DB] Cannot update record by id: `undefined`');
 			}
 
@@ -158,7 +158,7 @@ exports.install = function(instance) {
 						instance.throw(err);
 					else {
 						flowdata.data = { response: count || 0 };
-						instance.send2(0, flowdata);
+						next(0, flowdata);
 					}
 				});
 			});
@@ -167,7 +167,7 @@ exports.install = function(instance) {
 
 			if (!flowdata.data.id) {
 				flowdata.data = { err: '[DB] Cannot remove record by id: `undefined`' };
-				instance.send2(0, flowdata);
+				next(0, flowdata);
 				return instance.error('[DB] Cannot remove record by id: `undefined`');
 			}
 
@@ -178,7 +178,7 @@ exports.install = function(instance) {
 						instance.throw(err);
 					else {
 						flowdata.data = { response: count || 0 };
-						instance.send2(0, flowdata);
+						next(0, flowdata);
 					}
 				});
 			});
