@@ -27,7 +27,10 @@ exports.html = `<div class="padding">
 exports.install = function(instance) {
 
 	instance.custom.reconfigure = function(options){
-		instance.status(instance.options.wirename ? instance.options.wirename :'Not configured');
+		if (instance.options.wirename) {
+			instance.status(instance.options.wirename);
+		} else
+			instance.status('Not configured', 'red');
 	};
 
 	ON('virtualwire', function(wirename, flowdata){

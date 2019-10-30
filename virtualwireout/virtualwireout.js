@@ -29,7 +29,7 @@ exports.install = function(instance) {
 		if (instance.options.wirename) {
 			instance.status(instance.options.wirename);
 		} else
-			instance.status('Not configure', 'red');
+			instance.status('Not configured', 'red');
 	};
 
 	instance.on('data', function(flowdata) {
