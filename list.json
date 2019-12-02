@@ -16,6 +16,10 @@
 		"name": "Common",
 		"items": [
 			{
+				"url": "https://cdn.totaljs.com/flow/childprocess_exec.js",
+				"version": "1.0.0"
+			},
+			{
 				"url": "https://cdn.totaljs.com/flow/code.js",
 				"version": "1.2.0"
 			},
@@ -317,6 +321,10 @@
 			{
 				"url": "https://cdn.totaljs.com/flow/nosql.js",
 				"version": "1.2.0"
+			},
+			{
+				"url": "https://cdn.totaljs.com/flow/nosql2.js",
+				"version": "1.0.0"
 			}
 		]
 	},
@@ -489,6 +497,23 @@
 			{
 				"url": "https://cdn.totaljs.com/flow/restschema.js",
 				"version": "1.0.0"
+			}
+		]
+	},
+	{
+		"name": "SMSGatewayME",
+		"items": [
+			{
+				"url": "https://cdn.totaljs.com/flow/smsgatewaymephoneinfo.js",
+				"version": "0.0.1"
+			},
+			{
+				"url": "https://cdn.totaljs.com/flow/smsgatewaymesmssend.js",
+				"version": "0.0.1"
+			},
+			{
+				"url": "https://cdn.totaljs.com/flow/smsgatewaymesmsstatus.js",
+				"version": "0.0.1"
 			}
 		]
 	},
