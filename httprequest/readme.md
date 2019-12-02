@@ -14,8 +14,12 @@ __Response:__
 ```
 
 __Dynamic arguments__:
+
 Are performed via FlowData repository and can be used for URL address or for custom headers/cookies/auth. Use `repository` component for creating of dynamic arguments. Examples:
 
 - url address can be in this form `https://hostname.com/{key}/`
 - headers values e.g. `{token}`
 - cookies values e.g. `{token}`
+
+__Custom headers__:
+
