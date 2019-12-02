@@ -101,6 +101,12 @@ Component.prototype.debug = function(data, style) {
 	return this;
 };
 
+Component.prototype.throw = function(data) {
+	log('instance.throw', data);
+	EMIT('flow.throw', data);
+	return this;
+};
+
 FLOW.register = function(name, options, fn) {
 
 	if (typeof(options) === 'function') {
