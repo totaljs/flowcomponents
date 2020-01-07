@@ -2,11 +2,11 @@ exports.id = 'childprocess_exec';
 exports.title = 'Child Process: Exec';
 exports.group = 'Common';
 exports.color = '#37BC9B';
-exports.version = '1.0.0';
+exports.version = '1.0.1';
 exports.input = 1;
 exports.output = ['green | stdout', 'red | stderr'];
 exports.author = 'Peter Širka';
-exports.icon = 'tasks-alt';
+exports.icon = 'calculator';
 exports.options = { filename: '', arg: [], convert: 'buffer', timeout: 5000 };
 
 
