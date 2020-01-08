@@ -1,4 +1,4 @@
-exports.id = 'downloader';
+exports.id = 'httpdownloader';
 exports.title = 'HTTP Downloader';
 exports.group = 'HTTP';
 exports.color = '#5D9CEC';
