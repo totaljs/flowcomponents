@@ -3,7 +3,7 @@ exports.title = 'HTTP Request';
 exports.group = 'HTTP';
 exports.color = '#5D9CEC';
 exports.input = true;
-exports.version = '2.0.0';
+exports.version = '2.0.1';
 exports.output = 1;
 exports.author = 'Peter Širka';
 exports.icon = 'cloud-upload';
@@ -21,6 +21,7 @@ exports.html = `<div class="padding">
 	<div data-jc="checkbox" data-jc-path="chunks">@(Download the content <b>in chunks</b>)</div>
 	<div data-jc="checkbox" data-jc-path="persistentcookies">@(Keep persistent cookies)</div>
 	<div data-jc="checkbox" data-jc-path="nodns">@(Disable DNS cache)</div>
+	<div data-jc="checkbox" data-jc-path="keepalive">@(Keep alive connection)</div>
 </div>
 <hr class="nmt nmb" />
 <div class="padding">
@@ -122,6 +123,7 @@ exports.install = function(instance) {
 		flags.push(options.method.toLowerCase());
 		options.stringify === 'json' && flags.push('json');
 		options.stringify === 'raw' && flags.push('raw');
+		options.keepalive && flags.push('keepalive');
 		!options.nodns && flags.push('dnscache');
 		if (options.persistentcookies) {
 			flags.push('cookies');
