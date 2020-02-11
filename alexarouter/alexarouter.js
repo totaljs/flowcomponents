@@ -5,7 +5,7 @@ exports.color = '#AAAAFF';
 exports.icon = 'globe';
 exports.input = 1;
 exports.output = 1;
-exports.version = '1.1.1';
+exports.version = '1.1.2';
 exports.author = 'John Graves';
 exports.cloning = false;
 exports.options = { conditions: [{ type: 'LaunchRequest', name: '', index: 0 }], helpintentsmml: '<speak>\n\n</speak>', cancelintentsmml: '<speak>\n\n</speak>', stopintentsmml: '<speak>\n\n</speak>', nointentsmml: '<speak>\n\n</speak>' };
@@ -44,14 +44,14 @@ exports.html = `
 					<div class="cond-col3"><strong>Intent Name</strong></div>
 				</div>
 			</div>
-			<div data-jc="repeater" data-jc-path="conditions" class="mt10">
+			<div data-jc="repeater__conditions" class="mt10">
 				<script type="text/html">
 				<div class="row">
 					<div class="col-md-12">
 						<div class="cond-col1 mt5"><strong>$index</strong></div>
-						<div class="cond-col2 pr10"><div data-jc="dropdown" data-jc-path="conditions[$index].type" data-jc-config="items:LaunchRequest,IntentRequest,Both" class="m"></div></div>
-						<div class="cond-col3 pr10"><div data-jc="textbox" data-jc-path="conditions[$index].name" data-jc-config="placeholder:@(intent name)"></div></div>
-						<div class="cond-col4"><button class="exec button button-small cond-remove" data-exec="#alexaroutercomponent_remove_condition" data-index="$index"><i class="fa fa-trash"></i></button></div>
+						<div class="cond-col2 pr10"><div data-jc="dropdown__conditions[$index].type__items:LaunchRequest,IntentRequest,Both" class="m"></div></div>
+						<div class="cond-col3 pr10"><div data-jc="textbox__conditions[$index].name__placeholder:@(intent name)"></div></div>
+						<div class="cond-col4"><button class="exec button button-small cond-remove" data-exec="FUNC.alexaroutercomponent_remove_condition" data-index="$index"><i class="fa fa-trash"></i></button></div>
 					</div>
 				</div>
 				</script>
@@ -59,34 +59,35 @@ exports.html = `
 			<div class="row">
 				<div class="col-md-2 m">
 					<br>
-					<button class="exec button button-small" data-exec="#alexaroutercomponent_add_condition"><i class="fa fa-plus mr5"></i>ADD</button>
+					<button class="exec button button-small" data-exec="FUNC.alexaroutercomponent_add_condition"><i class="fa fa-plus mr5"></i>ADD</button>
 				</div>
 			</div>
 		</div>
 	</section>
-	<section>
+	<br />
+	<section class="m">
 		<label>@(Default Intents)</label>
-		<div class="padding npb">
-			<div data-jc="checkbox" data-jc-path="helpintentoverride">@(Override Help Intent)</div>
-			<div data-jc="visible" data-jc-path="helpintentoverride" data-jc-config="if:value">
-				<div data-jc="codemirror" data-jc-path="helpintentsmml" data-jc-config="type:javascript;required:true;height:70;tabs:true;trim:true" class="m">@(Help Intent SMML)</div>
+		<div class="padding">
+			<div data-jc="checkbox__helpintentoverride">@(Override Help Intent)</div>
+			<div data-jc="visible__helpintentoverride__if:value">
+				<div data-jc="codemirror__helpintentsmml__type:javascript;required:true;height:70;tabs:true;trim:true" class="m">@(Help Intent SMML)</div>
 			</div>
-			<div data-jc="checkbox" data-jc-path="cancelintentoverride">@(Cancel Intent)</div>
-			<div data-jc="visible" data-jc-path="cancelintentoverride" data-jc-config="if:value">
-				<div data-jc="codemirror" data-jc-path="cancelintentsmml" data-jc-config="type:javascript;required:true;height:70;tabs:true;trim:true" class="m">@(Cancel Intent SMML)</div>
+			<div data-jc="checkbox__cancelintentoverride">@(Cancel Intent)</div>
+			<div data-jc="visible__cancelintentoverride" data-jc-config="if:value">
+				<div data-jc="codemirror__cancelintentsmml__type:javascript;required:true;height:70;tabs:true;trim:true" class="m">@(Cancel Intent SMML)</div>
 			</div>
-			<div data-jc="checkbox" data-jc-path="stopintentoverride">@(Stop Intent)</div>
-			<div data-jc="visible" data-jc-path="stopintentoverride" data-jc-config="if:value">
-				<div data-jc="codemirror" data-jc-path="stopintentsmml" data-jc-config="type:javascript;required:true;height:70;tabs:true;trim:true" class="m">@(Stop Intent SMML)</div>
+			<div data-jc="checkbox__stopintentoverride">@(Stop Intent)</div>
+			<div data-jc="visible__stopintentoverride" data-jc-config="if:value">
+				<div data-jc="codemirror__stopintentsmml__type:javascript;required:true;height:70;tabs:true;trim:true" class="m">@(Stop Intent SMML)</div>
 			</div>
-			<div data-jc="checkbox" data-jc-path="nointentoverride">@(No Intent)</div>
-			<div data-jc="visible" data-jc-path="nointentoverride" data-jc-config="if:value">
-				<div data-jc="codemirror" data-jc-path="nointentsmml" data-jc-config="type:javascript;required:true;height:70;tabs:true;trim:true" class="m">@(No Intent SMML)</div>
+			<div data-jc="checkbox__nointentoverride">@(No Intent)</div>
+			<div data-jc="visible__nointentoverride__if:value">
+				<div data-jc="codemirror__nointentsmml__type:javascript;required:true;height:70;tabs:true;trim:true" class="m">@(No Intent SMML)</div>
 			</div>
 		</div>
 	</section>
-	<p><a href="https://developer.amazon.com/docs/custom-skills/speech-synthesis-markup-language-ssml-reference.html" target="_blank">Alexa SMML Documentation</a></p>
-	<p><a href="https://youtu.be/YBtN4Ky3MLo" target="_blank">Example Video</a></p>
+	<div><a href="https://developer.amazon.com/docs/custom-skills/speech-synthesis-markup-language-ssml-reference.html" class="b" target="_blank">Alexa SMML Documentation</a></div>
+	<div><a href="https://youtu.be/YBtN4Ky3MLo" target="_blank">Example Video</a></div>
 </div>
 <script>
 
