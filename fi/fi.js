@@ -1,5 +1,5 @@
 exports.id = 'fi';
-exports.version = '1.0.0';
+exports.version = '1.1.0';
 exports.title = 'First In';
 exports.group = 'Common';
 exports.color = '#F6BB42';
@@ -8,9 +8,10 @@ exports.output = 1;
 exports.author = 'Peter Širka';
 exports.icon = 'plus';
 exports.options = { outputs: 1, timeout: '1 minute' };
+exports.click = true;
 exports.readme = `# First In
 
-This component is a part of __FI__FO stack. __IMPORTANT__ message can't changed repository because it contains a reference to this component. Click sends next data.`;
+This component is a part of __FI__FO stack. __IMPORTANT__ message can't changed repository because it contains a reference to this component. \`Click\` clears queue.`;
 
 exports.html = `<div class="padding">
 	<div class="row">
@@ -46,6 +47,41 @@ exports.install = function(instance) {
 	var stack = [];
 	var free = [];
 	var pending = [];
+
+	instance.on('click', function() {
+
+		if (locked)
+			return;
+
+		var index = 0;
+
+		while (true) {
+			var fifo = pending[index++];
+			if (fifo === undefined)
+				break;
+
+			if (fifo) {
+				fifo.instance.custom.done(fifo.index);
+				fifo.instance = null;
+			}
+
+			index -= 1;
+			pending.splice(index, 1);
+			instance.end();
+		}
+
+		instance.custom.free();
+		instance.custom.status();
+	});
+
+	instance.custom.free = function() {
+		var options = instance.options;
+		free = [];
+		for (var i = 0; i < options.outputs; i++)
+			free.push(i);
+		outputs = free.length;
+		stack = [];
+	};
 
 	instance.custom.send = function() {
 
@@ -109,15 +145,17 @@ exports.install = function(instance) {
 	};
 
 	instance.on('service', function() {
-		var ticks = F.datetime.getTime();
+		var ticks = NOW.getTime();
 		var index = 0;
 		while (true) {
 			var fifo = pending[index++];
 			if (fifo === undefined)
 				break;
+
 			if (!fifo || fifo.ticks < ticks) {
 
 				if (fifo) {
+					free.push(fifo.index);
 					fifo.instance.custom.done(fifo.index);
 					fifo.instance = null;
 				}
