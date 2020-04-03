@@ -79,7 +79,6 @@ Component.prototype.send = Component.prototype.send2 = function(index, message) 
 		message = new FlowData(message);
 
 	var self = this;
-	var connections = self.connections;
 
 	message.tracking.push(self);
 	message.parent = self;
