@@ -18,7 +18,7 @@ global.assert = require('assert');
 
 var DEBUG = true;
 
-global.FLOW = { component: null, current: null, inmemory: {}, triggers: {} };
+global.FLOW = { component: null, current: null, inmemory: {}, triggers: {}, variables: {} };
 
 function log(name, data, index) {
 
