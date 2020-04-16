@@ -11,7 +11,7 @@ exports.icon = 'code';
 exports.html = `<div class="padding">
 	<div data-jc="dropdown" data-jc-path="parser" class="m" data-jc-config="items:,Begin/End parser|beginend,Newline parser|newline;required:true">@(Parser type)</div>
 </div>
-<div data-jc="visible" data-jc-path="parser" data-jc-config="if:value === 'beginend'">
+<div data-jc="visible" data-jc-path="parser" data-jc-config="if:value === 'beginend'" class="padding">
 	<section>
 		<label><i class="fa fa-code"></i>@(Advanced settings)</label>
 		<div data-jc="disable" data-jc-path="parser" data-jc-config="if_value !== 'beginend';validate:begin,end" class="padding">
