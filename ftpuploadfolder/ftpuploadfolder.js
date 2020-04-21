@@ -20,19 +20,21 @@ exports.html = `<div class="padding">
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-md-4">
+		<div class="col-md-6">
 			<div class="m" data---="textbox__path__required:1;placeholder:/www/upload">@(Local path)</div>
 		</div>
-		<div class="col-md-4">
+		<div class="col-md-6">
 			<div class="m" data---="textbox__interval__required:1;type:number__5000">@(Interval in ms)</div>
 		</div>
 	</div>
+	<div data---="checkbox__isenabled">@(Enable upload)</div>
 </div>`;
 
 exports.install = function(instance) {
 
 	const Exec = require('child_process').exec;
 	const Url = require('url');
+
 	var can = false;
 	var isrunning = false;
 	var interval;
@@ -103,12 +105,13 @@ exports.install = function(instance) {
 		});
 	};
 
-	instance.close = function(callback) {
+	instance.close = function() {
+		isrunning = false;
 		clearInterval(interval);
     };
 
 	instance.reconfigure = function() {
-		can = instance.options.url && instance.options.path && instance.options.interval ? true : false;
+		can = instance.options.url && instance.options.path && instance.options.interval && instance.options.isenabled ? true : false;
 		instance.status(can ? '' : 'Not configured', can ? undefined : 'red');
 
 		if (!can)
