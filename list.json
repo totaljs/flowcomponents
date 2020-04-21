@@ -261,7 +261,11 @@
 		"items": [
 			{
 				"url": "https://cdn.totaljs.com/flow/ftpupload.js",
-				"version": "1.0.1"
+				"version": "1.0.2"
+			},
+			{
+				"url": "https://cdn.totaljs.com/flow/ftpuploadfolder.js",
+				"version": "1.0.0"
 			}
 		]
 	},
