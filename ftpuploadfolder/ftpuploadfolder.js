@@ -70,7 +70,7 @@ exports.install = function(instance) {
 		if (uri.path)
 			builder.push('-e \'mkdir -p {0};cd {0};mput {1};exit\''.format(uri.path, localpath));
 		else
-			builder.push('-e \'mput /www/upload/*;exit\'');
+			builder.push('-e \'mput {0};exit\''.format(localpath));
 
 		Exec(builder.join(' '), function(err) {
 			isrunning = false;
@@ -111,6 +111,7 @@ exports.install = function(instance) {
     };
 
 	instance.reconfigure = function() {
+		interval && clearInterval(interval);
 		can = instance.options.url && instance.options.path && instance.options.interval && instance.options.isenabled ? true : false;
 		instance.status(can ? '' : 'Not configured', can ? undefined : 'red');
 
