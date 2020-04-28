@@ -1,5 +1,5 @@
 exports.id = 'ftpuploadfolder';
-exports.version = '1.0.0';
+exports.version = '1.0.1';
 exports.title = 'FTP Upload Folder';
 exports.group = 'FTP';
 exports.color = '#34ace1';
