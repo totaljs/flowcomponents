@@ -39,40 +39,36 @@ exports.install = function(instance) {
 	var isrunning = false;
 	var interval;
 
+	instance.custom.test = function(callback) {
+		Exec(instance.custom.geturl(true), function(err) {
+			if (err)
+				callback && callback(false);
+			else {
+				instance.status('Connected', 'green');
+				callback && callback(true);
+			}
+		});
+	};
+
+
 	instance.custom.create = function() {
-		interval = setInterval(function() {
-			(!isrunning) && instance.custom.upload();
-		}, instance.options.interval);
+		instance.custom.test(function(working) {
+			if (!working)
+				return;
+			interval = setInterval(function() {
+				(!isrunning) && instance.custom.upload();
+			}, instance.options.interval);
+		});
 	};
 
 	instance.custom.upload = function() {
 
+		if (isrunning)
+			return;
+
 		isrunning = true;
 
-		var opt = instance.options;
-		var uri = Url.parse(opt.url);
-
-		var builder = [];
-		var localpath = opt.path.substr(-1) === '/' ? opt.path + '*' : opt.path + '/*';
-
-		builder.push('lftp');
-
-		if (uri.auth) {
-			uri.auth = uri.auth.split(':');
-			builder.push('-u {0},{1}'.format(uri.auth[0], uri.auth[1]));
-		}
-
-		if (uri.port)
-			builder.push('-p ' + uri.port);
-
-		builder.push('{0}//{1}{2}'.format(uri.protocol, uri.hostname));
-
-		if (uri.path)
-			builder.push('-e \'mkdir -p {0};cd {0};mput {1};exit\''.format(uri.path, localpath));
-		else
-			builder.push('-e \'mput {0};exit\''.format(localpath));
-
-		Exec(builder.join(' '), function(err) {
+		Exec(instance.custom.geturl(), function(err) {
 			isrunning = false;
 			if (err)
 				instance.throw(err);
@@ -105,6 +101,37 @@ exports.install = function(instance) {
 		});
 	};
 
+	instance.custom.geturl = function(istest) {
+		var opt = instance.options;
+		var uri = Url.parse(opt.url);
+
+		var builder = [];
+		var localpath = opt.path.substr(-1) === '/' ? opt.path : opt.path + '/';
+
+		builder.push('lftp');
+
+		if (uri.auth) {
+			uri.auth = uri.auth.split(':');
+			builder.push('-u {0},{1}'.format(uri.auth[0], uri.auth[1]));
+		}
+
+		if (uri.port)
+			builder.push('-p ' + uri.port);
+
+		builder.push('{0}//{1}{2}'.format(uri.protocol, uri.hostname));
+
+		if (istest) {
+			builder.push('-e \'ls;exit\'');
+		} else {
+			if (uri.path)
+				builder.push('-e \'mkdir -p {0};cd {0};lcd {1};mirror -R -c --Remove-source-files;exit\''.format(uri.path, localpath));
+			else
+				builder.push('-e \'lcd {0};mirror -R -c --Remove-source-files;exit\''.format(localpath));
+		}
+
+		return builder.join(' ');
+	};
+
 	instance.close = function() {
 		isrunning = false;
 		clearInterval(interval);
@@ -117,6 +144,8 @@ exports.install = function(instance) {
 
 		if (!can)
 			return;
+
+		instance.status('Disconnected', 'red');
 
 		if (instance.options.url.indexOf('sftp') !== -1)
 			instance.custom.preparessh();
