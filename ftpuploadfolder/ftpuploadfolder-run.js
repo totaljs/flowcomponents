@@ -34,7 +34,7 @@ FLOWINIT(require('./' + U.getName(process.argv[1].replace(/-run\.js$/, ''))));
 // ON('flow.close')                    - triggered when the component is closed
 
 ON('flow.ready', function() {
-	FLOWOPTIONS({ url: 'ftp://user:password@yourhost.com', path: '/www/upload', interval: 3000 });
+	FLOWOPTIONS({ type: 'ftp', port: 21, hostname: '', user: '', password: '', localpath: '/www/uploads/', interval: 3000 });
 
 	setTimeout(function() {
 		FLOWCLOSE();
