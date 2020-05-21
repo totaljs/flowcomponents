@@ -1,5 +1,5 @@
 exports.id = 'ftpuploadfolder';
-exports.version = '1.0.2';
+exports.version = '1.0.3';
 exports.title = 'FTP Upload Folder';
 exports.group = 'FTP';
 exports.color = '#34ace1';
@@ -40,10 +40,10 @@ exports.html = `<div class="padding">
 	</div>
 	<div class="row">
 		<div class="col-md-6">
-			<div class="m" data---="textbox__remotepath__required:1;placeholder:/">@(Remote path)</div>
+			<div class="m" data---="textbox__remotepath__placeholder:/">@(Remote path)</div>
 		</div>
 		<div class="col-md-6">
-			<div class="m" data---="textbox__localpath__required:1;placeholder:/www/upload">@(Local path)</div>
+			<div class="m" data---="textbox__localpath__required:true;placeholder:/www/upload">@(Local path)</div>
 		</div>
 	</div>
 	<div data---="checkbox__isenabled">@(Enable upload)</div>
@@ -59,7 +59,6 @@ exports.html = `<div class="padding">
 exports.install = function(instance) {
 
 	const Exec = require('child_process').exec;
-	const Url = require('url');
 
 	var can = false;
 	var isrunning = false;
@@ -69,6 +68,10 @@ exports.install = function(instance) {
 		instance.custom.test(function(working) {
 			if (!working)
 				return;
+			if (!instance.options.isenabled) {
+				instance.status('Disabled', 'orange');
+				return;
+			}
 			interval = setInterval(function() {
 				(!isrunning) && instance.custom.upload();
 			}, instance.options.interval);
@@ -76,6 +79,11 @@ exports.install = function(instance) {
 	};
 
 	instance.custom.test = function(callback) {
+
+		if (isrunning) {
+			callback(false, 'Test of connection is already in progress.');
+			return;
+		}
 
 		isrunning = true;
 
@@ -86,16 +94,19 @@ exports.install = function(instance) {
 				return;
 			}
 
-			Exec(instance.custom.geturl(), function(err) {
+			Exec(instance.custom.geturl(true), function(err) {
 				isrunning = false;
 				if (err) {
-					callback && callback(false, err);
-					instance.throw(err);
 					instance.status('Disconnected', 'red');
+					callback && callback(false, 'Login failed! Please check your settings!');
+					instance.throw(err);
 				} else {
-					callback && callback(true);
+					if (instance.options.isenabled)
+						instance.status('Connected', 'green');
+					else
+						instance.status('Disabled', 'orange');
+					callback && callback(true, 'Test processed successfully!');
 					instance.send2(SUCCESS(true, 'Test processed successfully!'));
-					instance.status('Connected', 'green');
 				}
 			});
 		});
@@ -125,14 +136,17 @@ exports.install = function(instance) {
 		});
 	};
 
-	instance.custom.geturl = function() {
+	instance.custom.geturl = function(istest) {
 		var opt = instance.options;
 		var builder = [];
 		builder.push('lftp');
 		builder.push('-u {user},{password}'.arg(opt));
 		builder.push('-p ' + opt.port);
 		builder.push('{type}://{hostname}'.arg(opt));
-		builder.push('-e \'mkdir -p {remotepath};mput -c -E -O {remotepath} {localpath}*;exit\''.arg(opt));
+		if (istest)
+			builder.push('-e \'set net:max-retries 1;set net:reconnect-interval-base 1;set net:reconnect-interval-multiplier 1;mkdir -p {remotepath};put -c -E -O {remotepath} {localpath}testfile.txt;exit\''.arg(opt));
+		else
+			builder.push('-e \'set net:max-retries 1;set net:reconnect-interval-base 1;set net:reconnect-interval-multiplier 1;mkdir -p {remotepath};mput -c -E -O {remotepath} {localpath}*;exit\''.arg(opt));
 		return builder.join(' ');
 	};
 
@@ -160,42 +174,40 @@ exports.install = function(instance) {
 		next();
     };
 
-	instance.reconfigure = function(opt) {
+	instance.reconfigure = function() {
 
 		interval && clearInterval(interval);
 
-		var local = instance.options.localpath;
-		var remote = instance.options.remotepath;
+		var opt = instance.options;
+		var local = opt.localpath;
+		var remote = opt.remotepath;
 
-		if (instance.options.localpath) {
-			instance.options.localpath = instance.options.localpath[0] === '/' ? instance.options.localpath : '/' + instance.options.localpath;
-			instance.options.localpath = instance.options.localpath[instance.options.localpath.length - 1] === '/' ? instance.options.localpath : instance.options.localpath + '/';
+		if (opt.localpath) {
+			opt.localpath = opt.localpath[0] === '/' ? opt.localpath : '/' + opt.localpath;
+			opt.localpath = opt.localpath[opt.localpath.length - 1] === '/' ? opt.localpath : opt.localpath + '/';
 		} else
-			instance.options.localpath = '/';
+			opt.localpath = '/';
 
-		if (instance.options.remotepath) {
-			instance.options.remotepath = instance.options.remotepath[0] === '/' ? instance.options.remotepath : '/' + instance.options.remotepath;
-			instance.options.remotepath = instance.options.remotepath[instance.options.remotepath.length - 1] === '/' ? instance.options.remotepath : instance.options.remotepath + '/';
+		if (opt.remotepath) {
+			opt.remotepath = opt.remotepath[0] === '/' ? opt.remotepath : '/' + opt.remotepath;
+			opt.remotepath = opt.remotepath[opt.remotepath.length - 1] === '/' ? opt.remotepath : opt.remotepath + '/';
 		} else
-			instance.options.remotepath = '/';
+			opt.remotepath = '/';
 
-		if (local !== instance.options.localpath || remote !== instance.options.remotepath) {
-			instance.reoptions(instance.options);
+		if (local !== opt.localpath || remote !== opt.remotepath) {
+			instance.reoptions(opt);
 			return;
 		}
 
-		can = instance.options.type && instance.options.port && instance.options.hostname && instance.options.interval && instance.options.user && instance.options.password ? true : false;
+		can = opt.type && opt.port && opt.hostname && opt.interval && opt.user && opt.password ? true : false;
 		instance.status(can ? '' : 'Not configured', can ? undefined : 'red');
 
 		if (!can)
 			return;
 
-		if (!instance.options.isenabled) {
-			instance.status('Disabled', 'orange');
-			return;
-		}
+		instance.status('Connecting...');
 
-		if (instance.options.type === 'sftp')
+		if (opt.type === 'sftp')
 			instance.custom.preparessh();
 		else
 			instance.custom.create();
