@@ -5,7 +5,7 @@ exports.color = '#967ADC';
 exports.click = true;
 exports.input = true;
 exports.icon = 'bug';
-exports.version = '2.0.3';
+exports.version = '2.0.4';
 exports.options = { enabled: true, repository: false, type: 'data' };
 exports.readme = `# Debug
 
@@ -70,6 +70,16 @@ exports.install = function(instance) {
 	instance.custom.status();
 
 	function safeparse(o) {
+
+		if (o instanceof Buffer)
+			return o;
+
+		if (o === undefined)
+			return 'undefined';
+
+		if (o === null)
+			return 'null';
+
 		var cache = [];
 		var str = JSON.stringify(o, function(key, value) {
 			if (typeof value === 'object' && value !== null) {
