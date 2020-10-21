@@ -16,7 +16,7 @@ exports.html = `<div class="padding">
 <div data-jc="textbox" data-jc-path="initialvalue" data-jc-config="placeholder:1;increment:true;type:number;align:center">@(Initial Value)</div>
 <div data-jc="textbox" data-jc-path="increment" data-jc-config="placeholder:1;increment:true;type:number;align:center">@(Increment)</div>
 <p><a href="https://youtu.be/NuUbTm1oRE0" target="_blank">Example Video</a></p>
-</div>`
+</div>`;
 
 exports.readme = `# Count
 
