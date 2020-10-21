@@ -57,11 +57,11 @@ exports.install = function(instance) {
 	var pagetemplate = '';
 
 	instance.on('data', function(flowdata){
-		console.log('DATA', ready, flowdata.data);
 		if (!ready)
 			return;
 
 		try {
+			make_template();
 			flowdata.data = F.viewCompile('@{nocompress all}\n' + pagetemplate, flowdata.data, '', flowdata.parent);
 			instance.send2(flowdata);
 		} catch (e) {

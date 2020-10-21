@@ -4,7 +4,7 @@ exports.group = 'MQTT';
 exports.color = '#888600';
 exports.version = '1.0.1';
 exports.icon = 'exchange';
-exports.input = false;
+exports.input = true;
 exports.output = 0;
 exports.author = 'Martin Smola';
 exports.variables = true;
@@ -66,7 +66,23 @@ exports.html = `<div class="padding">
 </script>`;
 
 exports.readme = `
-# MQTT Broker`;
+# MQTT Broker
+
+## Input
+Allows to change connection programaticaly
+\`\`\`javascipt
+{
+	host: '1.2.3.4',
+	port: '',
+	secure: true/false,
+	username: 'john',
+	password: 'X',
+	lwttopic: '',
+	lwtmessage: '',
+	clientid: ''
+}
+\`\`\`
+`;
 
 var MQTT_BROKERS = [];
 var mqtt;
@@ -78,6 +94,17 @@ exports.install = function(instance) {
 	var broker;
 
 	mqtt = require('mqtt');
+
+	instance.on('data', function(flowdata){
+		var data= flowdata.data;
+		var options = instance.options;
+
+		if (data.host && data.port)
+			return instance.custom.reconfigure(data, options);
+
+		if (data.close === true)
+			instance.close(NOOP);
+	});
 
 	instance.custom.reconfigure = function(o, old_options) {
 
@@ -96,7 +123,7 @@ exports.install = function(instance) {
 		options.id = (options.username || '') + '@' + options.host + ':' + options.port;
 
 		if (broker) {
-			JSON.stringify(options) !== JSON.stringify(old_options) && broker.close();
+			broker.close();
 			EMIT('mqtt.brokers.status', 'reconfigured', old_options.id, options.id);
 		}
 
