@@ -25,14 +25,6 @@
 		]
 	},
 	{
-		"name": "Commander",
-		"items": [
-			"https://rawgit.com/totaljs/flowcomponents/v4components/commandercommands/commandercommands.js",
-			"https://rawgit.com/totaljs/flowcomponents/v4components/commanderdependencies/commanderdependencies.js",
-			"https://rawgit.com/totaljs/flowcomponents/v4components/commanderoutput/commanderoutput.js"
-		]
-	},
-	{
 		"name": "Inputs",
 		"items": [
 			"https://rawgit.com/totaljs/flowcomponents/v4components/console/console.js",

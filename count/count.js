@@ -1,7 +1,6 @@
-const ID = 'count';
 exports.id = 'count';
 exports.title = 'Count';
-exports.version = '1.0.0';
+exports.version = '1.0.1';
 exports.author = 'John Graves';
 exports.color = '#656D78';
 exports.icon = 'plus-square';
@@ -37,21 +36,19 @@ exports.install = function(instance) {
 
 	instance.on('data', function(flowdata) {
 		var index = flowdata.index;
- 		if(index === 0) { // First bubble, increment by value.
-
+		if (index) {
+			instance.debug('Reset Count.');
+			count = instance.options.initialvalue;
+			initialCall = true;
+		} else {
 			// If this is the first time, set the value to 'initial value'
 			if(initialCall) {
- 				initialCall = false;
+				initialCall = false;
 				count = instance.options.initialvalue;
- 			} else {
+			} else
 				count = count+instance.options.increment;
- 			}
 			instance.status('Count:' + count);
- 			instance.send2(count);
-		} else { // Second bubble, reset counter.
- 			instance.debug('Reset Count.');
-			count = instance.options.initialvalue;
- 			initialCall = true;
+			instance.send2(count);
 		}
 	});
 

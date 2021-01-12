@@ -4,7 +4,7 @@ exports.group = 'Parsers';
 exports.color = '#37BC9B';
 exports.input = true;
 exports.output = 1;
-exports.version = '1.0.0';
+exports.version = '1.0.1';
 exports.author = 'Peter Širka';
 exports.icon = 'code';
 exports.options = { template: '<h1>Hello @{model.firstname}</h1>' };
@@ -26,7 +26,7 @@ exports.install = function(instance) {
 	instance.on('data', function(response) {
 		if (can) {
 			try {
-				response.data = F.viewCompile('@{nocompress all}\n' + instance.options.template, response.data, '', response.parent);
+				response.data = F.is4 ? VIEWCOMPILE('@{nocompress all}\n' + instance.options.template, response.data, '', response.parent) : F.viewCompile('@{nocompress all}\n' + instance.options.template, response.data, '', response.parent);
 				instance.send2(response);
 			} catch (e) {}
 		}

@@ -5,7 +5,7 @@ exports.color = '#5D9CEC';
 exports.icon = 'map-marker';
 exports.input = true;
 exports.output = 1;
-exports.version = '1.0.0';
+exports.version = '1.0.1';
 exports.author = 'Peter Širka';
 exports.readme = `# HTTP GeoIP
 
@@ -33,23 +33,43 @@ exports.install = function(instance) {
 			return;
 		}
 
-		ip && U.request('http://freegeoip.net/json/' + ip, FLAGS, function(err, res, status) {
+		if (F.is4) {
 
-			if (err) {
-				instance.error(err);
-				return;
-			}
+			RESTBuilder.GET('http://freegeoip.net/json/' + ip).callback(function(err, data, meta) {
 
-			if (status !== 200)
-				return;
+				if (err) {
+					instance.error(err);
+					return;
+				}
 
-			var data = res.parseJSON();
-			if (data) {
-				response.data.geoip = cache[ip] = data;
-				instance.send2(response.data);
-			}
-		});
+				if (meta.status !== 200)
+					return;
+
+				if (data) {
+					response.data.geoip = cache[ip] = data;
+					instance.send2(data);
+				}
+			});
+
+		} else {
+			U.request('http://freegeoip.net/json/' + ip, FLAGS, function(err, res, status) {
+
+				if (err) {
+					instance.error(err);
+					return;
+				}
+
+				if (status !== 200)
+					return;
+
+				var data = res.parseJSON();
+				if (data) {
+					response.data.geoip = cache[ip] = data;
+					instance.send2(response.data);
+				}
+			});
+		}
 	});
 
-	instance.on('service', (counter) => counter % 30 === 0 && (cache = {}));
+	instance.on('service', counter => counter % 30 === 0 && (cache = {}));
 };

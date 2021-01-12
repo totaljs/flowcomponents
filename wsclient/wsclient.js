@@ -6,7 +6,7 @@ exports.input = true;
 exports.output = true;
 exports.author = 'Martin Smola';
 exports.icon = 'comment';
-exports.version = '1.0.0';
+exports.version = '1.0.1';
 exports.options = {  };
 
 exports.html = `<div class="padding">
@@ -48,7 +48,6 @@ All recieved messages are send to the output`;
 
 exports.install = function(instance) {
 
-	var parser;
 	var wsclient;
 
 	instance.on('data', function(flowdata) {

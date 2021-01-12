@@ -1,6 +1,6 @@
 exports.id = 'timer';
 exports.title = 'Timer';
-exports.version = '1.0.0';
+exports.version = '1.0.1';
 exports.group = 'Time';
 exports.color = '#F6BB42';
 exports.output = 1;
@@ -70,7 +70,7 @@ exports.install = function(instance) {
 				break;
 			case 'buffer':
 				try {
-					value = U.createBuffer(options.data);
+					value = F.is4 ? Buffer.from(options.data) : U.createBuffer(options.data);
 				} catch (e) {
 					instance.error(e);
 				}

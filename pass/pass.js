@@ -1,6 +1,6 @@
 exports.id = 'pass';
 exports.title = 'Pass';
-exports.version = '1.0.0';
+exports.version = '1.0.1';
 exports.author = 'Martin Smola';
 exports.color = '#656D78';
 exports.icon = 'arrow-right';
@@ -89,7 +89,7 @@ exports.install = function(instance) {
 	});
 
 	instance.on('click', function() {
-		instance.options.enabled = instance.options.enabled;
+		instance.options.enabled = !instance.options.enabled;
 		instance.custom.status();
 	});
 

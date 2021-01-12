@@ -1,6 +1,6 @@
 exports.id = 'uniqueinterval';
 exports.title = 'Unique in interval';
-exports.version = '1.0.0';
+exports.version = '1.0.1';
 exports.group = 'Time';
 exports.author = 'Peter Širka';
 exports.color = '#656D78';
@@ -41,7 +41,14 @@ exports.install = function(instance) {
 
 	instance.reconfigure = function() {
 		try {
-			instance.options.condition && (fn = SCRIPT(instance.options.condition));
+
+			if (instance.options.condition) {
+				if (F.is4) {
+					fn = new Function('next', 'value', 'var model=value;now=function(){return new Date()};try{' + instance.options.condition + '}catch(e){next(e)}');
+				} else
+					fn = SCRIPT(instance.options.condition);
+			}
+
 			instance.status(instance.options.interval);
 		} catch(e) {
 			fn = null;
@@ -54,7 +61,7 @@ exports.install = function(instance) {
 
 	instance.on('service', function(counter) {
 		counter % 5 === 0 && Object.keys(cache).forEach(function(key) {
-			if (cache[key] < F.datetime)
+			if (cache[key] < NOW)
 				delete cache[key];
 		});
 	});

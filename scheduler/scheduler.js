@@ -1,7 +1,7 @@
 exports.id = 'scheduler';
 exports.title = 'Scheduler';
 exports.group = 'Time';
-exports.version = '1.0.0';
+exports.version = '1.0.1';
 exports.color = '#F6BB42';
 exports.output = 1;
 exports.click = true;
@@ -51,7 +51,7 @@ In Frequency and Start fields following can be used:
 
 exports.install = function(instance) {
 
-	var value, id;
+	var value, id, scheduler;
 
 	instance.on('click', () => value && instance.send2(value));
 
@@ -90,23 +90,37 @@ exports.install = function(instance) {
 				break;
 			case 'buffer':
 				try {
-					value = U.createBuffer(options.data);
+					value = F.is4 ? Buffer.from(options.data) : U.createBuffer(options.data);
 				} catch (e) {
 					instance.error(e);
 				}
 				break;
 		}
 
-		F.clearSchedule(id);
-		id = F.schedule(options.start ? options.time.parseDate().add(options.start) : options.time, options.repeat, function() {
-			if (instance.options.noweeks) {
-				F.datetime = new Date();
-				var day = F.datetime.getDate();
-				if (day === 0 || day === 6)
-					return;
-			}
-			instance.send(value);
-		});
+		if (F.is4) {
+			scheduler && scheduler.remove();
+			scheduler = SCHEDULE(options.start ? options.time.parseDate().add(options.start) : options.time, options.repeat, function() {
+				if (instance.options.noweeks) {
+					NOW = new Date();
+					var day = NOW.getDate();
+					if (day === 0 || day === 6)
+						return;
+				}
+				instance.send(value);
+			});
+
+		} else {
+			F.clearSchedule(id);
+			id = F.schedule(options.start ? options.time.parseDate().add(options.start) : options.time, options.repeat, function() {
+				if (instance.options.noweeks) {
+					F.datetime = new Date();
+					var day = F.datetime.getDate();
+					if (day === 0 || day === 6)
+						return;
+				}
+				instance.send(value);
+			});
+		}
 
 		instance.status('');
 	};

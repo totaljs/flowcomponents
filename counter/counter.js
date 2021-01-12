@@ -2,7 +2,7 @@ const ID = 'flowcounter';
 
 exports.id = 'counter';
 exports.title = 'Counter';
-exports.version = '1.0.0';
+exports.version = '1.0.1';
 exports.author = 'Peter Širka';
 exports.color = '#656D78';
 exports.icon = 'dashboard';
@@ -27,20 +27,27 @@ exports.install = function(instance) {
 
 	instance.on('data', function() {
 		count++;
-		NOSQL(ID).counter.hit(instance.id, 1);
+
+		if (F.is4)
+			COUNTER(ID).hit(instance.id, 1);
+		else
+			NOSQL(ID).counter.hit(instance.id, 1);
+
 		instance.custom.status();
 	});
 
 	instance.custom.stats = function(callback) {
-		NOSQL(ID).counter.monthly(instance.id, function(err, response) {
-			callback(err, response);
-		});
+		if (F.is4)
+			COUNTER(ID).monthly(instance.id, callback);
+		else
+			NOSQL(ID).counter.monthly(instance.id, callback);
 	};
 
 	instance.custom.reset = function(callback) {
-		NOSQL(ID).counter.clear(function() {
-			callback && callback();
-		});
+		if (F.is4)
+			COUNTER(ID).clear(callback);
+		else
+			NOSQL(ID).counter.clear(callback);
 	};
 
 	instance.custom.status = function() {
@@ -50,16 +57,26 @@ exports.install = function(instance) {
 		}, 100);
 	};
 
-	NOSQL(ID).counter.count(instance.id, function(err, response) {
-		count = response;
-		instance.custom.status();
-	});
+	var cb = function(err, response) {
+		count = response || 0;
+	};
+
+	if (F.is4)
+		COUNTER(ID).count(instance.id, cb);
+	else
+		NOSQL(ID).counter.count(instance.id, cb);
 };
 
 FLOW.trigger(ID, function(next, data) {
-	NOSQL(ID).counter.monthly(data.id, function(err, response) {
+
+	var cb = function(err, response) {
 		next(response);
-	});
+	};
+
+	if (F.is4)
+		COUNTER(ID).monthly(data.id, cb);
+	else
+		NOSQL(ID).counter.monthly(data.id, cb);
 });
 
 exports.uninstall = function() {

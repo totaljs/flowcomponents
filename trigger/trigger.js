@@ -4,7 +4,7 @@ exports.group = 'Inputs';
 exports.color = '#F6BB42';
 exports.click = true;
 exports.output =  1;
-exports.version = '1.1.0';
+exports.version = '1.1.1';
 exports.author = 'Martin Smola';
 exports.icon = 'play';
 
@@ -57,7 +57,7 @@ exports.install = function(instance) {
 				break;
 			case 'buffer':
 				try {
-					value = U.createBuffer(options.data);
+					value = F.is4 ? Buffer.from(options.data) : U.createBuffer(options.data);
 				} catch (e) {
 					instance.error(e);
 				}

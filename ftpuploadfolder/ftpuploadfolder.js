@@ -1,5 +1,5 @@
 exports.id = 'ftpuploadfolder';
-exports.version = '1.0.2';
+exports.version = '1.0.3';
 exports.title = 'FTP Upload Folder';
 exports.group = 'FTP';
 exports.color = '#34ace1';
@@ -59,7 +59,6 @@ exports.html = `<div class="padding">
 exports.install = function(instance) {
 
 	const Exec = require('child_process').exec;
-	const Url = require('url');
 
 	var can = false;
 	var isrunning = false;
@@ -158,9 +157,9 @@ exports.install = function(instance) {
 		isrunning = false;
 		interval && clearInterval(interval);
 		next();
-    };
+	};
 
-	instance.reconfigure = function(opt) {
+	instance.reconfigure = function() {
 
 		interval && clearInterval(interval);
 

@@ -1,7 +1,7 @@
 exports.id = 'pagerenderer';
 exports.title = 'Page renderer';
 exports.group = 'Website';
-exports.version = '1.0.1';
+exports.version = '1.0.2';
 exports.color = '#67B13D';
 exports.input = 1;
 exports.output = 1;
@@ -57,12 +57,13 @@ exports.install = function(instance) {
 	var pagetemplate = '';
 
 	instance.on('data', function(flowdata){
+
 		if (!ready)
 			return;
 
 		try {
 			make_template();
-			flowdata.data = F.viewCompile('@{nocompress all}\n' + pagetemplate, flowdata.data, '', flowdata.parent);
+			flowdata.data = F.is4 ? VIEWCOMPILE('@{nocompress all}\n' + pagetemplate, flowdata.data, '', flowdata.parent) : F.viewCompile('@{nocompress all}\n' + pagetemplate, flowdata.data, '', flowdata.parent);
 			instance.send2(flowdata);
 		} catch (e) {
 			instance.error(e.toString());

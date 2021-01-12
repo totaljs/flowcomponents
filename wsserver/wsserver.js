@@ -6,7 +6,7 @@ exports.input = 2;
 exports.output = 1;
 exports.author = 'Martin Smola';
 exports.icon = 'comments';
-exports.version = '1.0.0';
+exports.version = '1.0.2';
 exports.options = {  };
 exports.cloning = false;
 
@@ -43,9 +43,7 @@ exports.install = function(instance) {
 
 	// broadcast to all clients
 	instance.on('0', function(flowdata) {
-
 		ws && ws.send(flowdata.data);
-
 	});
 
 	// send to a specific client by ID
@@ -53,10 +51,8 @@ exports.install = function(instance) {
 
 		var id = flowdata.data.id;
 		var find = flowdata.data.find;
-		var data = flowdata.data.data;
 
 		var client  = ws.find(id || find);
-
 		if (client)
 			client.send(flowdata.data.data);
 		else
@@ -66,40 +62,46 @@ exports.install = function(instance) {
 
 	instance.reconfigure = function() {
 
-		if (ws) {
-			ws.destroy(function() {
-				ws = null;	
-				instance.status('Destroyed');	
-			});
-		}
+		ws && ws.destroy(function() {
+			ws = null;
+			instance.status('Destroyed');
+		});
 
-		UNINSTALL('websocket', id);
+		if (F.is4)
+			ROUTE(id, null);
+		else
+			UNINSTALL('websocket', id);
 
 		createws();
-
 	};
 
 	instance.on('options', instance.reconfigure);
 	instance.reconfigure();
 
 	function createws() {
+
 		instance.status('No client connected');
-		F.websocket(instance.options.url || '/', wshandler, [instance.options.datatype || 'json', id]);
+
+		if (F.is4) {
+			id = 'SOCKET ' + instance.options.url || '/';
+			ROUTE(id, [instance.options.datatype || 'json']);
+		} else
+			F.websocket(instance.options.url || '/', wshandler, [instance.options.datatype || 'json', id]);
 	}
 
 	function wshandler() {
 		ws = this;
 
 		ws.autodestroy(function() {
-			ws = null;	
-			instance.status('No client connected');	
+			ws = null;
+			instance.status('No client connected');
 		});
 
-		ws.on('open', function(client) {
+		ws.on('open', function() {
 			instance.status('{0} client(s) connected'.format(ws && ws.online || '0'));
 		});
 
-		ws.on('close', function(client) {
+		ws.on('close', function() {
 			instance.status('{0} client(s) connected'.format(ws && ws.online || '0'));
 		});
 
@@ -109,7 +111,7 @@ exports.install = function(instance) {
 			instance.send(flowdata);
 		});
 
-		ws.on('error', function(err, client) {
+		ws.on('error', function(err) {
 			instance.throw(err);
 		});
 	}

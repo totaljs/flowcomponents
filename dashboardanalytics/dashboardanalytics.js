@@ -1,6 +1,6 @@
 exports.id = 'dashboardanalytics';
 exports.title = 'Analytics';
-exports.version = '1.2.2';
+exports.version = '1.2.3';
 exports.author = 'Peter Širka';
 exports.group = 'Dashboard';
 exports.color = '#5CB36D';
@@ -73,7 +73,7 @@ exports.install = function(instance) {
 	var cache = {};
 	var current = {};
 
-	cache.datetime = F.datetime;
+	cache.datetime = F.is4 ? NOW : F.datetime;
 	cache.count = 0;
 	cache.avg = { count: 0, sum: 0 };
 	cache.number = null;
@@ -139,7 +139,7 @@ exports.install = function(instance) {
 			current.count = cache.count;
 			current.period = instance.options.type[0] === 'D' ? 'daily' : 'hourly';
 			current.decimals = instance.options.decimals;
-			current.datetime = F.datetime;
+			current.datetime = F.is4 ? NOW : F.datetime;
 			instance.send2(current);
 			instance.dashboard('laststate', current);
 			instance.custom.status();
@@ -175,11 +175,13 @@ exports.install = function(instance) {
 
 	instance.custom.save = function() {
 
+		var dt = F.is4 ? NOW : F.datetime;
+
 		if (instance.options.type[0] === 'D') {
-			if (cache.datetime.getDate() === F.datetime.getDate())
+			if (cache.datetime.getDate() === dt.getDate())
 				return;
 		} else {
-			if (cache.datetime.getHours() === F.datetime.getHours())
+			if (cache.datetime.getHours() === dt.getHours())
 				return;
 		}
 
@@ -194,9 +196,12 @@ exports.install = function(instance) {
 		DOC.type = cache.type[0] === 'D' ? cache.type.substring(1) : cache.type;
 		DOC.period = cache.type[0] === 'D' ? 'daily' : 'hourly';
 		DOC.format = cache.format;
-		DOC.datecreated = F.datetime;
+		DOC.datecreated = F.is4 ? NOW : F.datetime;
 
-		NOSQL(dbname).update(DOC, DOC).where('id', DOC.id).callback(instance.stats);
+		if (F.is4)
+			NOSQL(dbname).modify(DOC, true).id(DOC.id).callback(instance.stats);
+		else
+			NOSQL(dbname).update(DOC, DOC).where('id', DOC.id).callback(instance.stats);
 
 		cache.count = 0;
 		cache.number = null;
@@ -213,7 +218,7 @@ exports.install = function(instance) {
 				break;
 		}
 
-		cache.datetime = F.datetime;
+		cache.datetime = F.is4 ? NOW : F.datetime;
 	};
 
 	instance.nosql = callback => callback(null, NOSQL(dbname));
@@ -230,7 +235,12 @@ exports.install = function(instance) {
 		cache.type = options.type;
 		cache.format = options.format;
 
-		fn = SCRIPT(instance.options.fn + ';\n');
+
+		if (F.is4)
+			fn = new Function('next', 'value', 'var model=value;var now=function(){return new Date()};try{' + instance.options.fn + '}catch(e){next(e)}');
+		else
+			fn = SCRIPT(instance.options.fn + ';\n');
+
 		instance.custom.status();
 	};
 
@@ -304,16 +314,29 @@ exports.install = function(instance) {
 		DOC.type = cache.type[0] === 'D' ? cache.type.substring(1) : cache.type;
 		DOC.period = cache.type[0] === 'D' ? 'daily' : 'hourly';
 		DOC.format = cache.format;
-		DOC.datecreated = F.datetime;
+		DOC.datecreated = F.is4 ? NOW : F.datetime;
 
 		preprocessor(DOC);
 
-		NOSQL(dbname).stream(preprocessor, function() {
-			if (callback)
-				callback(null, output);
-			else if (instance.dashboard)
-				instance.dashboard('stats', output);
-		});
+		if (F.is4) {
+			NOSQL(dbname).find(function(err, response) {
+
+				for (var i = 0; i < response.length; i++)
+					preprocessor(response[i]);
+
+				if (callback)
+					callback(null, output);
+				else if (instance.dashboard)
+					instance.dashboard('stats', output);
+			});
+		} else {
+			NOSQL(dbname).stream(preprocessor, function() {
+				if (callback)
+					callback(null, output);
+				else if (instance.dashboard)
+					instance.dashboard('stats', output);
+			});
+		}
 	};
 
 	instance.reconfigure();
@@ -324,7 +347,7 @@ exports.install = function(instance) {
 		Fs.readFile(temporary, function(err, data) {
 			if (err)
 				return;
-			var dt = cache.datetime || F.datetime;
+			var dt = cache.datetime || (F.is4 ? NOW : F.datetime);
 			var tmp = data.toString('utf8').parseJSON(true);
 			if (tmp && tmp.datetime) {
 				cache = tmp;

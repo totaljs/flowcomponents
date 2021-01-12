@@ -71,7 +71,7 @@ exports.install = function(instance) {
 				return value.parseBoolean();
 			case 'buffer':
 				try {
-					return U.createBuffer(value);
+					return F.is4 ? Buffer.from(value) : U.createBuffer(value);
 				} catch (e) {
 					instance.error(e);
 					return null;
