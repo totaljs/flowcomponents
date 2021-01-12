@@ -29,11 +29,11 @@
 			},
 			{
 				"url": "https://cdn.totaljs.com/flow/count.js",
-				"version": "1.0.0"
+				"version": "1.0.1"
 			},
 			{
 				"url": "https://cdn.totaljs.com/flow/counter.js",
-				"version": "1.0.0"
+				"version": "1.0.1"
 			},
 			{
 				"url": "https://cdn.totaljs.com/flow/debug.js",
@@ -61,7 +61,7 @@
 			},
 			{
 				"url": "https://cdn.totaljs.com/flow/function.js",
-				"version": "1.1.0"
+				"version": "1.1.1"
 			},
 			{
 				"url": "https://cdn.totaljs.com/flow/lastdata.js",
@@ -85,7 +85,7 @@
 			},
 			{
 				"url": "https://cdn.totaljs.com/flow/pass.js",
-				"version": "1.0.0"
+				"version": "1.0.1"
 			},
 			{
 				"url": "https://cdn.totaljs.com/flow/repository.js",
@@ -110,23 +110,6 @@
 		]
 	},
 	{
-		"name": "Commander",
-		"items": [
-			{
-				"url": "https://cdn.totaljs.com/flow/commandercommands.js",
-				"version": "1.0.0"
-			},
-			{
-				"url": "https://cdn.totaljs.com/flow/commanderdependencies.js",
-				"version": "1.0.0"
-			},
-			{
-				"url": "https://cdn.totaljs.com/flow/commanderoutput.js",
-				"version": "1.0.0"
-			}
-		]
-	},
-	{
 		"name": "Inputs",
 		"items": [
 			{
@@ -139,7 +122,7 @@
 			},
 			{
 				"url": "https://cdn.totaljs.com/flow/trigger.js",
-				"version": "1.1.0"
+				"version": "1.1.1"
 			},
 			{
 				"url": "https://cdn.totaljs.com/flow/triggertoggle.js",
@@ -172,15 +155,15 @@
 			},
 			{
 				"url": "https://cdn.totaljs.com/flow/scheduler.js",
-				"version": "1.0.0"
+				"version": "1.0.1"
 			},
 			{
 				"url": "https://cdn.totaljs.com/flow/timer.js",
-				"version": "1.0.0"
+				"version": "1.0.1"
 			},
 			{
 				"url": "https://cdn.totaljs.com/flow/uniqueinterval.js",
-				"version": "1.0.0"
+				"version": "1.0.1"
 			}
 		]
 	},
@@ -189,7 +172,7 @@
 		"items": [
 			{
 				"url": "https://cdn.totaljs.com/flow/dashboardanalytics.js",
-				"version": "1.2.2"
+				"version": "1.2.3"
 			},
 			{
 				"url": "https://cdn.totaljs.com/flow/dashboardgroupanalytics.js",
@@ -265,7 +248,7 @@
 			},
 			{
 				"url": "https://cdn.totaljs.com/flow/ftpuploadfolder.js",
-				"version": "1.0.2"
+				"version": "1.0.3"
 			}
 		]
 	},
@@ -274,11 +257,11 @@
 		"items": [
 			{
 				"url": "https://cdn.totaljs.com/flow/httpdownloader.js",
-				"version": "1.0.0"
+				"version": "1.0.1"
 			},
 			{
 				"url": "https://cdn.totaljs.com/flow/httpgeoip.js",
-				"version": "1.0.0"
+				"version": "1.0.1"
 			},
 			{
 				"url": "https://cdn.totaljs.com/flow/httplistener.js",
@@ -421,7 +404,7 @@
 		"items": [
 			{
 				"url": "https://cdn.totaljs.com/flow/pagerenderer.js",
-				"version": "1.0.1"
+				"version": "1.0.2"
 			},
 			{
 				"url": "https://cdn.totaljs.com/flow/pagetemplate.js",
@@ -438,7 +421,7 @@
 			},
 			{
 				"url": "https://cdn.totaljs.com/flow/template.js",
-				"version": "1.0.0"
+				"version": "1.0.1"
 			},
 			{
 				"url": "https://cdn.totaljs.com/flow/transform.js",
@@ -526,11 +509,11 @@
 		"items": [
 			{
 				"url": "https://cdn.totaljs.com/flow/wsclient.js",
-				"version": "1.0.0"
+				"version": "1.0.1"
 			},
 			{
 				"url": "https://cdn.totaljs.com/flow/wsserver.js",
-				"version": "1.0.0"
+				"version": "1.0.2"
 			}
 		]
 	}
