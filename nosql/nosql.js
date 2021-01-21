@@ -1,6 +1,6 @@
 exports.id = 'nosql';
 exports.title = 'NoSQL';
-exports.version = '1.2.0';
+exports.version = '1.2.1';
 exports.group = 'Databases';
 exports.author = 'Martin Smola';
 exports.color = '#D770AD';
@@ -71,7 +71,9 @@ exports.html = `
 </div>`;
 
 exports.install = function(instance) {
-
+	var getBuilder = function(obj){
+		return F.is4 ? { make : function(fn){fn(obj);} } : obj;
+	};
 	instance.on('data', function(flowdata, next) {
 
 		instance.send2(1, flowdata.clone());
@@ -94,7 +96,7 @@ exports.install = function(instance) {
 				return instance.error('[DB] Cannot get record by id: `undefined`');
 			}
 
-			nosql.find().make(function(builder) {
+			getBuilder(nosql.find()).make(function(builder) {
 				builder.where('id', flowdata.data.id);
 				builder.first();
 				builder.callback(function(err, response) {
@@ -122,7 +124,7 @@ exports.install = function(instance) {
 		} else if (options.method === 'query') {
 
 			var query = flowdata.data;
-			nosql.find().make(function(builder) {
+			getBuilder(nosql.find()).make(function(builder) {
 				query && query instanceof Array && query.forEach(function(q) {
 					if (q instanceof Array) {
 						var m = q[0];
@@ -151,7 +153,7 @@ exports.install = function(instance) {
 			if (options.upsert && (options.upsertid && !flowdata.data.id))
 				flowdata.data.id = UID();
 
-			nosql.modify(flowdata.data, options.upsert).make(function(builder) {
+				getBuilder(nosql.modify(flowdata.data, options.upsert)).make(function(builder) {
 				builder.where('id', flowdata.data.id);
 				builder.callback(function(err, count) {
 					if (err)
@@ -171,7 +173,7 @@ exports.install = function(instance) {
 				return instance.error('[DB] Cannot remove record by id: `undefined`');
 			}
 
-			nosql.remove().make(function(builder) {
+			getBuilder(nosql.remove()).make(function(builder) {
 				builder.where('id', flowdata.data.id);
 				builder.callback(function(err, count) {
 					if (err)
