@@ -71,9 +71,7 @@ exports.html = `
 </div>`;
 
 exports.install = function(instance) {
-	var getBuilder = function(obj){
-		return F.is4 ? { make : function(fn){fn(obj);} } : obj;
-	};
+
 	instance.on('data', function(flowdata, next) {
 
 		instance.send2(1, flowdata.clone());
@@ -83,30 +81,32 @@ exports.install = function(instance) {
 		if (!collection) {
 			flowdata.data = { err: '[DB] No collection specified' };
 			next(0, flowdata);
-			return instance.error('[DB] No collection specified');
+			instance.error('[DB] No collection specified');
+			return;
 		}
 
 		var nosql = NOSQL(collection);
+		var builder;
 
 		if (options.method === 'read') {
 
 			if (!flowdata.data.id) {
 				flowdata.data = { err: '[DB] Cannot get record by id: `undefined`' };
 				next(0, flowdata);
-				return instance.error('[DB] Cannot get record by id: `undefined`');
+				instance.error('[DB] Cannot get record by id: `undefined`');
+				return;
 			}
 
-			getBuilder(nosql.find()).make(function(builder) {
-				builder.where('id', flowdata.data.id);
-				builder.first();
-				builder.callback(function(err, response) {
-					if (err)
-						instance.throw(err);
-					else {
-						flowdata.data = { response: response };
-						next(0, flowdata);
-					}
-				});
+			builder = nosql.find();
+			builder.where('id', flowdata.data.id);
+			builder.first();
+			builder.callback(function(err, response) {
+				if (err) {
+					instance.throw(err);
+				} else {
+					flowdata.data = { response: response };
+					next(0, flowdata);
+				}
 			});
 
 		} else if (options.method === 'insert') {
@@ -124,22 +124,23 @@ exports.install = function(instance) {
 		} else if (options.method === 'query') {
 
 			var query = flowdata.data;
-			getBuilder(nosql.find()).make(function(builder) {
-				query && query instanceof Array && query.forEach(function(q) {
-					if (q instanceof Array) {
-						var m = q[0];
-						var args = q.splice(1);
-						builder[m] && (builder[m].apply(builder, args));
-					}
-				});
-				builder.callback(function(err, response) {
-					if (err)
-						instance.throw(err);
-					else {
-						flowdata.data = { response: response || [] };
-						next(0, flowdata);
-					}
-				});
+			builder = nosql.find();
+
+			query && query instanceof Array && query.forEach(function(q) {
+				if (q instanceof Array) {
+					var m = q[0];
+					var args = q.splice(1);
+					builder[m] && (builder[m].apply(builder, args));
+				}
+			});
+
+			builder.callback(function(err, response) {
+				if (err) {
+					instance.throw(err);
+				} else {
+					flowdata.data = { response: response || [] };
+					next(0, flowdata);
+				}
 			});
 
 		} else if (options.method === 'update') {
@@ -147,13 +148,13 @@ exports.install = function(instance) {
 			if (!options.upsert && !flowdata.data.id) {
 				flowdata.data = { err: '[DB] Cannot update record by id: `undefined`' };
 				next(0, flowdata);
-				return instance.error('[DB] Cannot update record by id: `undefined`');
+				instance.error('[DB] Cannot update record by id: `undefined`');
+				return;
 			}
 
-			if (options.upsert && (options.upsertid && !flowdata.data.id))
+			if (options.upsert && (options.upsertid && !flowdata.data.id)) {
 				flowdata.data.id = UID();
-
-				getBuilder(nosql.modify(flowdata.data, options.upsert)).make(function(builder) {
+				builder = nosql.modify(flowdata.data, options.upsert);
 				builder.where('id', flowdata.data.id);
 				builder.callback(function(err, count) {
 					if (err)
@@ -163,27 +164,28 @@ exports.install = function(instance) {
 						next(0, flowdata);
 					}
 				});
-			});
+			}
 
 		} else if (options.method === 'remove') {
 
 			if (!flowdata.data.id) {
 				flowdata.data = { err: '[DB] Cannot remove record by id: `undefined`' };
 				next(0, flowdata);
-				return instance.error('[DB] Cannot remove record by id: `undefined`');
+				instance.error('[DB] Cannot remove record by id: `undefined`');
+				return;
 			}
 
-			getBuilder(nosql.remove()).make(function(builder) {
-				builder.where('id', flowdata.data.id);
-				builder.callback(function(err, count) {
-					if (err)
-						instance.throw(err);
-					else {
-						flowdata.data = { response: count || 0 };
-						next(0, flowdata);
-					}
-				});
+			builder = nosql.remove();
+			builder.where('id', flowdata.data.id);
+			builder.callback(function(err, count) {
+				if (err)
+					instance.throw(err);
+				else {
+					flowdata.data = { response: count || 0 };
+					next(0, flowdata);
+				}
 			});
 		}
+
 	});
 };

@@ -24,9 +24,9 @@ exports.readme = `# NoSQL embedded
 	method: 'users', // optional, will override settings value
 	idname: 'key', // optional, value of query.key will be used as an id
 	// for Insert, Read, Update, Remove
-	query: <document object>, 
+	query: <document object>,
 	// for Query
-	query: [], 
+	query: [],
 }
 \`\`\`
 ## Insert
@@ -82,10 +82,7 @@ exports.html = `
 </div>`;
 
 exports.install = function(instance) {
-	var getBuilder = function(obj){
-		return F.is4 ? { make : function(fn){fn(obj);} } : obj;
-	};
-	
+
 	instance.on('data', function(flowdata, next) {
 
 		instance.send2(1, flowdata.clone());
@@ -95,26 +92,33 @@ exports.install = function(instance) {
 		var options = instance.options;
 
 		var collection = data.collection || options.collection;
-		if (!collection)
-			return next(0, flowdata.rewrite({ success: false, err: '[DB] No collection specified' }));
+		if (!collection) {
+			next(0, flowdata.rewrite({ success: false, err: '[DB] No collection specified' }));
+			return;
+		}
 
 		var nosql = NOSQL(collection);
 		var method = flowdata.data.method || options.method;
 
-		if (!method)
-			return next(0, flowdata.rewrite({ success: false, err: '[DB] No method specified' }));
+		if (!method) {
+			next(0, flowdata.rewrite({ success: false, err: '[DB] No method specified' }));
+			return;
+		}
+
+		var builder;
 
 		if (method === 'read') {
 
-			if (!data[id])
-				return next(0, flowdata.rewrite({ success: false, err: '[DB] Cannot get record by id: `undefined`' }));
+			if (!data[id]) {
+				next(0, flowdata.rewrite({ success: false, err: '[DB] Cannot get record by id: `undefined`' }));
+				return;
+			}
 
-			getBuilder(nosql.find()).make(function(builder) {
-				builder.where(id, data[id]);
-				builder.first();
-				builder.callback(function(err, response) {
-					next(0, flowdata.rewrite({ success: err ? false : true, result: response }));
-				});
+			builder = nosql.find();
+			builder.where(id, data[id]);
+			builder.first();
+			builder.callback(function(err, response) {
+				next(0, flowdata.rewrite({ success: err ? false : true, result: response }));
 			});
 
 		} else if (method === 'insert') {
@@ -127,46 +131,48 @@ exports.install = function(instance) {
 		} else if (method === 'query') {
 
 			var query = data;
-			getBuilder(nosql.find()).make(function(builder) {
-				query && query instanceof Array && query.forEach(function(q) {
-					if (q instanceof Array) {
-						var m = q[0];
-						var args = q.splice(1);
-						builder[m] && (builder[m].apply(builder, args));
-					}
-				});
-				builder.callback(function(err, response) {
-					next(0, flowdata.rewrite({ success: err ? false : true, result: response || [] }));
-				});
+			builder = nosql.find();
+			query && query instanceof Array && query.forEach(function(q) {
+				if (q instanceof Array) {
+					var m = q[0];
+					var args = q.splice(1);
+					builder[m] && (builder[m].apply(builder, args));
+				}
+			});
+
+			builder.callback(function(err, response) {
+				next(0, flowdata.rewrite({ success: err ? false : true, result: response || [] }));
 			});
 
 		} else if (method === 'update') {
 
 			if (!options.upsert && !data[id]) {
 				next(0, flowdata.rewrite({ success: false, err: '[DB] Cannot update record by id: `undefined`' }));
+				return;
 			}
 
 			if (options.upsert && (options.upsertid && !data[id]))
 				data[id] = UID();
 
-			getBuilder(nosql.modify(data, options.upsert)).make(function(builder) {
-				builder.where(id, data[id]);
-				builder.callback(function(err, count) {
-					next(0, flowdata.rewrite({ success: err ? false : true, result: count || 0 }));
-				});
+			builder = nosql.modify(data, options.upsert);
+			builder.where(id, data[id]);
+			builder.callback(function(err, count) {
+				next(0, flowdata.rewrite({ success: err ? false : true, result: count || 0 }));
 			});
 
 		} else if (method === 'remove') {
 
-			if (!data[id])
-				return next(0, flowdata.rewrite({ success: false, err: '[DB] Cannot remove record by id: `undefined`' }));
+			if (!data[id]) {
+				next(0, flowdata.rewrite({ success: false, err: '[DB] Cannot remove record by id: `undefined`' }));
+				return;
+			}
 
-			getBuilder(nosql.remove()).make(function(builder) {
-				builder.where(id, data[id]);
-				builder.callback(function(err, count) {
-					next(0, flowdata.rewrite({ success: err ? false : true, result: count || 0 }));
-				});
+			builder = nosql.remove();
+			builder.where(id, data[id]);
+			builder.callback(function(err, count) {
+				next(0, flowdata.rewrite({ success: err ? false : true, result: count || 0 }));
 			});
 		}
+
 	});
 };
