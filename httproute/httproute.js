@@ -173,13 +173,17 @@ exports.html = `<div class="padding">
 </script>`;
 
 exports.install = function(instance) {
-	var _UNINSTALL = function(id,options){
-		if (F.is4)
-			ROUTE(options.method.toUpperCase()+" "+options.url, null);
-		else
+
+	var route;
+
+	var uninstall = function(id) {
+		if (F.is4) {
+			route && route.remove();
+			route = null;
+		} else
 			UNINSTALL('route', id);
-	}
-	
+	};
+
 	instance.custom.emptyresponse = function(self) {
 		self.plain();
 	};
@@ -195,19 +199,28 @@ exports.install = function(instance) {
 
 		if (typeof(options.flags) === 'string')
 			options.flags = options.flags.split(',').trim();
-		_UNINSTALL('id:' + instance.id, options);
+
+		uninstall('id:' + instance.id);
+
 		var flags = options.flags || [];
+
 		flags.push('id:' + instance.id);
-		if(!F.is4) flags.push(options.method.toLowerCase());
+
+		if (!F.is4)
+			flags.push(options.method.toLowerCase());
+
 		options.timeout && flags.push(options.timeout * 1000);
 
 		// Make unique values
-		flags = flags.filter((v, i, a) =>{
-			if(F.is4 && v.toString().toLowerCase() == options.method.toLowerCase()) return false; // remove method
+		flags = flags.filter(function(v, i, a) {
+			if(F.is4 && v.toString().toLowerCase() === options.method.toLowerCase())
+				return false; // remove method
 			return a.indexOf(v) === i;
 		});
+
 		options.flags = flags;
 		var handler = function() {
+
 			if (instance.paused || (instance.isDisabled && (instance.isDisabled('output', 0) || instance.isDisabled('output', 1)))) {
 				instance.status('503 Service Unavailable');
 				this.status = 503;
@@ -281,10 +294,10 @@ exports.install = function(instance) {
 				instance.send2(0, data);
 				key && FINISHED(self.res, () => F.cache.set(key, self.$flowdata.data, instance.options.cacheexpire));
 			}
-
 		};
-		if(F.is4)
-			ROUTE(options.method.toUpperCase()+" "+options.url,  handler, flags, options.size || 5);
+
+		if (F.is4)
+			route = ROUTE(options.method.toUpperCase() + ' ' + options.url, handler, flags, options.size || 5);
 		else
 			F.route(options.url, handler, flags, options.size || 5);
 
@@ -293,9 +306,8 @@ exports.install = function(instance) {
 
 	instance.reconfigure();
 	instance.on('options', instance.reconfigure);
-
 	instance.on('close', function(){
-		_UNINSTALL('id:' + instance.id, instance.options);
+		uninstall('id:' + instance.id);
 	});
 };
 
