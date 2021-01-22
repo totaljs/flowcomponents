@@ -5,10 +5,11 @@ exports.color = '#5D9CEC';
 exports.icon = 'globe';
 exports.input = false;
 exports.output = ['#6CAC5A', '#37BC9B'];
-exports.version = '1.2.2';
+exports.version = '1.2.3';
 exports.author = 'Martin Smola';
 exports.cloning = false;
 exports.options = { method: 'GET', url: '', size: 5, cacheexpire: '5 minutes', cachepolicy: 0, timeout: 5 };
+exports.dateupdated = '2021-01-21 18:30d';
 exports.readme = `# HTTP route
 
 __Outputs__:
@@ -172,7 +173,13 @@ exports.html = `<div class="padding">
 </script>`;
 
 exports.install = function(instance) {
-
+	var _UNINSTALL = function(id,options){
+		if (F.is4)
+			ROUTE(options.method.toUpperCase()+" "+options.url, null);
+		else
+			UNINSTALL('route', id);
+	}
+	
 	instance.custom.emptyresponse = function(self) {
 		self.plain();
 	};
@@ -188,21 +195,21 @@ exports.install = function(instance) {
 
 		if (typeof(options.flags) === 'string')
 			options.flags = options.flags.split(',').trim();
-
-		UNINSTALL('route', 'id:' + instance.id);
-
+		_UNINSTALL('id:' + instance.id, options);
 		var flags = options.flags || [];
 		flags.push('id:' + instance.id);
-		flags.push(options.method.toLowerCase());
+		if(!F.is4) flags.push(options.method.toLowerCase());
 		options.timeout && flags.push(options.timeout * 1000);
 
 		// Make unique values
-		flags = flags.filter((v, i, a) => a.indexOf(v) === i);
+		flags = flags.filter((v, i, a) =>{
+			if(F.is4 && v.toString().toLowerCase() == options.method.toLowerCase()) return false; // remove method
+			return a.indexOf(v) === i;
+		});
 		options.flags = flags;
-
-		F.route(options.url, function() {
-
+		var handler = function() {
 			if (instance.paused || (instance.isDisabled && (instance.isDisabled('output', 0) || instance.isDisabled('output', 1)))) {
+				instance.status('503 Service Unavailable');
 				this.status = 503;
 				this.json();
 				return;
@@ -275,7 +282,11 @@ exports.install = function(instance) {
 				key && FINISHED(self.res, () => F.cache.set(key, self.$flowdata.data, instance.options.cacheexpire));
 			}
 
-		}, flags, options.size || 5);
+		};
+		if(F.is4)
+			ROUTE(options.method.toUpperCase()+" "+options.url,  handler, flags, options.size || 5);
+		else
+			F.route(options.url, handler, flags, options.size || 5);
 
 		instance.status('Listening', 'green');
 	};
@@ -284,7 +295,7 @@ exports.install = function(instance) {
 	instance.on('options', instance.reconfigure);
 
 	instance.on('close', function(){
-		UNINSTALL('route', 'id:' + instance.id);
+		_UNINSTALL('id:' + instance.id, instance.options);
 	});
 };
 
