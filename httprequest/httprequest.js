@@ -3,7 +3,7 @@ exports.title = 'HTTP Request';
 exports.group = 'HTTP';
 exports.color = '#5D9CEC';
 exports.input = true;
-exports.version = '2.0.1';
+exports.version = '2.0.2';
 exports.output = 1;
 exports.author = 'Peter Širka';
 exports.icon = 'cloud-upload';
@@ -81,33 +81,61 @@ exports.install = function(instance) {
 		var headers = null;
 		var cookies = null;
 
-		options.headers && Object.keys(options.headers).forEach(function(key) {
-			!headers && (headers = {});
-			headers[key] = response.arg(options.headers[key]);
-		});
+		if (options.headers) {
+			for (var key in options.headers) {
+				!headers && (headers = {});
+				headers[key] = response.arg(options.headers[key]);
+			}
+		}
 
 		if (options.username && options.userpassword) {
 			!headers && (headers = {});
-			headers['Authorization'] = 'Basic ' + U.createBuffer(response.arg(options.username + ':' + options.userpassword)).toString('base64');
+			headers.Authorization = 'Basic ' + U.createBuffer(response.arg(options.username + ':' + options.userpassword)).toString('base64');
 		}
 
-		options.cookies && Object.keys(options.cookies).forEach(function(key) {
-			!cookies && (cookies = {});
-			cookies[key] = response.arg(options.cookies[key]);
-		});
+		if (options.cookies) {
+			for (var key in options.cookies) {
+				!cookies && (cookies = {});
+				cookies[key] = response.arg(options.cookies[key]);
+			}
+		}
 
-		if (options.chunks) {
-			U.download(response.arg(options.url), flags, options.stringify === 'none' ? null : response.data, function(err, response) {
-				response.on('data', (chunks) => instance.send2(chunks));
-			}, cookies || cookies2, headers);
+		if (F.is4) {
+
+			if (options.chunks) {
+				options.custom = true;
+				options.callback = function(err, response) {
+					if (err)
+						instance.error(err);
+					else if (response && response.stream)
+						response.stream.on('data', (chunks) => instance.send2(chunks));
+				};
+			} else {
+				options.callback = function(err, response) {
+					if (response && !err) {
+						var msg = { data: response.body, status: response.status, headers: response.headers, host: response.host, cookies: response.cookies };
+						instance.send2(msg);
+					} else if (err)
+						instance.error(err, response);
+				};
+			}
+
+			REQUEST(options);
+
 		} else {
-			U.request(response.arg(options.url), flags, options.stringify === 'none' ? null : response.data, function(err, data, status, headers, host) {
-				if (response && !err) {
-					response.data = { data: data, status: status, headers: headers, host: host };
-					instance.send2(response);
-				} else if (err)
-					instance.error(err, response);
-			}, cookies || cookies2, headers);
+			if (options.chunks) {
+				U.download(response.arg(options.url), flags, options.stringify === 'none' ? null : response.data, function(err, response) {
+					response.on('data', (chunks) => instance.send2(chunks));
+				}, cookies || cookies2, headers);
+			} else {
+				U.request(response.arg(options.url), flags, options.stringify === 'none' ? null : response.data, function(err, data, status, headers, host) {
+					if (response && !err) {
+						response.data = { data: data, status: status, headers: headers, host: host };
+						instance.send2(response);
+					} else if (err)
+						instance.error(err, response);
+				}, cookies || cookies2, headers);
+			}
 		}
 	};
 
@@ -119,17 +147,38 @@ exports.install = function(instance) {
 		if (!can)
 			return;
 
-		flags = [];
-		flags.push(options.method.toLowerCase());
-		options.stringify === 'json' && flags.push('json');
-		options.stringify === 'raw' && flags.push('raw');
-		options.keepalive && flags.push('keepalive');
-		!options.nodns && flags.push('dnscache');
-		if (options.persistentcookies) {
-			flags.push('cookies');
-			cookies2 = {};
-		} else
-			cookies2 = null;
+		if (F.is4) {
+
+			flags = {};
+			flags.method = options.method.toUpperCase();
+
+			if (!options.nodns)
+				flags.resolve = true;
+
+			flags.keepalive = options.keepalive;
+
+			if (options.stringify && options.stringify !== 'none')
+				options.type = options.stringify;
+
+			if (options.persistentcookies) {
+				flags.cook = true;
+				cookies2 = {};
+			} else
+				cookies2 = null;
+
+		} else {
+			flags = [];
+			flags.push(options.method.toLowerCase());
+			options.stringify === 'json' && flags.push('json');
+			options.stringify === 'raw' && flags.push('raw');
+			options.keepalive && flags.push('keepalive');
+			!options.nodns && flags.push('dnscache');
+			if (options.persistentcookies) {
+				flags.push('cookies');
+				cookies2 = {};
+			} else
+				cookies2 = null;
+		}
 	};
 
 	instance.on('options', instance.reconfigure);
