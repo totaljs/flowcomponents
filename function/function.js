@@ -5,7 +5,7 @@ exports.color = '#656D78';
 exports.icon = 'code';
 exports.input = true;
 exports.output = 1;
-exports.version = '1.1.1';
+exports.version = '1.1.2';
 exports.author = 'Martin Smola';
 exports.options = {
 	outputs: 1,
@@ -99,7 +99,7 @@ exports.install = function(instance) {
 	instance.custom.reconfigure = function() {
 
 		if (F.is4) {
-			fn = new Function('next', 'value', 'var model=value;var now=function(){return new Date()};var instance=value.instance;var flowdata=value.flowdata;var data=flowdata.data;var global=value.global;var send=function(index,data){value.instance.send(value.flowdata,index,data)};try{' + instance.options.code + '}catch(e){next(e)}');
+			fn = new Function('value', 'next', 'var model=value;var now=function(){return new Date()};var instance=value.instance;var flowdata=value.flowdata;var data=flowdata.data;var global=value.global;var send=function(index,data){value.instance.send(value.flowdata,index,data)};try{' + instance.options.code + '}catch(e){next(e)}');
 		} else {
 			fn = SCRIPT(`
 				var instance = value.instance;
