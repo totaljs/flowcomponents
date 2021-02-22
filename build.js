@@ -1,5 +1,5 @@
 const Fs = require('fs');
-require('total.js');
+require('total4');
 
 deleteFolder('__flow');
 Fs.mkdirSync(F.path.root('__flow'));

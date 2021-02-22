@@ -3,7 +3,7 @@ if (!version)
 	version = 6;
 
 const Fs = require('fs');
-require('total.js');
+require('total4');
 
 var templates = {};
 var giturl = 'https://cdn.totaljs.com/flow/{1}.js';
