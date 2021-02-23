@@ -5,7 +5,7 @@ exports.title = 'File Writer';
 exports.color = '#656D78';
 exports.icon = 'file-text-o';
 exports.input = true;
-exports.version = '1.0.1';
+exports.version = '1.0.2';
 exports.author = 'Peter Širka';
 exports.options = { filename: '', append: true, delimiter: '\\n' };
 
@@ -48,7 +48,12 @@ exports.install = function(instance) {
 					err && instance.throw(err);
 					next();
 				});
-			F.touch('/' + instance.options.filename);
+
+			var path = '/' + instance.options.filename;
+			if (F.is4)
+				TOUCH(path);
+			else
+				F.touch(path);
 		});
 	};
 
