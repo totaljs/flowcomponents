@@ -36,6 +36,11 @@ U.ls('./', function callback(files,dirs) {
 		var filename = U.join(F.path.root(dir), dir + '.js');
 		var url = giturl.format('master', dir);
 
+		if (filename.indexOf('tutorial') !== -1) {
+			next();
+			return;
+		}
+
 		var file = Fs.readFileSync(filename, 'utf8');
 		var groupname = parseValue('group', file);
 		var ver = parseValue('version', file);
