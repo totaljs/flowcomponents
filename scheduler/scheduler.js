@@ -1,7 +1,7 @@
 exports.id = 'scheduler';
 exports.title = 'Scheduler';
 exports.group = 'Time';
-exports.version = '1.0.1';
+exports.version = '1.0.2';
 exports.color = '#F6BB42';
 exports.output = 1;
 exports.click = true;
@@ -125,7 +125,14 @@ exports.install = function(instance) {
 		instance.status('');
 	};
 
-	instance.on('close', () => F.clearSchedule(id));
+	instance.on('close', function() {
+		if (F.is4) {
+			scheduler && scheduler.remove();
+			scheduler = null;
+		} else
+			F.clearSchedule(id);
+	});
+
 	instance.on('options', instance.reconfigure);
 	instance.reconfigure();
 };
