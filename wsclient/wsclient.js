@@ -146,7 +146,7 @@ exports.install = function(instance) {
 	instance.on('close', function() {
 		if (wsclient && wsclient.socket) {
 			wsclient.close();
-			setTimeout(function(){
+			setTimeout(function() {
 				wsclient.free();
 				wsclient.removeAllListeners();
 				wsclient = null;
