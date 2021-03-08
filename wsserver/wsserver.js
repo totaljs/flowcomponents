@@ -6,39 +6,42 @@ exports.input = 2;
 exports.output = 1;
 exports.author = 'Martin Smola';
 exports.icon = 'comments';
-exports.version = '1.0.2';
+exports.version = '1.0.3';
 exports.options = {  };
 exports.cloning = false;
 
 exports.html = `<div class="padding">
 	<div class="row">
 		<div class="col-md-6">
-			<div data-jc="textbox" data-jc-path="url" data-jc-config="placeholder:/ws">@(URL) (@(default is) /)</div>
+			<div data---="textbox__url__placeholder:/ws">@(URL) (@(default is) /)</div>
 			<div class="help m">@(Optional, only use if you intend to use multiple endpoints)</div>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-md-3">
-			<div data-jc="dropdown" data-jc-path="datatype" data-jc-config="items:,JSON|json,Plain text|raw" class="m">@(Data type) (@(default is) json)</div>
+			<div data---="dropdown__datatype__items:,JSON|json,Plain text|raw" class="m">@(Data type) (@(default is) json)</div>
 		</div>
 	</div>
 </div>`;
 
 exports.readme = `# WebSocket Server
 ## Input
+
 - #1 > broadcast a message to all clients
 - #2 > send a message to a specific client by ID (use id or find method \`{ id: <some-id>, find: function..., data: <data-to-send> }\`)
 
 ## Output
+
 All recieved messages are send to the output
 
 ## Documentation
-https://docs.totaljs.com/latest/en.html#api~WebSocketClient
-`;
+
+- https://docs.totaljs.com/total4/5a794001yw51c/`;
 
 exports.install = function(instance) {
 
 	var id = 'id:' + instance.id;
+	var route;
 	var ws;
 
 	// broadcast to all clients
@@ -67,9 +70,10 @@ exports.install = function(instance) {
 			instance.status('Destroyed');
 		});
 
-		if (F.is4)
-			ROUTE(id, null);
-		else
+		if (F.is4) {
+			route && route.remove();
+			route = null;
+		} else
 			UNINSTALL('websocket', id);
 
 		createws();
@@ -82,10 +86,9 @@ exports.install = function(instance) {
 
 		instance.status('No client connected');
 
-		if (F.is4) {
-			id = 'SOCKET ' + instance.options.url || '/';
-			ROUTE(id, [instance.options.datatype || 'json']);
-		} else
+		if (F.is4)
+			route = ROUTE('SOCKET ' + instance.options.url || '/', [instance.options.datatype || 'json']);
+		else
 			F.websocket(instance.options.url || '/', wshandler, [instance.options.datatype || 'json', id]);
 	}
 
@@ -116,7 +119,11 @@ exports.install = function(instance) {
 		});
 	}
 
-	instance.on('close', function(){
-		id && UNINSTALL('websocket', id);
+	instance.on('close', function() {
+		if (F.is4) {
+			route && route.remove();
+			route = null;
+		} else if (id)
+			UNINSTALL('websocket', id);
 	});
 };
