@@ -49,7 +49,7 @@ exports.install = function(instance) {
 						target.click();
 						break;
 					case 'send':
-						target.send(data, instance.options.index);
+						target.send(instance.options.index, data);
 						break;
 					case 'push':
 						target.emit('data', data);
