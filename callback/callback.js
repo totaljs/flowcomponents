@@ -11,7 +11,7 @@ exports.output = false;
 exports.options = { target: '', type: 'send', index: 0, delay: 0 };
 exports.readme = `# Callback
 
-The component can make a callback to the target instance and repeat the cycle for new/modified data.`;
+The component can make a callback to the target instance and repeat the cycle for new/modified data. Incoming data will be used as data to another component.`;
 
 exports.html = `<div class="padding">
 	<div data---="dropdown__?.target__datasource:%{0};empty:No target" class="m">@(Target instance)</div>
