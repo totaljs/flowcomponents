@@ -5,8 +5,8 @@ exports.color = '#53B04A';
 exports.input = false;
 exports.output = false;
 exports.author = 'Peter Širka';
-exports.icon = 'id-card-o';
-exports.version = '1.0.0';
+exports.icon = 'code-branch';
+exports.version = '1.0.1';
 exports.options = { name: '', code: `schema.define('name', 'String(30)', true);
 
 schema.setQuery(function($) {
@@ -50,7 +50,14 @@ exports.install = function(instance) {
 
 	var oldname, schema;
 
-	instance.on('close', () => instance.options.name && UNINSTALL('schema', instance.options.name));
+	instance.on('close', function() {
+		if (instance.options.name) {
+			if (F.is4)
+				NEWSCHEMA(instance.options.name, null);
+			else
+				UNINSTALL('schema', instance.options.name);
+		}
+	});
 
 	instance.reconfigure = function() {
 
@@ -61,20 +68,30 @@ exports.install = function(instance) {
 			return;
 		}
 
-		oldname && UNINSTALL('schema', oldname);
-		oldname = options.name;
+		if (oldname) {
+			if (F.is4)
+				NEWSCHEMA(oldname, null);
+			else
+				UNINSTALL('schema', oldname);
+		}
 
+		oldname = options.name;
 		var name = options.name.split('/');
 		var group = name.length === 1 ? 'default' : name[0];
 
 		name = name.length === 1 ? name[0] : name[1];
 
 		try {
-			schema = NEWSCHEMA(group, name);
+			schema = F.is4 ? NEWSCHEMA(group + '/' + name) : NEWSCHEMA(group, name);
 			(new Function('schema', options.code))(schema);
 			instance.status(options.name);
 		} catch (e) {
-			UNINSTALL('schema', options.name);
+
+			if (F.is4)
+				NEWSCHEMA(options.name, null);
+			else
+				UNINSTALL('schema', options.name);
+
 			instance.error(e);
 			instance.status('Syntax error', 'red');
 		}

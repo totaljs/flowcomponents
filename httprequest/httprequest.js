@@ -3,7 +3,7 @@ exports.title = 'HTTP Request';
 exports.group = 'HTTP';
 exports.color = '#5D9CEC';
 exports.input = true;
-exports.version = '2.0.2';
+exports.version = '2.0.3';
 exports.output = 1;
 exports.author = 'Peter Širka';
 exports.icon = 'cloud-upload';
@@ -118,6 +118,21 @@ exports.install = function(instance) {
 					} else if (err)
 						instance.error(err, response);
 				};
+			}
+
+			switch (options.stringify) {
+				case 'json':
+					options.body = JSON.stringify(response.data);
+					options.type = 'json';
+					break;
+				case 'raw':
+					options.body = response.data instanceof Buffer ? response.data : Buffer.from(response.data);
+					options.type = 'raw';
+					break;
+				case 'encoded':
+					options.body = U.toURLEncode(response.data);
+					options.type = 'urlencoded';
+					break;
 			}
 
 			REQUEST(options);
