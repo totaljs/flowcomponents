@@ -3,7 +3,7 @@ exports.title = 'HTTP Request';
 exports.group = 'HTTP';
 exports.color = '#5D9CEC';
 exports.input = true;
-exports.version = '2.0.4';
+exports.version = '2.0.5';
 exports.output = 1;
 exports.author = 'Peter Širka';
 exports.icon = 'cloud-upload';
@@ -106,6 +106,8 @@ exports.install = function(instance) {
 
 			opt.method = options.method;
 			opt.url = options.url;
+			opt.headers = headers;
+			opt.cookies = cookies;
 
 			if (options.keepalive)
 				opt.keepalive = true;
