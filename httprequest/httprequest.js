@@ -3,7 +3,7 @@ exports.title = 'HTTP Request';
 exports.group = 'HTTP';
 exports.color = '#5D9CEC';
 exports.input = true;
-exports.version = '2.0.3';
+exports.version = '2.0.4';
 exports.output = 1;
 exports.author = 'Peter Širka';
 exports.icon = 'cloud-upload';
@@ -76,14 +76,14 @@ exports.install = function(instance) {
 	});
 
 	instance.custom.send = function(response) {
-		var options = instance.options;
 
+		var options = instance.options;
 		var headers = null;
 		var cookies = null;
 
 		if (options.headers) {
+			headers = {};
 			for (var key in options.headers) {
-				!headers && (headers = {});
 				headers[key] = response.arg(options.headers[key]);
 			}
 		}
@@ -102,16 +102,26 @@ exports.install = function(instance) {
 
 		if (F.is4) {
 
+			var opt = {};
+
+			opt.method = options.method;
+			opt.url = options.url;
+
+			if (options.keepalive)
+				opt.keepalive = true;
+
+			opt.dnscache = options.nodns ? false : true;
+
 			if (options.chunks) {
-				options.custom = true;
-				options.callback = function(err, response) {
+				opt.custom = true;
+				opt.callback = function(err, response) {
 					if (err)
 						instance.error(err);
 					else if (response && response.stream)
 						response.stream.on('data', (chunks) => instance.send2(chunks));
 				};
 			} else {
-				options.callback = function(err, response) {
+				opt.callback = function(err, response) {
 					if (response && !err) {
 						var msg = { data: response.body, status: response.status, headers: response.headers, host: response.host, cookies: response.cookies };
 						instance.send2(msg);
@@ -122,20 +132,24 @@ exports.install = function(instance) {
 
 			switch (options.stringify) {
 				case 'json':
-					options.body = JSON.stringify(response.data);
-					options.type = 'json';
+					opt.body = JSON.stringify(response.data);
+					opt.type = 'json';
 					break;
 				case 'raw':
-					options.body = response.data instanceof Buffer ? response.data : Buffer.from(response.data);
-					options.type = 'raw';
+					opt.body = response.data instanceof Buffer ? response.data : Buffer.from(response.data);
+					opt.type = 'raw';
 					break;
 				case 'encoded':
-					options.body = U.toURLEncode(response.data);
-					options.type = 'urlencoded';
+					if (opt.method === 'GET' || opt.method === 'HEAD') {
+						opt.query = U.toURLEncode(response.data);
+					} else {
+						opt.body = U.toURLEncode(response.data);
+						opt.type = 'urlencoded';
+					}
 					break;
 			}
 
-			REQUEST(options);
+			REQUEST(opt);
 
 		} else {
 			if (options.chunks) {
