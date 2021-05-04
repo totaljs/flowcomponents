@@ -20,6 +20,3 @@ Are performed via FlowData repository and can be used for URL address or for cus
 - url address can be in this form `https://hostname.com/{key}/`
 - headers values e.g. `{token}`
 - cookies values e.g. `{token}`
-
-__Custom headers__:
-

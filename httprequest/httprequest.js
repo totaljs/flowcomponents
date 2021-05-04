@@ -3,7 +3,7 @@ exports.title = 'HTTP Request';
 exports.group = 'HTTP';
 exports.color = '#5D9CEC';
 exports.input = true;
-exports.version = '2.0.5';
+exports.version = '2.0.6';
 exports.output = 1;
 exports.author = 'Peter Širka';
 exports.icon = 'cloud-upload';
@@ -22,6 +22,7 @@ exports.html = `<div class="padding">
 	<div data-jc="checkbox" data-jc-path="persistentcookies">@(Keep persistent cookies)</div>
 	<div data-jc="checkbox" data-jc-path="nodns">@(Disable DNS cache)</div>
 	<div data-jc="checkbox" data-jc-path="keepalive">@(Keep alive connection)</div>
+	<div data-jc="checkbox" data-jc-path="keepmessage">@(Keep message instance)</div>
 </div>
 <hr class="nmt nmb" />
 <div class="padding">
@@ -75,7 +76,7 @@ exports.install = function(instance) {
 		can && instance.custom.send(response);
 	});
 
-	instance.custom.send = function(response) {
+	instance.custom.send = function(flowdata) {
 
 		var options = instance.options;
 		var headers = null;
@@ -83,20 +84,19 @@ exports.install = function(instance) {
 
 		if (options.headers) {
 			headers = {};
-			for (var key in options.headers) {
-				headers[key] = response.arg(options.headers[key]);
-			}
+			for (var key in options.headers)
+				headers[key] = flowdata.arg(options.headers[key]);
 		}
 
 		if (options.username && options.userpassword) {
 			!headers && (headers = {});
-			headers.Authorization = 'Basic ' + U.createBuffer(response.arg(options.username + ':' + options.userpassword)).toString('base64');
+			headers.Authorization = 'Basic ' + U.createBuffer(flowdata.arg(options.username + ':' + options.userpassword)).toString('base64');
 		}
 
 		if (options.cookies) {
 			for (var key in options.cookies) {
 				!cookies && (cookies = {});
-				cookies[key] = response.arg(options.cookies[key]);
+				cookies[key] = flowdata.arg(options.cookies[key]);
 			}
 		}
 
@@ -119,14 +119,25 @@ exports.install = function(instance) {
 				opt.callback = function(err, response) {
 					if (err)
 						instance.error(err);
-					else if (response && response.stream)
-						response.stream.on('data', (chunks) => instance.send2(chunks));
+					else if (response && response.stream) {
+						response.stream.on('data', function(chunks) {
+							if (options.keepmessage) {
+								flowdata.data = chunks;
+								instance.send2(flowdata);
+							} else
+								instance.send2(chunks);
+						});
+					}
 				};
 			} else {
 				opt.callback = function(err, response) {
 					if (response && !err) {
 						var msg = { data: response.body, status: response.status, headers: response.headers, host: response.host, cookies: response.cookies };
-						instance.send2(msg);
+						if (options.keepmessage) {
+							flowdata.data = msg;
+							instance.send2(flowdata);
+						} else
+							instance.send2(msg);
 					} else if (err)
 						instance.error(err, response);
 				};
@@ -134,18 +145,18 @@ exports.install = function(instance) {
 
 			switch (options.stringify) {
 				case 'json':
-					opt.body = JSON.stringify(response.data);
+					opt.body = JSON.stringify(flowdata.data);
 					opt.type = 'json';
 					break;
 				case 'raw':
-					opt.body = response.data instanceof Buffer ? response.data : Buffer.from(response.data);
+					opt.body = flowdata.data instanceof Buffer ? flowdata.data : Buffer.from(flowdata.data);
 					opt.type = 'raw';
 					break;
 				case 'encoded':
 					if (opt.method === 'GET' || opt.method === 'HEAD') {
-						opt.query = U.toURLEncode(response.data);
+						opt.query = U.toURLEncode(flowdata.data);
 					} else {
-						opt.body = U.toURLEncode(response.data);
+						opt.body = U.toURLEncode(flowdata.data);
 						opt.type = 'urlencoded';
 					}
 					break;
@@ -155,16 +166,26 @@ exports.install = function(instance) {
 
 		} else {
 			if (options.chunks) {
-				U.download(response.arg(options.url), flags, options.stringify === 'none' ? null : response.data, function(err, response) {
-					response.on('data', (chunks) => instance.send2(chunks));
+				U.download(flowdata.arg(options.url), flags, options.stringify === 'none' ? null : flowdata.data, function(err, response) {
+					response.on('data', function(chunks) {
+						if (options.keepmessage) {
+							flowdata.data = chunks;
+							instance.send2(flowdata);
+						} else
+							instance.send2(chunks);
+					});
 				}, cookies || cookies2, headers);
 			} else {
-				U.request(response.arg(options.url), flags, options.stringify === 'none' ? null : response.data, function(err, data, status, headers, host) {
-					if (response && !err) {
-						response.data = { data: data, status: status, headers: headers, host: host };
-						instance.send2(response);
+				U.request(flowdata.arg(options.url), flags, options.stringify === 'none' ? null : flowdata.data, function(err, data, status, headers, host) {
+					if (flowdata && !err) {
+						var msg = { data: data, status: status, headers: headers, host: host };
+						if (options.keepmessage) {
+							flowdata.data = msg;
+							instance.send2(flowdata);
+						} else
+							instance.send2(msg);
 					} else if (err)
-						instance.error(err, response);
+						instance.error(err, flowdata);
 				}, cookies || cookies2, headers);
 			}
 		}
