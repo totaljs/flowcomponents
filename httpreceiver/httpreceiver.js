@@ -6,7 +6,7 @@ exports.group = 'HTTP';
 exports.color = '#5D9CEC';
 exports.icon = 'server';
 exports.output = 1;
-exports.version = '1.0.0';
+exports.version = '1.0.1';
 exports.author = 'Peter Širka';
 exports.options = { route: 0 };
 exports.cloning = false;
@@ -54,7 +54,11 @@ exports.install = function(instance) {
 		instance.send2(data);
 	};
 
-	F.on('controller', instance.custom.event);
+	if (F.is4)
+		ON('controller', instance.custom.event);
+	else
+		F.on('controller', instance.custom.event);
+
 	instance.on('close', () => F.removeListener('controller', instance.custom.event));
 };
 
