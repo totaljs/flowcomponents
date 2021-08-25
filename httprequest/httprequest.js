@@ -145,12 +145,20 @@ exports.install = function(instance) {
 
 			switch (options.stringify) {
 				case 'json':
-					opt.body = JSON.stringify(flowdata.data);
-					opt.type = 'json';
+					if (opt.method === 'GET' || opt.method === 'HEAD') {
+						opt.query = JSON.stringify(flowdata.data);
+					} else {
+						opt.body = JSON.stringify(flowdata.data);
+						opt.type = 'json';
+					}
 					break;
 				case 'raw':
-					opt.body = flowdata.data instanceof Buffer ? flowdata.data : Buffer.from(flowdata.data);
-					opt.type = 'raw';
+					if (opt.method === 'GET' || opt.method === 'HEAD') {
+						opt.query = flowdata.data instanceof Buffer ? flowdata.data : Buffer.from(flowdata.data);
+					} else {
+						opt.body = flowdata.data instanceof Buffer ? flowdata.data : Buffer.from(flowdata.data);
+						opt.type = 'raw';
+					}
 					break;
 				case 'encoded':
 					if (opt.method === 'GET' || opt.method === 'HEAD') {
