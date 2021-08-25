@@ -5,7 +5,7 @@ exports.color = '#5D9CEC';
 exports.icon = 'exchange';
 exports.input = false;
 exports.output = 1;
-exports.version = '1.0.0';
+exports.version = '1.0.1';
 exports.author = 'Peter Širka';
 exports.cloning = false;
 exports.options = { redirect: {}, permanent: false, path: true };
@@ -42,7 +42,11 @@ exports.install = function(instance) {
 				index !== -1 && F.owners.splice(index, 1);
 			}
 		}
-		UNINSTALL('route', 'id:' + instance.id);
+
+		if (F.is4)
+			ROUTE('id:' + instance.id, null);
+		else
+			UNINSTALL('route', 'id:' + instance.id);
 	};
 
 	instance.custom.reconfigure = function() {
