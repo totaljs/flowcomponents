@@ -87,7 +87,7 @@ exports.install = function(instance) {
 		instance.status('No client connected');
 
 		if (F.is4)
-			route = ROUTE('SOCKET ' + instance.options.url || '/', [instance.options.datatype || 'json']);
+			route = ROUTE('SOCKET ' + instance.options.url || '/', wshandler, [instance.options.datatype || 'json']);
 		else
 			F.websocket(instance.options.url || '/', wshandler, [instance.options.datatype || 'json', id]);
 	}
