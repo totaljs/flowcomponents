@@ -273,11 +273,11 @@
 			},
 			{
 				"url": "https://cdn.totaljs.com/flow/httpreceiver.js",
-				"version": "1.0.0"
+				"version": "1.0.1"
 			},
 			{
 				"url": "https://cdn.totaljs.com/flow/httpredirect.js",
-				"version": "1.0.0"
+				"version": "1.0.1"
 			},
 			{
 				"url": "https://cdn.totaljs.com/flow/httprequest.js",
@@ -517,7 +517,7 @@
 			},
 			{
 				"url": "https://cdn.totaljs.com/flow/wsserver.js",
-				"version": "1.0.3"
+				"version": "1.0.4"
 			}
 		]
 	}
