@@ -6,8 +6,8 @@ exports.input = 2;
 exports.output = 1;
 exports.author = 'Martin Smola';
 exports.icon = 'comments';
-exports.version = '1.0.3';
-exports.options = {  };
+exports.version = '1.0.4';
+exports.options = {};
 exports.cloning = false;
 
 exports.html = `<div class="padding">
