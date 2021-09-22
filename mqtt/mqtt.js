@@ -154,7 +154,7 @@ exports.install = function(instance) {
 			opts.will = {
 				topic: instance.arg(o.lwttopic),
 				payload: instance.arg(o.lwtmessage)
-			}
+			};
 		}
 
 		if (o.clientid)
@@ -321,19 +321,8 @@ Broker.prototype.connect = function() {
 
 	self.client.on('message', function(topic, message) {
 		message = message.toString();
-		if (message[0] === '{') {
-			if (F.is4) {
-				try {
-					message = JSON.parse(message);
-				} catch (e) {
-					FLOW.debug('MQTT: Error parsing data', message)
-				}
-			} else {
-				TRY(function() {
-					message = JSON.parse(message);
-				}, () => FLOW.debug('MQTT: Error parsing data', message));
-			}
-		}
+		if (message[0] === '{')
+			message = message.parseJSON(true);
 		EMIT('mqtt.brokers.message', self.id, topic, message);
 	});
 
