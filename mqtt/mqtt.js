@@ -322,9 +322,17 @@ Broker.prototype.connect = function() {
 	self.client.on('message', function(topic, message) {
 		message = message.toString();
 		if (message[0] === '{') {
-			TRY(function() {
-				message = JSON.parse(message);
-			}, () => FLOW.debug('MQTT: Error parsing data', message));
+			if (F.is4) {
+				try {
+					message = JSON.parse(message);
+				} catch (e) {
+					FLOW.debug('MQTT: Error parsing data', message)
+				}
+			} else {
+				TRY(function() {
+					message = JSON.parse(message);
+				}, () => FLOW.debug('MQTT: Error parsing data', message));
+			}
 		}
 		EMIT('mqtt.brokers.message', self.id, topic, message);
 	});
