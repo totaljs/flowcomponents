@@ -44,7 +44,7 @@ exports.install = function(instance) {
 
 			if (instance.options.condition) {
 				if (F.is4) {
-					fn = new Function('next', 'value', 'var model=value;now=function(){return new Date()};try{' + instance.options.condition + '}catch(e){next(e)}');
+					fn = new Function('value', 'next', 'var model=value;now=function(){return new Date()};try{' + instance.options.condition + '}catch(e){next(e)}');
 				} else
 					fn = SCRIPT(instance.options.condition);
 			}
