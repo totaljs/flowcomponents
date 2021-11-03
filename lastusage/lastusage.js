@@ -1,6 +1,6 @@
 exports.id = 'lastusage';
 exports.title = 'Last Usage';
-exports.version = '1.1.0';
+exports.version = '1.1.1';
 exports.author = 'Peter Širka';
 exports.color = '#656D78';
 exports.input = true;
@@ -30,7 +30,11 @@ exports.install = function(instance) {
 		instance.custom.status();
 
 		// Internal stats
-		NOSQL('flowlastusage').counter.hit(instance.id, 1);
+		if (F.is4) {
+			COUNTER('flowlastusage').hit(instance.id, 1);
+		} else {
+			NOSQL('flowlastusage').counter.hit(instance.id, 1);
+		}
 	});
 
 	instance.custom.status = function(skip) {
