@@ -5,7 +5,7 @@ exports.color = '#656D78';
 exports.icon = 'code';
 exports.input = true;
 exports.output = 1;
-exports.version = '1.1.2';
+exports.version = '1.1.3';
 exports.author = 'Martin Smola';
 exports.options = {
 	outputs: 1,
