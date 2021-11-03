@@ -56,7 +56,7 @@ exports.html = `<div class="padding">
 				component.connections = {};
 				setState(MESSAGES.apply);
 			}
-			component.output = options.outputs || 1;
+			component.output = options.outputs > 0 ? options.outputs : 1;
 		}
 	});
 </script>`;
