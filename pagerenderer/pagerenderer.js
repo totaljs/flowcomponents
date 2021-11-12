@@ -1,7 +1,7 @@
 exports.id = 'pagerenderer';
 exports.title = 'Page renderer';
 exports.group = 'Website';
-exports.version = '1.0.2';
+exports.version = '1.0.3';
 exports.color = '#67B13D';
 exports.input = 1;
 exports.output = 1;
@@ -77,14 +77,14 @@ exports.install = function(instance) {
 	};
 
 	function make_template(){
-
 		var templatecomp = FLOW.instance(instance.options.template);
-		pagetemplate = templatecomp.options.template;
-
-		if (instance.options.layout) {
-			var layoutcomp = FLOW.instance(instance.options.layout);
-			var layout = layoutcomp.options.template;
-			pagetemplate = layout.replace('@{body}', pagetemplate);
+		if (templatecomp) {
+			pagetemplate = templatecomp.options.template;
+			if (instance.options.layout) {
+				var layoutcomp = FLOW.instance(instance.options.layout);
+				var layout = layoutcomp.options.template;
+				pagetemplate = layout.replace('@{body}', pagetemplate);
+			}
 		}
 	}
 
