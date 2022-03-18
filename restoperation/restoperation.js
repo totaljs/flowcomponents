@@ -5,7 +5,7 @@ exports.color = '#53B04A';
 exports.input = false;
 exports.output = false;
 exports.author = 'Peter Širka';
-exports.icon = 'id-card-o';
+exports.icon = 'id-card';
 exports.version = '1.0.0';
 exports.options = { name: '', code: `// Properties:
 // $.value; {Object} received data
