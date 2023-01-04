@@ -24,6 +24,7 @@ exports.install = function(instance) {
 	instance.on('data', function(flowdata) {
 
 		var ctrl = flowdata.repository.controller;
+		ctrl.status = flowdata.repository.status || 200;
 		var data = flowdata.data;
 
 		if (!ctrl) {
