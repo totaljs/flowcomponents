@@ -105,7 +105,7 @@ exports.install = function(instance) {
 			var opt = {};
 
 			opt.method = options.method;
-			opt.url = options.url;
+			opt.url = flowdata.arg(options.url);
 			opt.headers = headers;
 			opt.cookies = cookies;
 
